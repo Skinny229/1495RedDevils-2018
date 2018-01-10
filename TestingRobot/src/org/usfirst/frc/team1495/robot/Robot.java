@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team1495.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PWMTalonSRX;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -24,11 +27,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends TimedRobot {
 	//public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-	
+	public Joystick stick = new Joystick(1);
+	public static DifferentialDrive roboDrive = new DifferentialDrive(new SpeedControllerGroup(new PWMTalonSRX(0),new PWMTalonSRX(1)),
+			new SpeedControllerGroup(new PWMTalonSRX(2),new PWMTalonSRX(3)));
 	//public static DifferentialDrive drive = new DifferentialDrive(null, null);
 	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
+	
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,6 +47,7 @@ public class Robot extends TimedRobot {
 		//chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", chooser);
+		
 	}
 
 	/**
@@ -110,6 +118,7 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		roboDrive.arcadeDrive(stick.getX(), stick.getTwist());
 	}
 
 	/**
