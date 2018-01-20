@@ -14,14 +14,14 @@ public class SensorUltrasonic extends Subsystem {
 	protected void initDefaultCommand() {
 	}
 
-	public double getDistanceMMRAW() {
+	//public double getDistanceMMRAW() {
 		// Distances less than 300mm will read as 300mm
-		return  ultrasonic.getVoltage() * 997;
+		//return ultrasonic.getVoltage() * 997;
 
-	}
-	public int getDistanceMMINT(){
-		return (int) ultrasonic.getVoltage()* 997;
-	}
+	//}
+
+	//public int getDistanceMMINT() {
+		//return (int) ultrasonic.getVoltage() * 997;
+	//}
 
 }
-

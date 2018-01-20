@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class SensorGyro extends Subsystem {
-	
+
 	private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
 	public void initDefaultCommand() {
@@ -19,8 +19,7 @@ public class SensorGyro extends Subsystem {
 	}
 
 	public double getAngleDegrees() {
-		return (int) gyro.getAngle() % 360 < 0 ? ((int) gyro.getAngle() % 360) + 360
-				: (int) gyro.getAngle() % 360;
+		return (int) gyro.getAngle() % 360 < 0 ? ((int) gyro.getAngle() % 360) + 360 : (int) gyro.getAngle() % 360;
 	}
 
 	public double getRawAngleDegrees() {
@@ -31,4 +30,3 @@ public class SensorGyro extends Subsystem {
 		return gyro;
 	}
 }
-
