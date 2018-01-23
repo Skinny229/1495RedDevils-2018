@@ -68,7 +68,20 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		roboDrive.arcadeDrive(-OI.joystick.getY(), OI.joystick.getTwist());
+		/* EXPERIMENTAL
+		double deadzone = .1;
+		double twist = OI.joystick.getTwist();
+		double rotation;
+		double rotationThrottle = .65;
+		if (twist < deadzone && twist > -deadzone)
+			rotation = 0;
+		else if (twist > deadzone)
+			rotation = rotationThrottle*(twist-deadzone)*(1/(1-deadzone));
+		else if (twist < -deadzone)
+			rotation = rotationThrottle*(twist+deadzone)*(1/(1-deadzone));
+		else rotation = 0;
+		roboDrive.arcadeDrive(OI.joystick.getY(), rotation); */
+		roboDrive.arcadeDrive(OI.joystick.getY(), .65*OI.joystick.getTwist());
 	}
 
 	@Override
