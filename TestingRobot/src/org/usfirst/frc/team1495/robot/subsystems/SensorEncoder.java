@@ -14,9 +14,7 @@ public class SensorEncoder extends Subsystem {
 	}
 
 	public SensorEncoder(int radius) {
-		// needs to be defined
-		// set distance per pulse (pulses per revolution)
-		// set radius
+		//encoder = new Encoder();
 	}
 
 	public void reset() {

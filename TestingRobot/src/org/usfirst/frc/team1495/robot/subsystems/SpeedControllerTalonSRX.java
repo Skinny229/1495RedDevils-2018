@@ -1,17 +1,14 @@
 package org.usfirst.frc.team1495.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWMTalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-/**
- *
- */
 public class SpeedControllerTalonSRX extends Subsystem {
 
-	public PWMTalonSRX speedController;
+	public WPI_TalonSRX speedController;
 
 	public SpeedControllerTalonSRX(int port, boolean safety) {
-		speedController = new PWMTalonSRX(port);
+		speedController = new WPI_TalonSRX(port);
 		speedController.setSafetyEnabled(safety);
 	}
 
@@ -20,11 +17,9 @@ public class SpeedControllerTalonSRX extends Subsystem {
 	}
 
 	public void spin(double speed) {
-		if (speed > 1)
-			speed = 1;
-		else if (speed < -1)
-			speed = -1;
-		speedController.setSpeed(speed);
+		if (speed > 1)   speed = 1;
+		else if (speed < -1)   speed = -1;
+		speedController.set(speed);
 	}
 
 	public void updateSaftey(boolean safety) {

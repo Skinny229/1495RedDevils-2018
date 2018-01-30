@@ -9,7 +9,7 @@ public class RobotMap {
 	DRIVE_ENCODER_RIGHT_PORT
 	DRIVE_ENCODER_LEFT_PORT
     DRIVE_WHEEL_RADIUS (for encoders)
-    SCALE_WHEEL_RADIUS (for encoders)
+    SCALE_WHEEL_RADIUS (for encoders) 
     
  */
 }
