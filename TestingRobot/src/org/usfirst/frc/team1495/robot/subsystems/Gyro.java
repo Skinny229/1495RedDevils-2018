@@ -3,7 +3,7 @@ package org.usfirst.frc.team1495.robot.subsystems;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class SensorGyro extends Subsystem {
+public class Gyro extends Subsystem  {
 
 	private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 

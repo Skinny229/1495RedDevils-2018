@@ -4,7 +4,10 @@ public class RobotMap {
 	//Drive
 	public static final int DRIVE_PORT_LEFT = 0;
 	public static final int DRIVE_PORT_RIGHT = 1;
-	public static final boolean DRIVE_SAFETY = false;	
+	public static final boolean DRIVE_SAFETY = false;
+	
+	public static enum ControlType {SingleJoystick, SingleController};
+	public static final ControlType CONTROL_TYPE = ControlType.SingleJoystick;
 	//Control
 	public static final int JOYSTICK_PORT = 0;
 	public static final int CONTROLLER_PORT_1 = 1;

@@ -3,14 +3,14 @@ package org.usfirst.frc.team1495.robot.subsystems;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
-public class SensorLimitSwitch extends Subsystem {
+public class LimitSwitch extends Subsystem {
 
 	private DigitalInput limitSwitch;
 
 	public void initDefaultCommand() {
 	}
 
-	public SensorLimitSwitch(int port) {
+	public LimitSwitch(int port) {
 		limitSwitch = new DigitalInput(port);
 	}
 

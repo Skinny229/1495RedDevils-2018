@@ -1,6 +1,8 @@
 package org.usfirst.frc.team1495.robot;
 
-import org.usfirst.frc.team1495.robot.subsystems.SpeedControllerTalonSRX;
+import org.usfirst.frc.team1495.robot.subsystems.CANTalonSRX;
+import org.usfirst.frc.team1495.robot.subsystems.Gyro;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.Compressor;
@@ -22,7 +24,10 @@ public class Robot extends TimedRobot {
 	public static Compressor compressor = new Compressor();
 	public static PowerDistributionPanel PDP; //make into subsystem 
 	
-	public static WPI_TalonSRX talon;
+	//public static WPI_TalonSRX talon2;
+	public static CANTalonSRX talon;
+	
+	public static Gyro gyro;
 	
 	//Command autonomousCommand;
 //	SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -33,8 +38,9 @@ public class Robot extends TimedRobot {
 		//chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		//SmartDashboard.putData("Auto mode", autoChooser);
-		talon = new WPI_TalonSRX(2);
-		talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		talon = new CANTalonSRX(RobotMap.CAN_ID_TALON, false);
+		//talon2 = new WPI_TalonSRX(2);
+		//talon2.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 		roboDrive = new DifferentialDrive(talon, new VictorSP(RobotMap.DRIVE_PORT_RIGHT));
 		roboDrive.setSafetyEnabled(RobotMap.DRIVE_SAFETY);		
 		PDP = new PowerDistributionPanel(RobotMap.CAN_ID_PDP);
@@ -95,8 +101,17 @@ public class Robot extends TimedRobot {
 			rotation = rotationThrottle*(twist+deadzone)*(1/(1-deadzone));
 		else rotation = 0;
 		roboDrive.arcadeDrive(OI.joystick.getY(), rotation); */
-		roboDrive.arcadeDrive(OI.joystick.getY(), .65*OI.joystick.getTwist());
-		//roboDrive.arcadeDrive(OI.controller1.getY(Hand.kLeft), OI.controller1.getX(Hand.kRight));
+		switch(RobotMap.CONTROL_TYPE)
+		{
+		case SingleController:
+			roboDrive.arcadeDrive(OI.controller1.getY(Hand.kLeft), OI.controller1.getX(Hand.kRight));
+			break;
+		case SingleJoystick:
+			roboDrive.arcadeDrive(OI.joystick.getY(), .65*OI.joystick.getTwist());
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override

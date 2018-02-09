@@ -15,16 +15,16 @@ public class CalibrateEncoder extends Command {
     int distance;
     
     protected void initialize() {
-    	distance = Robot.talon.getSelectedSensorPosition(0);
+    	distance = Robot.talon.getRawEncoderPosition();
     	Robot.roboDrive.arcadeDrive(-.5, 0);
     	Timer.delay(1);
     	Robot.roboDrive.stopMotor();
     }
 
     protected void execute() {
-    	if(Robot.talon.getSelectedSensorVelocity(0) == 0)
+    	if(Robot.talon.getRawEncoderVelocity() == 0)
     	{
-    		System.out.println("Encoder Value: " + Math.abs(Math.abs(Robot.talon.getSelectedSensorPosition(0)) - Math.abs(distance)));
+    		System.out.println("Encoder Value: " + Math.abs(Math.abs(Robot.talon.getRawEncoderPosition()) - Math.abs(distance)));
     		completed = true;
     	}
     }
