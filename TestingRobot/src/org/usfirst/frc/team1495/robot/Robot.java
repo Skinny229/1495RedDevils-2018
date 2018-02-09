@@ -1,5 +1,12 @@
 package org.usfirst.frc.team1495.robot;
 
+import org.usfirst.frc.team1495.robot.subsystems.SpeedControllerTalonSRX;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.command.Command;
@@ -12,6 +19,10 @@ public class Robot extends TimedRobot {
 	public static OI oi;
 	
 	public static DifferentialDrive roboDrive;
+	public static Compressor compressor = new Compressor();
+	public static PowerDistributionPanel PDP; //make into subsystem 
+	
+	public static WPI_TalonSRX talon;
 	
 	//Command autonomousCommand;
 //	SendableChooser<Command> autoChooser = new SendableChooser<>();
@@ -21,9 +32,13 @@ public class Robot extends TimedRobot {
 		oi = new OI();
 		//chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
-//		SmartDashboard.putData("Auto mode", autoChooser);
-		roboDrive = new DifferentialDrive(new VictorSP(RobotMap.DRIVE_PORT_LEFT), new VictorSP(RobotMap.DRIVE_PORT_RIGHT));
-		roboDrive.setSafetyEnabled(false);		
+		//SmartDashboard.putData("Auto mode", autoChooser);
+		talon = new WPI_TalonSRX(2);
+		talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+		roboDrive = new DifferentialDrive(talon, new VictorSP(RobotMap.DRIVE_PORT_RIGHT));
+		roboDrive.setSafetyEnabled(RobotMap.DRIVE_SAFETY);		
+		PDP = new PowerDistributionPanel(RobotMap.CAN_ID_PDP);
+		PDP.clearStickyFaults();
 	}
 
 	@Override
@@ -39,7 +54,6 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousInit() {
 //		autonomousCommand = autoChooser.getSelected();
-
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
@@ -82,6 +96,7 @@ public class Robot extends TimedRobot {
 		else rotation = 0;
 		roboDrive.arcadeDrive(OI.joystick.getY(), rotation); */
 		roboDrive.arcadeDrive(OI.joystick.getY(), .65*OI.joystick.getTwist());
+		//roboDrive.arcadeDrive(OI.controller1.getY(Hand.kLeft), OI.controller1.getX(Hand.kRight));
 	}
 
 	@Override

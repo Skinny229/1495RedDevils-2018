@@ -8,6 +8,9 @@
 package org.usfirst.frc.team1495.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -15,4 +18,11 @@ import edu.wpi.first.wpilibj.Joystick;
  */
 public class OI {
 	public static Joystick joystick = new Joystick(RobotMap.JOYSTICK_PORT);
+	public static XboxController controller1 = new XboxController(RobotMap.CONTROLLER_PORT_1);
+	
+	//Button button = new JoystickButton(joystick, 8);
+	public OI() {
+		//button.whenPressed(new command instance);
+	}
+	
 }
