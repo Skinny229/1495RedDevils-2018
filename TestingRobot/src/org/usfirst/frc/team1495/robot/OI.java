@@ -7,6 +7,12 @@
 
 package org.usfirst.frc.team1495.robot;
 
+import org.usfirst.frc.team1495.robot.commands.InitMotionProfile;
+
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
+
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
@@ -35,8 +41,13 @@ public class OI {
 	// Run the command while the button is being held down and interrupt it once
 	// the button is released.
 	// button.whileHeld(new ExampleCommand());
-
-	// Start the command when the button is released and let it run the command
-	// until it is finished as determined by it's isFinished method.
-	// button.whenReleased(new ExampleCommand());
+	
+	XboxController test = new XboxController(1);
+	Button testin = new JoystickButton(test,1);
+	
+	public OI() {
+		testin.whenPressed(new InitMotionProfile());
+	}
+	
+	
 }

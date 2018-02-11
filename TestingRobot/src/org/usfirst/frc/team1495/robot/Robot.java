@@ -7,7 +7,19 @@
 
 package org.usfirst.frc.team1495.robot;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.usfirst.frc.team1495.robot.commands.DoNothing;
+import org.usfirst.frc.team1495.robot.commands.InitMotionProfile;
+
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -22,10 +34,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  */
 public class Robot extends TimedRobot {
+	
 	//public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
+	
 	public static OI oi;
 	
-	//public static DifferentialDrive drive = new DifferentialDrive(null, null);
+	public static PowerDistributionPanel pdp = new PowerDistributionPanel(RobotMap.PDP);
+	
+	
+	//Operators
+	private XboxController nick = new XboxController(RobotMap.DRIVE_CONTROLLER);
+	
+	
+	//DriveTrain
+	public static WPI_TalonSRX driveTalon = new WPI_TalonSRX(RobotMap.DRIVE_TALON);
+	public static DifferentialDrive roboDrive = new DifferentialDrive(driveTalon, new VictorSP(RobotMap.DRIVE_SP_R));
+	
+	public static boolean isMPDone = false;
 	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
@@ -36,9 +61,23 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
+		//driveTalon.
+		
 		oi = new OI();
-		//chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+		
+		//Every 5 Seconds this will clear stick faults no matter what
+		TimerTask task = new TimerTask() {
+			@Override
+			public void run() {
+					pdp.clearStickyFaults();
+			}
+		};
+		Timer timer = new Timer();
+		timer.schedule(task, 0l, 5000l);
+		
+		
+		chooser.addDefault("Default Auto", new DoNothing());
+		chooser.addObject("Motion Profile Test", new InitMotionProfile());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
 
@@ -72,12 +111,6 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		autonomousCommand = chooser.getSelected();
 
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
 
 		// schedule the autonomous command (example)
 		if (autonomousCommand != null) {
@@ -110,6 +143,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		roboDrive.arcadeDrive(nick.getY(Hand.kLeft), nick.getX(Hand.kRight));
+		
 	}
 
 	/**
@@ -118,4 +153,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void testPeriodic() {
 	}
+	
+	
+
+	
 }
