@@ -7,15 +7,19 @@
 
 package org.usfirst.frc.team1495.robot;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.usfirst.frc.team1495.robot.commands.DoNothing;
 import org.usfirst.frc.team1495.robot.commands.InitMotionProfile;
+import org.usfirst.frc.team1495.robot.commands.MPAuto;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -47,13 +51,28 @@ public class Robot extends TimedRobot {
 	
 	
 	//DriveTrain
-	public static WPI_TalonSRX driveTalon = new WPI_TalonSRX(RobotMap.DRIVE_TALON);
-	public static DifferentialDrive roboDrive = new DifferentialDrive(driveTalon, new VictorSP(RobotMap.DRIVE_SP_R));
+	public static WPI_TalonSRX driveTalonL = new WPI_TalonSRX(RobotMap.kDriveTalonL);
+	//public static WPI_TalonSRX driveTalonR = new WPI_TalonSRX(RobotMap.kDriveTalonR);
+	private ArrayList<WPI_TalonSRX> escDrive = new ArrayList<WPI_TalonSRX>();
+	
+	
+	public static DifferentialDrive roboDrive = new DifferentialDrive(driveTalonL, new VictorSP(1));
+	
+	public static MPV2 mp2 = new MPV2(driveTalonL);
+	
 	
 	public static boolean isMPDone = false;
 	
 	Command autonomousCommand;
 	SendableChooser<Command> chooser = new SendableChooser<>();
+	
+	class StickyFaultNoMore implements java.lang.Runnable{
+		public void run() {
+			pdp.clearStickyFaults();
+		}
+	}
+	
+	Notifier noPdpNotify;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -61,23 +80,36 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		//driveTalon.
+		//Clear Sticky faults and every 10 seconds clear the faults just in case
+		pdp.clearStickyFaults();
+		noPdpNotify = new Notifier(new StickyFaultNoMore());
+		noPdpNotify.startPeriodic(10.0);
 		
+		//Iniate Button Conditions
 		oi = new OI();
 		
+		//Set up Talon for PID Control Auton
+		mp2.startMotionProfile(); //Start Loading Motion Profile and buffering Trajectory Points
+		//Config Settings for drive Talons
+		escDrive.add(driveTalonL);
+	//	escDrive.add(driveTalonR);
+		for(int i = 0; i < escDrive.size(); i++){
+			WPI_TalonSRX curTalon = escDrive.get(i);
+			curTalon.config_kP(0, .1, 0); 
+			curTalon.config_kI(0, .2, 0);
+			curTalon.setSafetyEnabled(true);
+			curTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, 0);
+		}
+		
+		
+		
 		//Every 5 Seconds this will clear stick faults no matter what
-		TimerTask task = new TimerTask() {
-			@Override
-			public void run() {
-					pdp.clearStickyFaults();
-			}
-		};
-		Timer timer = new Timer();
-		timer.schedule(task, 0l, 5000l);
+		
 		
 		
 		chooser.addDefault("Default Auto", new DoNothing());
 		chooser.addObject("Motion Profile Test", new InitMotionProfile());
+		chooser.addObject("Motion Profile V2 Test", new MPAuto());
 		SmartDashboard.putData("Auto mode", chooser);
 	}
 

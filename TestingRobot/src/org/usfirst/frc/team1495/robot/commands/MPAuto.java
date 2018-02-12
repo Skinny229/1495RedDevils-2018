@@ -1,38 +1,48 @@
 package org.usfirst.frc.team1495.robot.commands;
 
-import org.usfirst.frc.team1495.robot.MotionProfileExecuter;
+
+
+import org.usfirst.frc.team1495.robot.MPV2;
 import org.usfirst.frc.team1495.robot.Robot;
+
+import com.ctre.phoenix.motion.SetValueMotionProfile;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class InitMotionProfile extends Command{
-	
-	boolean isFin;
-	MotionProfileExecuter mpExec;
+/**
+ *
+ */
+public class MPAuto extends Command {
 
-	public InitMotionProfile() {
-		// TODO Auto-generated constructor stub
-	}
+    public MPAuto() {
+        // Use requires() here to declare subsystem dependencies
+        // eg. requires(chassis);
+    }
 
+    boolean isFin;
+    MPV2 autoMP = Robot.mp2;
+    
     // Called just before this Command runs the first time
     protected void initialize() {
-    	mpExec = new MotionProfileExecuter(Robot.driveTalonL);
-    	mpExec.reset();
     	isFin = false;
-    	mpExec.startMotionProfile();
+    	autoMP.reset();
+    	autoMP.control();
+    	System.out.println("MP Ready to rock and roll going to control loop...");
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	if(Robot.isMPDone){
-    		isFin = true;
-    	}
+    	autoMP.control();
     	
+    	SetValueMotionProfile output = autoMP.getSetValue();
+    	
+    	Robot.driveTalonL.set(ControlMode.MotionProfile, output.value);
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return isFin;
+        return false;
     }
 
     // Called once after isFinished returns true

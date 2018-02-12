@@ -16,7 +16,7 @@ package org.usfirst.frc.team1495.robot;
 public class RobotMap {
 	
 	//PWM
-	public static final int DRIVE_SP_R = 1;
+	
 	
 	//USB
 	public static final int DRIVE_CONTROLLER = 0;
@@ -25,7 +25,8 @@ public class RobotMap {
 	//CAN
 	public static final int PCM           = 0;
 	public static final int PDP           = 1;
-	public static final int DRIVE_TALON   = 2;
+	public static final int kDriveTalonL  = 2;
+	public static final int kDriveTalonR  = 3;
 	
 	
 }
