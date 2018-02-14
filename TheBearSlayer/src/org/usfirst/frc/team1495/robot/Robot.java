@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 		oi = new OI();
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);
-		compressor = new Compressor(RobotMap.kCompressor);
+		compressor = new Compressor();
 		PDP.clearStickyFaults();
 		/*
 		autoChooser.addDefault("Default Auto", new ExampleCommand());
@@ -120,7 +120,8 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		roboDrive.arcadeDrive(oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		//roboDrive.arcadeDrive(oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		roboDrive.arcadeDrive(oi.joystick.getY(), .65*oi.joystick.getTwist());
 		Scheduler.getInstance().run();
 	}
 

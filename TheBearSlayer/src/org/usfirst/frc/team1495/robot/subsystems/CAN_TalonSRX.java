@@ -9,19 +9,11 @@ public class CAN_TalonSRX extends WPI_TalonSRX {
 		setSafetyEnabled(safety);
 	}
 
-	public void stop() {
-		stopMotor();
-	}
-
 	public void spin(double speed) {
 		if (speed > 1)
 			speed = 1;
 		else if (speed < -1)
 			speed = -1;
 		set(speed);
-	}
-
-	public void updateSaftey(boolean safety) {
-		setSafetyEnabled(safety);
 	}
 }
