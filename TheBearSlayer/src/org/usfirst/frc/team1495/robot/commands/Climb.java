@@ -1,19 +1,14 @@
 package org.usfirst.frc.team1495.robot.commands;
 
 import org.usfirst.frc.team1495.robot.Robot;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
-public class CubeIO extends Command {
+public class Climb extends Command {
 
 	double speed;
 
-	public CubeIO(double s) {
-		requires(Robot.intake);
+	public Climb(double s) {
+		requires(Robot.climber);
 		speed = s;
 	}
 
@@ -21,9 +16,9 @@ public class CubeIO extends Command {
 	protected void initialize() {
 	}
 
+	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		Robot.intake.leftTalon.spin(speed);
-		Robot.intake.rightTalon.spin(speed);
+		Robot.climber.motor.set(speed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -33,14 +28,12 @@ public class CubeIO extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		Robot.intake.leftTalon.stopMotor();
-		Robot.intake.rightTalon.stopMotor();
+		Robot.climber.motor.stopMotor();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		Robot.intake.leftTalon.stopMotor();
-		Robot.intake.rightTalon.stopMotor();
+		Robot.climber.motor.stopMotor();
 	}
 }

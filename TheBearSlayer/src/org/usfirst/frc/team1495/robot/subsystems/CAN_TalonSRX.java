@@ -8,12 +8,4 @@ public class CAN_TalonSRX extends WPI_TalonSRX {
 		super(deviceNumber);
 		setSafetyEnabled(safety);
 	}
-
-	public void spin(double speed) {
-		if (speed > 1)
-			speed = 1;
-		else if (speed < -1)
-			speed = -1;
-		set(speed);
-	}
 }

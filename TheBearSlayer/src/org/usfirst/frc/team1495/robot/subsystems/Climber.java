@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Climber extends Subsystem {
 
-	CAN_TalonSRX talon;
+	public CAN_TalonSRX motor;
 
 	public Climber() {
-		talon = new CAN_TalonSRX(RobotMap.kClimberTalon, RobotMap.kClimberSafety);
+		motor = new CAN_TalonSRX(RobotMap.kClimberMotorID, RobotMap.kClimberMotorSafety);
 	}
 
 	public void initDefaultCommand() {

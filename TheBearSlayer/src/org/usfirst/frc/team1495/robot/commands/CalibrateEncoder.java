@@ -11,7 +11,13 @@ public class CalibrateEncoder extends Command {
 
 	}
 
-	boolean completed = false;
+	@Override
+	protected boolean isFinished() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/*boolean completed = false;
 	int rightDistance;
 	int leftDistance;
 
@@ -43,5 +49,5 @@ public class CalibrateEncoder extends Command {
 
 	protected void interrupted() {
 		Robot.roboDrive.stopMotor();
-	}
+	}*/
 }

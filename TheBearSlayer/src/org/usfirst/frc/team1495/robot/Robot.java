@@ -13,12 +13,15 @@ import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
+import org.usfirst.frc.team1495.robot.subsystems.PWM_VictorSP;
 
 public class Robot extends TimedRobot {
 	//Drive
 	public static DifferentialDrive roboDrive;
-	public static CAN_TalonSRXE leftDriveTalon;
-	public static CAN_TalonSRXE rightDriveTalon;
+	//public static CAN_TalonSRXE leftDriveMotor;
+	//public static CAN_TalonSRXE rightDriveMotor;
+	public static PWM_VictorSP leftDriveMotor;
+	public static PWM_VictorSP rightDriveMotor;
 	//Subsystems
 	public static Intake intake;
 	public static Elevator elevator;
@@ -37,9 +40,12 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void robotInit() {
-		leftDriveTalon = new CAN_TalonSRXE(RobotMap.kLeftDriveTalon, RobotMap.kDriveSafety);
-		rightDriveTalon = new CAN_TalonSRXE(RobotMap.kRightDriveTalon, RobotMap.kDriveSafety);
-		roboDrive = new DifferentialDrive(leftDriveTalon, rightDriveTalon);
+		//leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+		//rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+		//roboDrive = new DifferentialDrive(leftDriveTalon, rightDriveTalon);
+		leftDriveMotor = new PWM_VictorSP(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+		rightDriveMotor = new PWM_VictorSP(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
@@ -120,8 +126,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		//roboDrive.arcadeDrive(oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
-		roboDrive.arcadeDrive(oi.joystick.getY(), .65*oi.joystick.getTwist());
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 

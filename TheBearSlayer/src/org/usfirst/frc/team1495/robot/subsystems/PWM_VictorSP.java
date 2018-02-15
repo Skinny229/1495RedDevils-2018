@@ -8,20 +8,4 @@ public class PWM_VictorSP extends VictorSP {
 		super(port);
 		setSafetyEnabled(safety);
 	}
-
-	public void updateSafety(boolean safety) {
-		setSafetyEnabled(safety);
-	}
-
-	public void spin(double speed) {
-		if (speed > 1)
-			speed = 1;
-		else if (speed < -1)
-			speed = -1;
-		setSpeed(speed);
-	}
-
-	public void stop() {
-		stopMotor();
-	}
 }

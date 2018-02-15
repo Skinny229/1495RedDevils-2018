@@ -5,10 +5,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Elevator extends Subsystem {
 
-	CAN_TalonSRXE talon;
+	public CAN_TalonSRXE motor;
 
 	public Elevator() {
-		talon = new CAN_TalonSRXE(RobotMap.kElevatorTalon, RobotMap.kElevatorSafety);
+		motor = new CAN_TalonSRXE(RobotMap.kElevatorMotorID, RobotMap.kElevatorMotorSafety);
 	}
 
 	public void initDefaultCommand() {
