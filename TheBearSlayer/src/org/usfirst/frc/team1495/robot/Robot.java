@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 		rightDriveMotor = new PWM_VictorSP(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
 		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
-		elevator = new Elevator();
+		//elevator = new Elevator();
 		climber = new Climber();
 		oi = new OI();
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);

@@ -4,6 +4,7 @@ import org.usfirst.frc.team1495.robot.commands.Climb;
 import org.usfirst.frc.team1495.robot.commands.Elevate;
 import org.usfirst.frc.team1495.robot.commands.OpenIntake;
 import org.usfirst.frc.team1495.robot.commands.SpinIntake;
+import org.usfirst.frc.team1495.robot.subsystems.Intake.IntakeDir;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -39,8 +40,8 @@ public class OI {
 	public OI() {
 		close.whenPressed(new OpenIntake(false));
 		open.whenPressed(new OpenIntake(true));
-		in.whileHeld(new SpinIntake(0.7));
-		out.whileHeld(new SpinIntake(-0.7));
+		in.whileHeld(new SpinIntake(IntakeDir.Inwards));
+		out.whileHeld(new SpinIntake(IntakeDir.Outwards));
 		climb.whileHeld(new Climb(0.5));
 		raise.whileHeld(new Elevate(0.5));
 		lower.whileHeld(new Elevate(-0.5));

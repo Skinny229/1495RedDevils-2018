@@ -13,6 +13,10 @@ public class Intake extends Subsystem {
 	//public PWM_VictorSP rightMotor;
 	public DoubleSolenoid leftSolenoid;
 	public DoubleSolenoid rightSolenoid;
+	
+	public enum IntakeDir{
+		Inwards,Outwards
+	}
 
 	public Intake() {
 		leftMotor = new CAN_TalonSRX(RobotMap.kLeftIntakeMotorID, RobotMap.kIntakeMotorSafety);
@@ -23,7 +27,23 @@ public class Intake extends Subsystem {
 		leftSolenoid = new DoubleSolenoid(RobotMap.kLeftIntakeSolenoidForward, RobotMap.kLeftIntakeSolenoidReverse);
 		rightSolenoid = new DoubleSolenoid(RobotMap.kRightIntakeSolenoidForward, RobotMap.kRightIntakeSolenoidReverse);
 	}
+	
+	public void setIn(){
+		leftMotor.set(RobotMap.kIntakeSpeed);
+		rightMotor.set(RobotMap.kIntakeSpeed);
+	}
+	
+	public void setOut(){
+		rightMotor.set(-RobotMap.kIntakeSpeed);
+		leftMotor.set(-RobotMap.kIntakeSpeed);
+	}
+	
+	public void stopSpin(){
+		leftMotor.stopMotor();
+		rightMotor.stopMotor();
+	}
 
 	public void initDefaultCommand() {
 	}
 }
+
