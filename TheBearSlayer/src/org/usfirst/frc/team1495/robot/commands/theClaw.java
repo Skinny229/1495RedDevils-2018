@@ -5,31 +5,21 @@ import org.usfirst.frc.team1495.robot.Robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.command.Command;
 
-/**
- *
- */
-public class OpenIntake extends Command {
+public class theClaw extends Command {
+
+	DoubleSolenoid.Value val;
 	
-	boolean open;
-	
-    public OpenIntake(boolean o) {
-        requires(Robot.intake);
-        open = o;
+    public theClaw(DoubleSolenoid.Value v) {
+        requires(Robot.claw);
+        val = v;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	if(open) {
-    	Robot.intake.leftSolenoid.set(DoubleSolenoid.Value.kForward);
-    	Robot.intake.rightSolenoid.set(DoubleSolenoid.Value.kForward);
-    	}
-    	else {
-    		Robot.intake.leftSolenoid.set(DoubleSolenoid.Value.kOff);
-    		Robot.intake.rightSolenoid.set(DoubleSolenoid.Value.kOff);
-    		//Robot.intake.leftSolenoid.set(DoubleSolenoid.Value.kReverse);
-    		//Robot.intake.rightSolenoid.set(DoubleSolenoid.Value.kReverse);
-    	}
+    	//Robot.claw.leftSolenoid.set(val);
+    	//Robot.claw.rightSolenoid.set(val);
     }
+
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     }
