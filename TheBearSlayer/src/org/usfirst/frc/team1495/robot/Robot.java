@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
 	//Other
 	public static PowerDistributionPanel PDP;
 	public static Compressor compressor;
+	public static ReactingLED lights = new ReactingLED();
 
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -48,9 +49,9 @@ public class Robot extends TimedRobot {
 		elevator = new Elevator();
 		climber = new Climber();
 		oi = new OI();
-		PDP = new PowerDistributionPanel(RobotMap.kPDP);
-		compressor = new Compressor();
-		PDP.clearStickyFaults();
+	//	PDP = new PowerDistributionPanel(RobotMap.kPDP);
+		//compressor = new Compressor();
+	//	PDP.clearStickyFaults();
 		
 		
 		/*
@@ -126,7 +127,7 @@ public class Robot extends TimedRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		//roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 

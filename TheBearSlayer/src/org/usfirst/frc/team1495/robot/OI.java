@@ -24,9 +24,10 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 
 public class OI {
-	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
-	public XboxController operatorController = new XboxController(RobotMap.kOperatorControllerPort);
-	public Joystick joystick = new Joystick(RobotMap.kTestJoystickPort);
+	/*
+//	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
+//	public XboxController operatorController = new XboxController(RobotMap.kOperatorControllerPort);
+//	public Joystick joystick = new Joystick(RobotMap.kTestJoystickPort);
 	
 	public Button open = new JoystickButton(driverController, 2); // Intake solenoids
 	public Button close = new JoystickButton(driverController, 1); // Intake solenoids
@@ -45,4 +46,6 @@ public class OI {
 		raise.whileHeld(new Elevate(0.5));
 		lower.whileHeld(new Elevate(-0.5));
 	}
+	
+	*/
 }

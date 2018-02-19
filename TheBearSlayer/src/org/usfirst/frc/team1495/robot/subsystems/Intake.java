@@ -11,8 +11,8 @@ public class Intake extends Subsystem {
 	public CAN_TalonSRX rightMotor;
 	//public PWM_VictorSP leftMotor;
 	//public PWM_VictorSP rightMotor;
-	public DoubleSolenoid leftSolenoid;
-	public DoubleSolenoid rightSolenoid;
+	//public DoubleSolenoid leftSolenoid;
+//	public DoubleSolenoid rightSolenoid;
 
 	public Intake() {
 		leftMotor = new CAN_TalonSRX(RobotMap.kLeftIntakeMotorID, RobotMap.kIntakeMotorSafety);
@@ -20,8 +20,8 @@ public class Intake extends Subsystem {
 		//leftMotor = new PWM_VictorSP(RobotMap.kLeftIntakeMotorID, RobotMap.kIntakeMotorSafety);
 		//rightMotor = new PWM_VictorSP(RobotMap.kRightIntakeMotorID, RobotMap.kIntakeMotorSafety);
 		rightMotor.setInverted(true);
-		leftSolenoid = new DoubleSolenoid(RobotMap.kLeftIntakeSolenoidForward, RobotMap.kLeftIntakeSolenoidReverse);
-		rightSolenoid = new DoubleSolenoid(RobotMap.kRightIntakeSolenoidForward, RobotMap.kRightIntakeSolenoidReverse);
+	//	leftSolenoid = new DoubleSolenoid(RobotMap.kLeftIntakeSolenoidForward, RobotMap.kLeftIntakeSolenoidReverse);
+		//rightSolenoid = new DoubleSolenoid(RobotMap.kRightIntakeSolenoidForward, RobotMap.kRightIntakeSolenoidReverse);
 	}
 
 	public void initDefaultCommand() {
