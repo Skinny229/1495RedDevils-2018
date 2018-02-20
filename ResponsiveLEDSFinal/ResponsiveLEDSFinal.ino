@@ -30,8 +30,8 @@ const CRGB colorCubeMiddle = CRGB::Yellow;
 //Actual Elevator
 CRGB elevLeds[kNumLedElevator];
 //Color of elevator lights
-CRGB elevColor = CRGB::Yellow; //<----Default Color
-String elevDir = "up";  //<--- default direction of the leds
+CRGB elevColor = CRGB::Cyan; //<----Default Color
+String elevDir = "still";  //<--- default direction of the leds
 int elevTimePerUpdate = 50; // in ms
 int elevStartingPos = 0;
 
@@ -47,7 +47,7 @@ void setup() {
   initI2CLink(); //Setup connection to RoboRIO
   waitForRioLink(); //Lets wait until we are connected to the roboRio
   confirmLinkBlink(); //Blink the lights a color for three times
-  getReady();
+ // getReady();
   //SETUP COMPLETE moving on to the main control loop
   
 }
@@ -111,20 +111,22 @@ void confirmLinkBlink(){
 
 
 void requestReceived(){
+           int cmdReceived = Wire.read();
       if(hasRioLink){
-          int cmdReceived = Wire.read();
           switch(cmdReceived){
-              case 0: elevColor = CRGB::Red;
+              case 0:
                 break;
-              case 65: elevColor = CRGB::Green; 
+              case 65: elevColor = CRGB::Green; //A
                 break;
-              case 66: elevColor = CRGB::Yellow;
+              case 66: elevColor = CRGB::Yellow; //B
                 break;
-              case 67: elevColor = CRGB::Red; 
+              case 67: elevColor = CRGB::Red; //C
                   break;
-              case 4: elevDir = "up"; break;
-              case 5: elevDir = "still"; break;
-              case 6: elevDir = "down"; break;
+              case 68: elevDir = "up"; break;//D
+              
+              case 69: elevDir = "still"; break;//E
+              
+              case 70: elevDir = "down"; break;//F
             }
         }else{
             hasRioLink = true;
@@ -140,20 +142,16 @@ void getReady(){
 void elevUpdate(){
     if(tickCounter % (elevTimePerUpdate/kDelayPerTick) == 0){
       if(elevDir != "still"){
-            if(elevStartingPos >= 3)
-              elevStartingPos = 0;
-          if(elevStartingPos <= -1)
-              elevStartingPos = 2;
+        
           
         for(int i = 0; i <= kNumLedElevator; i ++){
             elevLeds[i] = CRGB::Black;
-            elevLeds[i+1] = CRGB::Black;
-            elevLeds[i+2] = CRGB::Black;
           }
           
         if(elevDir == "up"){
-
-        for(int i = elevStartingPos;i <= kNumLedElevator; i += 6){
+                if(elevStartingPos >= 6)
+              elevStartingPos = 0;
+        for(int i = elevStartingPos;i < kNumLedElevator; i += 6){
             elevLeds[i] = elevColor;
             elevLeds[i+1] = elevColor;
             elevLeds[i+2] = elevColor;
@@ -161,7 +159,9 @@ void elevUpdate(){
           elevStartingPos ++;
         }
         if(elevDir == "down"){
-               for(int i = elevStartingPos;i <= kNumLedElevator; i ++){
+               if(elevStartingPos <= -1)
+              elevStartingPos = 4;
+               for(int i = elevStartingPos;i < kNumLedElevator; i += 6){
             elevLeds[i] = elevColor;
             elevLeds[i+1] = elevColor;
             elevLeds[i+2] = elevColor;

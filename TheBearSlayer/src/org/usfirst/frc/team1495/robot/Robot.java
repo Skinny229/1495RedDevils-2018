@@ -8,6 +8,11 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import java.lang.reflect.Method;
+import java.util.function.Function;
+
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
@@ -52,6 +57,7 @@ public class Robot extends TimedRobot {
 	//	PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		//compressor = new Compressor();
 	//	PDP.clearStickyFaults();
+		
 		
 		
 		/*

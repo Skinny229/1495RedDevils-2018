@@ -18,47 +18,35 @@ public class ReactingLED {
 
 	public class CommandCenter implements java.lang.Runnable {
 		boolean hasArduinoLink = false;
-
+		boolean lastLimitState = false;
+		boolean lastLimit2State = false;
+		
 		@Override
 		public void run() {
-			System.out.println("limit 1: " + limit.get());
-			System.out.print("Limit 2: " + limit2.get());
-			if(limit.get()){
-				sendToArduino("A");
-			}else if (!limit2.get()){
-				sendToArduino("B");
-			}else{
-				sendToArduino("C");
-			}
-			
-			//System.out.println(cmdQueue.get(0));
-			if (hasArduinoLink) {
-				/*
-				if (cmdQueue.size() == 0) {
-					sendToArduino("0");
-				} else {
-					System.out.println("Sent!");
+				if(limit.get() != lastLimitState){
+					lastLimitState = limit.get();
+					if(limit.get())
+						addCmd("A");
+					else
+						addCmd("C");
+					}
+				if(limit2.get() != lastLimit2State){
+					lastLimit2State = limit2.get();
+					if(limit2.get())
+						addCmd("D");
+					else
+						addCmd("F");
+					}
+				sendToArduino("Z");
+				if(cmdQueue.size() == 0){
+					
+				}else{
 					sendToArduino(cmdQueue.get(0));
 					cmdQueue.remove(0);
-				}
-				*/
-			} else {
-				sendToArduino("REEEEE why you dont connect");
-				try {
-					byte[] thatByte = { 0 };
-					if (!i2.readOnly(thatByte, 1) && thatByte[0] == 1) {
-						System.out.println("READ SOMETHING: " + thatByte[0]);
-						System.out.println("ARDUINO LINKED CONFIRMED");
-						hasArduinoLink = true;
-					}
-				} catch (RuntimeException e) {
-
+					
 				}
 			}
-
 		}
-
-	}
 
 	// private class ArduinoTimeoutChecker
 
@@ -67,7 +55,7 @@ public class ReactingLED {
 	public ReactingLED() {
 		i2 = new I2C(Port.kOnboard, 4);
 		// s2 = new SerialPort(0, Port.);
-		notify.startPeriodic(0.5);
+		notify.startPeriodic(0.05);
 	}
 
 	public void sendToArduino(String input) {// writes to the arduino
@@ -83,7 +71,7 @@ public class ReactingLED {
 		// System.out.println("Data to Arduino" + WriteData);
 		 //i2.transaction(WriteData, WriteData.length, null, 0);//sends each
 		// byte to arduino
-		System.out.println("Sending...");
+		//System.out.println("Sending...");
 		i2.writeBulk(WriteData);
 	}
 
