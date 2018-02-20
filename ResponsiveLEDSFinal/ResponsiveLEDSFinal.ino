@@ -56,7 +56,7 @@ void loop() {
   // put your main code here, to run repeatedly:
 
 
-     elevUpdate(elevColor,elevDir);
+     elevUpdate();
 
 
     FastLED.show();
@@ -95,7 +95,7 @@ void initI2CLink(){
  }
 
 void confirmLinkBlink(){
-  for(int i = 0; i < 10; i ++){
+  for(int i = 0; i < 6; i ++){
     for(int i = 0; i < kNumLedElevator; i++){
         elevLeds[i] = CRGB::Green;
       }
@@ -131,27 +131,43 @@ void requestReceived(){
           }
  }
 void getReady(){
-  
+  for(int i = 0; i <= kNumLedElevator; i+=6){
+    elevLeds[i] = elevColor;
+    elevLeds[i+1] = elevColor;
+    elevLeds[i+2] = elevColor;
+  }
 }
-void elevUpdate(CRGB color,String dir){
+void elevUpdate(){
     if(tickCounter % (elevTimePerUpdate/kDelayPerTick) == 0){
-      if(dir != "still"){
-        if(dir == "up"){
-        //evens = color
-        for(int i = elevStartingPos;i <= kNumLedElevator; i += 6){
-            elevLeds[i] = color;
-            elevLeds[i+1] = color;
-            elevLeds[i+2] = color;
-          }
-        for(int i = elevStartingPos+3; i <= kNumLedElevator; i +=6){
+      if(elevDir != "still"){
+            if(elevStartingPos >= 3)
+              elevStartingPos = 0;
+          if(elevStartingPos <= -1)
+              elevStartingPos = 2;
+          
+        for(int i = 0; i <= kNumLedElevator; i ++){
             elevLeds[i] = CRGB::Black;
             elevLeds[i+1] = CRGB::Black;
             elevLeds[i+2] = CRGB::Black;
           }
+          
+        if(elevDir == "up"){
+
+        for(int i = elevStartingPos;i <= kNumLedElevator; i += 6){
+            elevLeds[i] = elevColor;
+            elevLeds[i+1] = elevColor;
+            elevLeds[i+2] = elevColor;
+          }
           elevStartingPos ++;
         }
+        if(elevDir == "down"){
+               for(int i = elevStartingPos;i <= kNumLedElevator; i ++){
+            elevLeds[i] = elevColor;
+            elevLeds[i+1] = elevColor;
+            elevLeds[i+2] = elevColor;
+          }
+            elevStartingPos --;
+        }  
       }  
     }
-    if(elevStartingPos == kNumLedElevator)
-      elevStartingPos = 0;
 }
