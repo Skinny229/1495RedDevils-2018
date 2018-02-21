@@ -43,10 +43,10 @@ public class Robot extends TimedRobot {
 		rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
 		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
-		//elevator = new Elevator();
+		elevator = new Elevator();
 		climber = new Climber();
 		oi = new OI();
-		//arm = new Arm();
+		arm = new Arm();
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		compressor = new Compressor();
 		autoChooser.addDefault(".5s Forward", new DriveForward());
