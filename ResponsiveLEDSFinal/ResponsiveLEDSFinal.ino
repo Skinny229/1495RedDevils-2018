@@ -1,9 +1,11 @@
 /*
     Creator: Rodrigo Lopez
-    Latest Revision: 2/18/18
+    Latest Revision: 2/20/18
 
     Notes:
-      
+      Every change that doesn't include a fundamental change of how the leds animate should be inside the variables before the setup function
+      For Example if you change the number of LEDS the animation should adjust for the change in LEDS same as per changes in the delay etc....
+      Works!!!1
     
 */
 
@@ -19,7 +21,7 @@
 #define kTickCounterMax 199
 
 //Creating Global Variables
-int tickCounter = 0;
+
 
 
 //**Creating Elevator Variables**
@@ -30,12 +32,13 @@ const CRGB colorCubeMiddle = CRGB::Yellow;
 //Actual Elevator
 CRGB elevLeds[kNumLedElevator];
 //Color of elevator lights
-CRGB elevColor = CRGB::Cyan; //<----Default Color
+CRGB elevColor = CRGB::Cyan; //<----Default Color or starting color, once roborio boots it should change to colors defined in the consts above
 String elevDir = "still";  //<--- default direction of the leds
-int elevTimePerUpdate = 50; // in ms
-int elevStartingPos = 0;
+int elevTimePerUpdate = 50; // in ms **must have remainer of ---> 0 <--- when divided by the kDelayPerTick **
 
-//I2C Link Variables
+//No No Touch variables
+int elevStartingPos = 0;
+int tickCounter = 0;
 boolean hasRioLink = false;
 int cmdReceived = 0;
 
@@ -114,13 +117,11 @@ void requestReceived(){
            int cmdReceived = Wire.read();
       if(hasRioLink){
           switch(cmdReceived){
-              case 0:
+              case 65: elevColor = colorCubeIn; //A
                 break;
-              case 65: elevColor = CRGB::Green; //A
+              case 66: elevColor = colorCubeMiddle; //B
                 break;
-              case 66: elevColor = CRGB::Cyan; //B
-                break;
-              case 67: elevColor = CRGB::Red; //C
+              case 67: elevColor = colorCubeOut; //C
                   break;
               case 68: elevDir = "up"; break;//D
               
@@ -151,23 +152,25 @@ void elevUpdate(){
         if(elevDir == "up"){
                 if(elevStartingPos >= 6)
               elevStartingPos = 0;
-        for(int i = elevStartingPos;i < kNumLedElevator; i += 6){
-            elevLeds[i] = elevColor;
-            elevLeds[i+1] = elevColor;
-            elevLeds[i+2] = elevColor;
-          }
+          fillInThrees();
           elevStartingPos ++;
         }
         if(elevDir == "down"){
                if(elevStartingPos <= -1)
               elevStartingPos = 4;
-               for(int i = elevStartingPos;i < kNumLedElevator; i += 6){
-            elevLeds[i] = elevColor;
-            elevLeds[i+1] = elevColor;
-            elevLeds[i+2] = elevColor;
-          }
+              fillInThrees();
             elevStartingPos --;
         }  
-      }  
+      }else{
+           fillInThrees();
+        }
     }
 }
+
+void fillInThrees(){
+    for(int i = elevStartingPos; i < kNumLedElevator; i += 6){
+        elevLeds[i] = elevColor;
+        elevLeds[i+1] = elevColor;
+        elevLeds[i+2] = elevColor;
+      }
+  }
