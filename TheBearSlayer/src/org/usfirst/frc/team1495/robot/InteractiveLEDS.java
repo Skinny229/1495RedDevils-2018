@@ -23,6 +23,7 @@ public class InteractiveLEDS {
 		public void run() {
 			sendToArduino("Z");
 			updateLimitSwitches();
+			if (cmdQueue.size() == 0) {
 
 			} else {
 				sendToArduino(cmdQueue.get(0));
