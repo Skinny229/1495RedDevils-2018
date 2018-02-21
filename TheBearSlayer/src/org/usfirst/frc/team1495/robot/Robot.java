@@ -17,6 +17,7 @@ import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
+import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 
 public class Robot extends TimedRobot {
 	//Drive
@@ -28,6 +29,8 @@ public class Robot extends TimedRobot {
 	public static Elevator elevator;
 	public static Climber climber;
 	public static Arm arm;
+	public static LimitSwitch elevUpper;
+	public static LimitSwitch elevLower;
 	//Control
 	public static OI oi;
 	//Other
@@ -48,6 +51,8 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 		oi = new OI();
 		arm = new Arm();
+		elevUpper = new LimitSwitch(RobotMap.kUpperLSPort);
+		elevLower = new LimitSwitch(RobotMap.kLowerLSPort);
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		compressor = new Compressor();
 		lights = new InteractiveLEDS();

@@ -33,11 +33,12 @@ public class InteractiveLEDS {
 		}
 
 		public void updateLimitSwitches() {
-			if (limit.get() != lastInnerLimitState && limit.get()) {
+			if (limit.get() != lastInnerLimitState) {
 				addCmd("A");
-				lastInnerLimitState = !limit.get();
-			} else if (limit2.get() != lastInnerLimitState && limit2.get()) {
+				lastInnerLimitState = limit.get();
+			} else if (limit2.get() != lastInnerLimitState) {
 				addCmd("B");
+				lastOuterLimitState = limit2.get();
 			} else {
 				addCmd("C");
 			}

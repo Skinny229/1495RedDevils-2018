@@ -13,6 +13,8 @@ public class Elevate extends Command {
 	
     public Elevate(double s) {
         requires(Robot.elevator);
+        requires(Robot.elevUpper);
+        requires(Robot.elevLower);
         speed = s;
     }
 
@@ -26,7 +28,12 @@ public class Elevate extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.motor.set(speed);
+    	if(speed > 0 && ! Robot.elevUpper.limit.get())
+    		Robot.elevator.motor.set(speed);
+    	else if(speed < 0 && ! Robot.elevLower.limit.get())
+    		Robot.elevator.motor.set(speed);
+    	else
+    		Robot.elevator.motor.stopMotor();
     }
 
     // Make this return true when this Command no longer needs to run execute()

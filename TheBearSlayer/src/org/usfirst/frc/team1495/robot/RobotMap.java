@@ -17,6 +17,8 @@ public class RobotMap {
 	
 	// Elevator
 	public static final int kElevatorMotorID = 4; // CAN ID
+	public static final int kUpperLSPort = 2;
+	public static final int kLowerLSPort = 3;
 	public static final boolean kElevatorMotorSafety = false;
 
 	// Climber
