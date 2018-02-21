@@ -21,14 +21,13 @@ public class SpinIntake extends Command {
 	}
 
 	protected void execute() {
-<<<<<<< HEAD
 		Robot.intake.set(speed);
-=======
+
 		if(dir == IntakeDir.Inwards)
 			Robot.intake.setIn();
 		else if(dir == IntakeDir.Outwards)
 			Robot.intake.setOut();
->>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
+
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
@@ -38,20 +37,14 @@ public class SpinIntake extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-<<<<<<< HEAD
 		Robot.intake.stop();
-=======
 		Robot.intake.stopSpin();
->>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-<<<<<<< HEAD
 		Robot.intake.stop();
-=======
 		Robot.intake.stopSpin();
->>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
 	}
 }

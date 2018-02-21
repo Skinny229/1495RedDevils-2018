@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Arm extends Subsystem {
 
-    //public DoubleSolenoid solenoid;
+    public DoubleSolenoid solenoid;
 
     public Arm() {
-    	//solenoid = new DoubleSolenoid(RobotMap.kArmSolenoidForward, RobotMap.kArmSoleoidReverse);
+    	solenoid = new DoubleSolenoid(RobotMap.kArmSolenoidForward, RobotMap.kArmSoleoidReverse);
     }
     
     public void initDefaultCommand() {

@@ -8,14 +8,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-<<<<<<< HEAD
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1495.robot.commands.DriveForward;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
-=======
->>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
+
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
@@ -33,7 +31,7 @@ public class Robot extends TimedRobot {
 	//Control
 	public static OI oi;
 	//Other
-	//public static PowerDistributionPanel PDP;
+	public static PowerDistributionPanel PDP;
 	public static Compressor compressor;
 	static Command autoRoutine;
 
@@ -49,13 +47,10 @@ public class Robot extends TimedRobot {
 		climber = new Climber();
 		oi = new OI();
 		//arm = new Arm();
-		//PDP = new PowerDistributionPanel(RobotMap.kPDP);
+		PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		compressor = new Compressor();
-<<<<<<< HEAD
-		//PDP.clearStickyFaults();
 		autoChooser.addDefault(".5s Forward", new DriveForward());
 		SmartDashboard.putData("Auto Routine", autoChooser);
-=======
 		PDP.clearStickyFaults();
 		
 		
@@ -64,7 +59,6 @@ public class Robot extends TimedRobot {
 		chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", autoChooser);
 		*/
->>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
 	}
 
 	@Override
