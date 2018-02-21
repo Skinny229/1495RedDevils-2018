@@ -33,6 +33,7 @@ public class RobotMap {
 	public static final int kPDP = 1; // CAN ID
 	
 	// Constants
+	public static final double kIntakeSpeed = 1.0;
 	public static final double kEncoderConversionFactor = 0.00851;
 	//public static final double kMaxVelocity;
 	//public static final double kMaxAcceleration;

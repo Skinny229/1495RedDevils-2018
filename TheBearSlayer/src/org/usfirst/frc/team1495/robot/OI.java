@@ -3,6 +3,7 @@ package org.usfirst.frc.team1495.robot;
 import org.usfirst.frc.team1495.robot.commands.Climb;
 import org.usfirst.frc.team1495.robot.commands.Elevate;
 import org.usfirst.frc.team1495.robot.commands.SpinIntake;
+import org.usfirst.frc.team1495.robot.subsystems.Intake.IntakeDir;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -35,10 +36,17 @@ public class OI {
 	public Button drop = new JoystickButton(driverController, 7);
 
 	public OI() {
+<<<<<<< HEAD
 		in.whileHeld(new SpinIntake(1.0));
 		out.whileHeld(new SpinIntake(-1.0));
 		raise.whileHeld(new Elevate(-0.5));
 		lower.whileHeld(new Elevate(1.0));
+=======
+		close.whenPressed(new OpenIntake(false));
+		open.whenPressed(new OpenIntake(true));
+		in.whileHeld(new SpinIntake(IntakeDir.Inwards));
+		out.whileHeld(new SpinIntake(IntakeDir.Outwards));
+>>>>>>> 6e9eac1441d702576fe4d0f235393b64ea33fca1
 		climb.whileHeld(new Climb(0.5));
 	}
 }
