@@ -33,8 +33,9 @@ public class Robot extends TimedRobot {
 	//Other
 	public static PowerDistributionPanel PDP;
 	public static Compressor compressor;
+	public static InteractiveLEDS lights;
 	static Command autoRoutine;
-
+	
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	@Override
@@ -49,6 +50,7 @@ public class Robot extends TimedRobot {
 		arm = new Arm();
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		compressor = new Compressor();
+		lights = new InteractiveLEDS();
 		autoChooser.addDefault(".5s Forward", new DriveForward());
 		SmartDashboard.putData("Auto Routine", autoChooser);
 		PDP.clearStickyFaults();

@@ -32,7 +32,12 @@ public class RobotMap {
 	public static final int kPCM = 0; // CAN ID
 	public static final int kPDP = 1; // CAN ID
 	
-	// Constants
+	//Interactive LEDS
+	public static final int kInnerLimitSwitchPort = 0;
+	public static final int kOutterLimitSwitchPort = 1;
+	public static final int kI2CAdress = 4;
+	
+	// Constant Speeds
 	public static final double kIntakeSpeed = 1.0;
 	public static final double kEncoderConversionFactor = 0.00851;
 	//public static final double kMaxVelocity;
