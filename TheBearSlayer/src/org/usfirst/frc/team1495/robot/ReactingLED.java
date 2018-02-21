@@ -14,41 +14,37 @@ public class ReactingLED {
 	public ArrayList<String> cmdQueue = new ArrayList<String>();
 	DigitalInput limit = new DigitalInput(0);
 	DigitalInput limit2 = new DigitalInput(1);
-	
 
 	public class CommandCenter implements java.lang.Runnable {
 		boolean hasArduinoLink = false;
-		boolean lastLimitState = false;
-		boolean lastLimit2State = false;
-		
+		boolean lastInnerLimitState = false;
+		boolean lastOuterLimitState = false;
+
 		@Override
 		public void run() {
-				if(limit.get() != lastLimitState){
-					lastLimitState = limit.get();
-					if(limit.get())
-						addCmd("A");
-					else
-						addCmd("C");
-					}
-				if(limit2.get() != lastLimit2State){
-					lastLimit2State = limit2.get();
-					if(limit2.get())
-						addCmd("D");
-					else
-						addCmd("F");
-					}
-				sendToArduino("Z");
-				if(cmdQueue.size() == 0){
-					
-				}else{
-					sendToArduino(cmdQueue.get(0));
-					cmdQueue.remove(0);
-					
-				}
+			sendToArduino("Z");
+			updateLimitSwitches();
+			if (cmdQueue.size() == 0) {
+
+			} else {
+				sendToArduino(cmdQueue.get(0));
+				cmdQueue.remove(0);
+
 			}
 		}
 
-	// private class ArduinoTimeoutChecker
+		public void updateLimitSwitches() {
+			if (limit.get() != lastInnerLimitState && limit.get()) {
+				addCmd("A");
+				lastInnerLimitState = !limit.get();
+			} else if (limit2.get() != lastInnerLimitState && limit2.get()) {
+				addCmd("B");
+			} else {
+				addCmd("C");
+			}
+		}
+		
+	}
 
 	Notifier notify = new Notifier(new CommandCenter());
 
@@ -69,9 +65,9 @@ public class ReactingLED {
 												// byte array
 		}
 		// System.out.println("Data to Arduino" + WriteData);
-		 //i2.transaction(WriteData, WriteData.length, null, 0);//sends each
+		// i2.transaction(WriteData, WriteData.length, null, 0);//sends each
 		// byte to arduino
-		//System.out.println("Sending...");
+		// System.out.println("Sending...");
 		i2.writeBulk(WriteData);
 	}
 

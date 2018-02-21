@@ -118,7 +118,7 @@ void requestReceived(){
                 break;
               case 65: elevColor = CRGB::Green; //A
                 break;
-              case 66: elevColor = CRGB::Yellow; //B
+              case 66: elevColor = CRGB::Cyan; //B
                 break;
               case 67: elevColor = CRGB::Red; //C
                   break;

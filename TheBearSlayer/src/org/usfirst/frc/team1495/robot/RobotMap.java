@@ -34,6 +34,13 @@ public class RobotMap {
 	public static final int kPCM = 0; // CAN ID
 	public static final int kPDP = 1; // CAN ID
 	
+	//Reactive LED
+	public static final int kI2CAdress = 4;
+	public static final double kMainLoopSpeed = 0.05;
+	public static final double kTimeoutLoopSpeed = 0.25;
+	public static final int kInnerIntakeLimit = 0;
+	public static final int kOuterIntakeLimit = 1;
+	
 	// Constants
 	public static final double kEncoderConversionFactor = 0.00851;
 }
