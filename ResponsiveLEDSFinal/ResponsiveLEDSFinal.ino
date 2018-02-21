@@ -71,7 +71,7 @@ void loop() {
 
 
 void initLEDS(){
-    FastLED.addLeds<NEOPIXEL, kElevatorPin>(elevLeds, kNumLedElevator);
+    FastLED.addLeds<WS2812B, kElevatorPin, GRB>(elevLeds, kNumLedElevator);
  
  }
  void startUpSequence(CRGB elevSetUpColor){
