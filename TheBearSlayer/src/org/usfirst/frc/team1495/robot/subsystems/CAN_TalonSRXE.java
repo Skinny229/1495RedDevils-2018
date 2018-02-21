@@ -23,6 +23,6 @@ public class CAN_TalonSRXE extends CAN_TalonSRX {
 	}
 
 	public void resetEncoder() {
-		// HOW DO I DO THIS?
+		setSelectedSensorPosition(0, 0, 1);
 	}
 }

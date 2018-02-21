@@ -21,7 +21,7 @@ public class CalibrateEncoder extends Command {
 	int rightDistance;
 	int leftDistance;
 
-	protected void initialize(CAN_TalonSRX rightTalon, CAN_TalonSRX leftTalon) {
+	protected void initialize(CAN_TalonSRXE rightTalon, CAN_TalonSRXE leftTalon) {
 		rightDistance = Robot.rightDriveTalon.getRawEncoderPosition();
 		leftDistance = Robot.leftDriveTalon.getRawEncoderPosition();
 		Robot.roboDrive.arcadeDrive(-.5, 0);

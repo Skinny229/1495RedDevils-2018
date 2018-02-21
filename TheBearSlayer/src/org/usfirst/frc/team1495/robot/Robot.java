@@ -9,12 +9,13 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team1495.robot.commands.DriveForward;
+import org.usfirst.frc.team1495.robot.subsystems.Arm;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
-import org.usfirst.frc.team1495.robot.subsystems.Claw;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
-import org.usfirst.frc.team1495.robot.subsystems.PWM_VictorSP;
 
 public class Robot extends TimedRobot {
 	//Drive
@@ -25,32 +26,31 @@ public class Robot extends TimedRobot {
 	public static Intake intake;
 	public static Elevator elevator;
 	public static Climber climber;
-	public static Claw claw;
+	public static Arm arm;
 	//Control
 	public static OI oi;
 	//Other
 	//public static PowerDistributionPanel PDP;
-	//public static Compressor compressor;
+	public static Compressor compressor;
+	static Command autoRoutine;
 
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	@Override
 	public void robotInit() {
-		//leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
-		//rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
-		//roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
+		leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+		rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
 		oi = new OI();
+		//arm = new Arm();
 		//PDP = new PowerDistributionPanel(RobotMap.kPDP);
-		//compressor = new Compressor();
+		compressor = new Compressor();
 		//PDP.clearStickyFaults();
-		/*
-		autoChooser.addDefault("Default Auto", new ExampleCommand());
-		chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", autoChooser);
-		*/
+		autoChooser.addDefault(".5s Forward", new DriveForward());
+		SmartDashboard.putData("Auto Routine", autoChooser);
 	}
 
 	@Override
@@ -65,18 +65,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		//m_autonomousCommand = m_chooser.getSelected();
+		autoRoutine = autoChooser.getSelected();
 
-		/*
-		 * String autoSelected = SmartDashboard.getString("Auto Selector",
-		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
-		 * = new MyAutoCommand(); break; case "Default Auto": default:
-		 * autonomousCommand = new ExampleCommand(); break; }
-		 */
-
-		//if (m_autonomousCommand != null) {
-		//	m_autonomousCommand.start();
-		//}
+		if (autoRoutine != null) {
+			autoRoutine.start();
+		}
 	}
 
 	@Override
@@ -86,14 +79,14 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		//if (m_autonomousCommand != null) {
-		//	m_autonomousCommand.cancel();
-		//}
+		if (autoRoutine != null) {
+			autoRoutine.cancel();
+		}
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		//roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 

@@ -2,33 +2,25 @@ package org.usfirst.frc.team1495.robot;
 
 public class RobotMap {
 	// Drive
-	public static final int kLeftDriveMotorID = 2; // CAN ID / PWM 2
-	public static final int kRightDriveMotorID = 3; // CAN ID / PWM 3
+	public static final int kLeftDriveMotorID = 0; // CAN ID
+	public static final int kRightDriveMotorID = 1; // CAN ID
 	public static final boolean kDriveMotorSafety = false;
 
 	// Intake
-	public static final int kLeftIntakeMotorID = 4; // CAN ID / PWM 4
-	public static final int kRightIntakeMotorID = 5; // CAN ID / PWM 5
+	public static final int kLeftIntakeMotorID = 2; // CAN ID
+	public static final int kRightIntakeMotorID = 3; // CAN ID
 	public static final boolean kIntakeMotorSafety = false;
-	
-	// Claw
-	public static final int kLeftClawSolenoidForward = 2; // PCM ID
-	public static final int kLeftClawSolenoidReverse = 3; // PCM ID
-	
-	public static final int kRightClawSolenoidForward = 4; // PCM ID
-	public static final int kRightClawSolenoidReverse = 5; // PCM ID
 
-	// Arm
-	
+	// Arm	
 	public static final int kArmSolenoidForward = 0;
 	public static final int kArmSoleoidReverse = 1;
 	
 	// Elevator
-	public static final int kElevatorMotorID = 6; // CAN ID / PWM 6
+	public static final int kElevatorMotorID = 4; // CAN ID
 	public static final boolean kElevatorMotorSafety = false;
 
 	// Climber
-	public static final int kClimberMotorID = 7; // CAN ID / PWM 7
+	public static final int kClimberMotorID = 5; // CAN ID /
 	public static final boolean kClimberMotorSafety = false;
 
 	// Control
@@ -42,4 +34,10 @@ public class RobotMap {
 	
 	// Constants
 	public static final double kEncoderConversionFactor = 0.00851;
+	//public static final double kMaxVelocity;
+	//public static final double kMaxAcceleration;
+	//public static final double kMaxJerk;
+	public static final double kEpsilon = Math.pow(10.0, -6.0);
+	public static final double kPositionTolerance = Math.pow(10.0, -3.0);
+	public static final double kVelocityTolerance = Math.pow(10.0, -3.0);
 }
