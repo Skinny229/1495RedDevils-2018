@@ -9,16 +9,7 @@ public class Intake extends Subsystem {
 
 	public CAN_TalonSRX leftMotor;
 	public CAN_TalonSRX rightMotor;
-
-	//public PWM_VictorSP leftMotor;
-	//public PWM_VictorSP rightMotor;
-
 	
-	public enum IntakeDir{
-		Inwards,Outwards
-	}
-
-
 	public Intake() {
 		leftMotor = new CAN_TalonSRX(RobotMap.kLeftIntakeMotorID, RobotMap.kIntakeMotorSafety);
 		rightMotor = new CAN_TalonSRX(RobotMap.kRightIntakeMotorID, RobotMap.kIntakeMotorSafety);
@@ -30,21 +21,6 @@ public class Intake extends Subsystem {
 	}
 	
 	public void stop() {
-		leftMotor.stopMotor();
-		rightMotor.stopMotor();
-	}
-	
-	public void setIn(){
-		leftMotor.set(RobotMap.kIntakeSpeed);
-		rightMotor.set(RobotMap.kIntakeSpeed);
-	}
-	
-	public void setOut(){
-		rightMotor.set(-RobotMap.kIntakeSpeed);
-		leftMotor.set(-RobotMap.kIntakeSpeed);
-	}
-	
-	public void stopSpin(){
 		leftMotor.stopMotor();
 		rightMotor.stopMotor();
 	}

@@ -17,9 +17,9 @@ public class RobotMap {
 	
 	// Elevator
 	public static final int kElevatorMotorID = 4; // CAN ID
-	public static final int kUpperLSPort = 2;
-	public static final int kLowerLSPort = 3;
 	public static final boolean kElevatorMotorSafety = false;
+	//public static final int kUpperElevatorLSPort = 2; // PWM
+	//public static final int kLowerElevatorLSPort = 3; // PWM
 
 	// Climber
 	public static final int kClimberMotorID = 5; // CAN ID /
@@ -39,13 +39,12 @@ public class RobotMap {
 	public static final int kOutterLimitSwitchPort = 1;
 	public static final int kI2CAdress = 4;
 	
-	// Constant Speeds
-	public static final double kIntakeSpeed = 1.0;
+	// Constants
 	public static final double kEncoderConversionFactor = 0.00851;
 	//public static final double kMaxVelocity;
 	//public static final double kMaxAcceleration;
 	//public static final double kMaxJerk;
-	public static final double kEpsilon = Math.pow(10.0, -6.0);
-	public static final double kPositionTolerance = Math.pow(10.0, -3.0);
-	public static final double kVelocityTolerance = Math.pow(10.0, -3.0);
+	//public static final double kEpsilon = Math.pow(10.0, -6.0);
+	//public static final double kPositionTolerance = Math.pow(10.0, -3.0);
+	//public static final double kVelocityTolerance = Math.pow(10.0, -3.0);
 }

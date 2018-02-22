@@ -9,16 +9,14 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import org.usfirst.frc.team1495.robot.commands.DriveForward;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
-
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
 import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 
+@SuppressWarnings("unused")
 public class Robot extends TimedRobot {
 	//Drive
 	public static DifferentialDrive roboDrive;
@@ -28,18 +26,18 @@ public class Robot extends TimedRobot {
 	public static Intake intake;
 	public static Elevator elevator;
 	public static Climber climber;
-	public static Arm arm;
-	public static LimitSwitch elevUpper;
-	public static LimitSwitch elevLower;
+	public static Arm arm = new Arm();
+	//public static LimitSwitch upperElevatorLS;
+	//public static LimitSwitch lowerElevatorLS;
 	//Control
 	public static OI oi;
 	//Other
 	public static PowerDistributionPanel PDP;
 	public static Compressor compressor;
 	public static InteractiveLEDS lights;
-	static Command autoRoutine;
-	
-	SendableChooser<Command> autoChooser = new SendableChooser<>();
+	//Autonomous
+	//static Command autoRoutine;	
+	//SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	@Override
 	public void robotInit() {
@@ -50,22 +48,15 @@ public class Robot extends TimedRobot {
 		elevator = new Elevator();
 		climber = new Climber();
 		oi = new OI();
-		arm = new Arm();
-		elevUpper = new LimitSwitch(RobotMap.kUpperLSPort);
-		elevLower = new LimitSwitch(RobotMap.kLowerLSPort);
+		//arm = new Arm();
+		//upperElevatorLS = new LimitSwitch(RobotMap.kUpperElevatorLSPort);
+		//lowerElevatorLS = new LimitSwitch(RobotMap.kLowerElevatorLSPort);
 		PDP = new PowerDistributionPanel(RobotMap.kPDP);
 		compressor = new Compressor();
 		lights = new InteractiveLEDS();
-		autoChooser.addDefault(".5s Forward", new DriveForward());
-		SmartDashboard.putData("Auto Routine", autoChooser);
+		/*autoChooser.addDefault(...);
+		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
-		
-		
-		/*
-		autoChooser.addDefault("Default Auto", new ExampleCommand());
-		chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", autoChooser);
-		*/
 	}
 
 	@Override
@@ -80,11 +71,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		autoRoutine = autoChooser.getSelected();
+		/*autoRoutine = autoChooser.getSelected();
 
 		if (autoRoutine != null) {
 			autoRoutine.start();
-		}
+		} */
 	}
 
 	@Override
@@ -94,9 +85,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		if (autoRoutine != null) {
+		/*if (autoRoutine != null) {
 			autoRoutine.cancel();
-		}
+		}*/
 	}
 
 	@Override
