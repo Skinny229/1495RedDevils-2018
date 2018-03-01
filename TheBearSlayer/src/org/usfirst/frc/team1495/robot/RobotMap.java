@@ -38,6 +38,7 @@ public class RobotMap {
 	public static final int kInnerLimitSwitchPort = 0;
 	public static final int kOutterLimitSwitchPort = 1;
 	public static final int kI2CAdress = 4;
+	public static boolean isArduinoConnected = false;
 	
 	// Constants
 	public static final double kEncoderConversionFactor = 0.00851;

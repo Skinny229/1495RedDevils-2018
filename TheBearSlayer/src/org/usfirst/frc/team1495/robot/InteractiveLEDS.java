@@ -21,7 +21,7 @@ public class InteractiveLEDS {
 
 		@Override
 		public void run() {
-			sendToArduino("Z");
+			RobotMap.isArduinoConnected = isArduinoHere();
 			updateLimitSwitches();
 			if (cmdQueue.size() == 0) {
 
@@ -44,6 +44,22 @@ public class InteractiveLEDS {
 			}
 		}
 
+		final double kTimeoutTimer = 3.0;
+		int counter = 0;
+
+		public boolean isArduinoHere() {
+			if (sendToArduino("Testing Connection")) {
+				counter = 0;
+				return true;
+			} else {
+				counter++;
+				if (counter > kTimeoutTimer / .05) {
+					return false;
+				}
+				return true;
+			}
+		}
+
 	}
 
 	Notifier notify = new Notifier(new CommandCenter());
@@ -53,13 +69,13 @@ public class InteractiveLEDS {
 		notify.startPeriodic(0.05);
 	}
 
-	public void sendToArduino(String input) {
+	public boolean sendToArduino(String input) {
 		char[] CharArray = input.toCharArray();
 		byte[] WriteData = new byte[CharArray.length];
 		for (int i = 0; i < CharArray.length; i++) {
 			WriteData[i] = (byte) CharArray[i];
 		}
-		i2.writeBulk(WriteData);
+		return (!i2.writeBulk(WriteData));
 	}
 
 	public void addCmd(String cmd) {
