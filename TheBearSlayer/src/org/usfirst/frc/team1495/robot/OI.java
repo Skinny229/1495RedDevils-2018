@@ -26,8 +26,8 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
 	//public XboxController operatorController = new XboxController(RobotMap.kOperatorControllerPort);
-	public Joystick stick = new Joystick(RobotMap.kTestJoystickPort);
-	/*s
+	//public Joystick stick = new Joystick(RobotMap.kTestJoystickPort);
+	
 	// Xbox
 	public Button in = new JoystickButton(driverController, 5);
 	public Button out = new JoystickButton(driverController, 6);
@@ -37,8 +37,8 @@ public class OI {
 	public Button drop = new JoystickButton(driverController, 7);
 	public Button open = new JoystickButton(driverController, 9);
 	public Button close = new JoystickButton(driverController, 10);
-	*/
 	
+	/*
 	//Joystick
 	public Button in = new JoystickButton(stick, 2);
 	public Button out = new JoystickButton(stick, 1);
@@ -47,7 +47,7 @@ public class OI {
 	public Button climb = new JoystickButton(stick, 7);
 	public Button open = new JoystickButton(stick, 6);
 	public Button close = new JoystickButton(stick, 4);
-	
+	*/
 
 	public OI() {
 

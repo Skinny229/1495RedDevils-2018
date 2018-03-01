@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+ 
 import org.usfirst.frc.team1495.robot.commands.OpenIntakeVertical;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
@@ -21,7 +21,7 @@ import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 @SuppressWarnings("unused")
 public class Robot extends TimedRobot {
 	//Drive
-	public static DifferentialDrive roboDrive;
+	public static MechCantMech roboDrive;
 	public static CAN_TalonSRXE leftDriveMotor;
 	public static CAN_TalonSRXE rightDriveMotor;
 	//Subsystems
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
 		rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
-		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
+		roboDrive = new MechCantMech(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
@@ -59,6 +59,7 @@ public class Robot extends TimedRobot {
 		/*autoChooser.addDefault(...);
 		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
+		
 		
 		SmartDashboard.putData("Bring Down Intake From vertical", new OpenIntakeVertical());
 	}
@@ -96,7 +97,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		roboDrive.arcadeModified(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * .80);
 		//roboDrive.tankDrive(-oi.driverController.getY(Hand.kLeft) * .98 , -oi.driverController.getY(Hand.kRight));
 		//roboDrive.arcadeDrive(-oi.driverController.getY(), oi.driverController.getX());
 		Scheduler.getInstance().run();
