@@ -5,6 +5,8 @@ public class RobotMap {
 	public static final int kLeftDriveMotorID = 0; // CAN ID
 	public static final int kRightDriveMotorID = 1; // CAN ID
 	public static final boolean kDriveMotorSafety = false;
+	public static final double kLeftSideRatio = 1.0;
+	public static final double kRightSideRatio = 1.0;
 
 	// Intake
 	public static final int kLeftIntakeMotorID = 2; // CAN ID

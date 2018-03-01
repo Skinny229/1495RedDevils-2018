@@ -19,7 +19,7 @@ import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 @SuppressWarnings("unused")
 public class Robot extends TimedRobot {
 	//Drive
-	public static DifferentialDrive roboDrive;
+	public static MechCantMech roboDrive;
 	public static CAN_TalonSRXE leftDriveMotor;
 	public static CAN_TalonSRXE rightDriveMotor;
 	//Subsystems
@@ -43,7 +43,7 @@ public class Robot extends TimedRobot {
 	public void robotInit() {
 		leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
 		rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
-		roboDrive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
+		roboDrive = new MechCantMech(leftDriveMotor, rightDriveMotor);
 		intake = new Intake();
 		elevator = new Elevator();
 		climber = new Climber();
@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
+		roboDrive.arcadeModified(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 
