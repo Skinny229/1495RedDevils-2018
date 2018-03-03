@@ -112,12 +112,12 @@ public class Robot extends TimedRobot {
 	double fineTuneX = 0.0;
 		switch(controlStatus){
 		case FINETUNE:
-				fineTuneY = oi.stick.getY();
-				fineTuneX = oi.stick.getX();
+				fineTuneY = oi.stick.getY() * .2;
+				fineTuneX = oi.stick.getX() * .2;
 			break;
 		default:
 			break;	
 		}
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY, (oi.driverController.getX(Hand.kRight) + fineTuneY) * .8);
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY, (oi.driverController.getX(Hand.kRight) + fineTuneX) * .8);
 	}
 }
