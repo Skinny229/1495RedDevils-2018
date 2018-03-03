@@ -2,8 +2,10 @@ package org.usfirst.frc.team1495.robot;
 
 public class RobotMap {
 	// Drive
-	public static final int kLeftDriveMotorID = 0; // CAN ID
-	public static final int kRightDriveMotorID = 1; // CAN ID
+	public static final int kLeftDriveMotorID = 4; // CAN ID
+	public static final int kRightDriveMotorID = 0; // CAN ID
+	public static final int kLeftDrive2MotorID = 5;
+	public static final int kRightDrive2MotorID = 1;
 	public static final boolean kDriveMotorSafety = false;
 	public static final double kLeftSideRatio = .94;
 	public static final double kRightSideRatio = 1.0;
@@ -11,8 +13,8 @@ public class RobotMap {
 	public static final double kSlowDownSpeed = .3;
 	
 	// Intake
-	public static final int kLeftIntakeMotorID = 2; // CAN ID
-	public static final int kRightIntakeMotorID = 3; // CAN ID
+	public static final int kLeftIntakeMotorID = 0;  // VictorSP
+	public static final int kRightIntakeMotorID = 1; // VictorSP
 	public static final boolean kIntakeMotorSafety = false;
 
 	// Arm	
@@ -20,13 +22,13 @@ public class RobotMap {
 	public static final int kArmSoleoidReverse = 1;
 	
 	// Elevator
-	public static final int kElevatorMotorID = 4; // CAN ID
+	public static final int kElevatorMotorID = 2; // CAN ID
 	public static final boolean kElevatorMotorSafety = false;
-	//public static final int kUpperElevatorLSPort = 2; // PWM
-	//public static final int kLowerElevatorLSPort = 3; // PWM
+	public static final int kUpperElevatorLSPort = 2; // Digital
+	public static final int kLowerElevatorLSPort = 3; // Digital
 
 	// Climber
-	public static final int kClimberMotorID = 5; // CAN ID /
+	public static final int kClimberMotorID = 3; // CAN ID /
 	public static final boolean kClimberMotorSafety = false;
 
 	// Control

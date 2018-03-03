@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Elevate extends Command {
 
 	double speed;
-
+	
 	public Elevate(double s) {
 		requires(Robot.elevator);
 		speed = s;
@@ -26,14 +26,14 @@ public class Elevate extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		/*if (speed > 0 && !Robot.upperElevatorLS.get())
+		if (speed > 0 && !Robot.upperElevatorLS.get())
 			Robot.elevator.motor.set(speed);
 		else if (speed < 0 && !Robot.lowerElevatorLS.get())
 			Robot.elevator.motor.set(speed);
-		else
+		else{
 			Robot.elevator.motor.stopMotor();
-		*/
-		Robot.elevator.motor.set(speed);
+			speed = 0;
+		}
 	}
 
 	// Make this return true when this Command no longer needs to run execute()

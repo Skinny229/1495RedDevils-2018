@@ -3,6 +3,7 @@ package org.usfirst.frc.team1495.robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
+import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -12,50 +13,49 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  
 import org.usfirst.frc.team1495.robot.commands.OpenIntakeVertical;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
+import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRX;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
 import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 @SuppressWarnings("unused")
 public class Robot extends TimedRobot {
+	public enum DriveState{
+		FINETUNE, NOFINETUNE
+	}
+	
 	//Drive
-	public static MechCantMech roboDrive;
-	public static CAN_TalonSRXE leftDriveMotor;
-	public static CAN_TalonSRXE rightDriveMotor;
+	public static DifferentialDrive roboDrive;
+	public static CAN_TalonSRXE leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE  leftDriveMotor2 = new CAN_TalonSRXE(RobotMap.kLeftDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE  rightDriveMotor2 = new CAN_TalonSRXE(RobotMap.kRightDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static DriveState controlStatus = DriveState.NOFINETUNE;
 	//Subsystems
-	public static Intake intake;
-	public static Elevator elevator;
-	public static Climber climber;
+	public static Intake intake = new Intake();
+	public static Elevator elevator = new Elevator();
+	public static Climber climber = new Climber();
 	public static Arm arm = new Arm();
-	//public static LimitSwitch upperElevatorLS;
-	//public static LimitSwitch lowerElevatorLS;
+	public static LimitSwitch upperElevatorLS = new LimitSwitch(RobotMap.kUpperElevatorLSPort);
+	public static LimitSwitch lowerElevatorLS = new LimitSwitch(RobotMap.kLowerElevatorLSPort);
 	//Control
-	public static OI oi;
+	public static OI oi = new OI();
 	//Other
-	public static PowerDistributionPanel PDP;
-	public static Compressor compressor;
-	public static InteractiveLEDS lights;
+	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
+	public static Compressor compressor = new Compressor();
+	public static InteractiveLEDS lights = new InteractiveLEDS();
 	//Autonomous
 	//static Command autoRoutine;	
 	//SendableChooser<Command> autoChooser = new SendableChooser<>();
 
 	@Override
 	public void robotInit() {
-		leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
-		rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
-		roboDrive = new MechCantMech(leftDriveMotor, rightDriveMotor);
-		intake = new Intake();
-		elevator = new Elevator();
-		climber = new Climber();
-		oi = new OI();
-		//arm = new Arm();
-		//upperElevatorLS = new LimitSwitch(RobotMap.kUpperElevatorLSPort);
-		//lowerElevatorLS = new LimitSwitch(RobotMap.kLowerElevatorLSPort);
-		PDP = new PowerDistributionPanel(RobotMap.kPDP);
-		compressor = new Compressor();
-		lights = new InteractiveLEDS();
+		roboDrive = new DifferentialDrive(new SpeedControllerGroup(leftDriveMotor, leftDriveMotor2), new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
+		
 		/*autoChooser.addDefault(...);
 		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
@@ -97,7 +97,7 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopPeriodic() {
-		roboDrive.arcadeModified(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * .80);
+		runDriveTrain();
 		//roboDrive.tankDrive(-oi.driverController.getY(Hand.kLeft) * .98 , -oi.driverController.getY(Hand.kRight));
 		//roboDrive.arcadeDrive(-oi.driverController.getY(), oi.driverController.getX());
 		Scheduler.getInstance().run();
@@ -105,5 +105,19 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void testPeriodic() {
+	}
+	
+	public void runDriveTrain(){
+	double fineTuneY = 0.0;
+	double fineTuneX = 0.0;
+		switch(controlStatus){
+		case FINETUNE:
+				fineTuneY = oi.stick.getY();
+				fineTuneX = oi.stick.getX();
+			break;
+		default:
+			break;	
+		}
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY, (oi.driverController.getX(Hand.kRight) + fineTuneY) * .8);
 	}
 }

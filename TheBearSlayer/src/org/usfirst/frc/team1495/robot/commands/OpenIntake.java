@@ -17,7 +17,7 @@ public class OpenIntake extends Command {
 	protected void initialize() {
 		if(down)
 			Robot.arm.solenoid.set(Value.kForward);
-		else
+		else 
 			Robot.arm.solenoid.set(Value.kReverse);
 	}
 
