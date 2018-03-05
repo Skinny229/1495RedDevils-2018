@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
- 
+
+import org.usfirst.frc.team1495.robot.commands.DriveRobotDrive;
 import org.usfirst.frc.team1495.robot.commands.OpenIntakeVertical;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRX;
@@ -18,8 +19,11 @@ import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
 import org.usfirst.frc.team1495.robot.subsystems.Intake;
+import org.usfirst.frc.team1495.robot.subsystems.IntegratedMP;
 import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 @SuppressWarnings("unused")
@@ -30,10 +34,10 @@ public class Robot extends TimedRobot {
 	
 	//Drive
 	public static DifferentialDrive roboDrive;
-	public static CAN_TalonSRXE leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
-	public static CAN_TalonSRXE  leftDriveMotor2 = new CAN_TalonSRXE(RobotMap.kLeftDrive2MotorID, RobotMap.kDriveMotorSafety);
-	public static CAN_TalonSRXE  rightDriveMotor2 = new CAN_TalonSRXE(RobotMap.kRightDrive2MotorID, RobotMap.kDriveMotorSafety);
-	public static CAN_TalonSRXE rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static WPI_TalonSRX leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static WPI_TalonSRX  leftDriveMotor2 = new CAN_TalonSRXE(RobotMap.kLeftDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static WPI_TalonSRX  rightDriveMotor2 = new CAN_TalonSRXE(RobotMap.kRightDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static WPI_TalonSRX rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
 	public static DriveState controlStatus = DriveState.NOFINETUNE;
 	//Subsystems
 	public static Intake intake = new Intake();
@@ -46,22 +50,61 @@ public class Robot extends TimedRobot {
 	public static OI oi = new OI();
 	//Other
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
-	public static Compressor compressor = new Compressor();
+	//public static Compressor compressor = new Compressor();
 	public static InteractiveLEDS lights = new InteractiveLEDS();
 	//Autonomous
-	//static Command autoRoutine;	
-	//SendableChooser<Command> autoChooser = new SendableChooser<>();
+	static Command autoRoutine;	
+	SendableChooser<Command> autoChooser = new SendableChooser<>();
+	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, leftDriveMotor2);
 
 	@Override
 	public void robotInit() {
 		roboDrive = new DifferentialDrive(new SpeedControllerGroup(leftDriveMotor, leftDriveMotor2), new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
-		
+		rodMP.reset();
 		/*autoChooser.addDefault(...);
 		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
 		
+
+		leftDriveMotor2.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		leftDriveMotor2.setSensorPhase(true); /* keep sensor and motor in phase */
+		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
+
+		leftDriveMotor2.config_kF(0, 0.076, 0);
+		leftDriveMotor2.config_kP(0, .4, 0);
+		leftDriveMotor2.config_kI(0, 0.0, 0);
+		leftDriveMotor2.config_kD(0, 20.0, 0);
+
+		/* Our profile uses 10ms timing */
+		leftDriveMotor2.configMotionProfileTrajectoryPeriod(10, 0); 
+		/*
+		 * status 10 provides the trajectory target for motion profile AND
+		 * motion magic
+		 */
+		leftDriveMotor2.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
 		
+
+		
+		leftDriveMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+		leftDriveMotor.setSensorPhase(true); /* keep sensor and motor in phase */
+		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
+
+		leftDriveMotor.config_kF(0, 0.076, 0);
+		leftDriveMotor.config_kP(0, .4, 0);
+		leftDriveMotor.config_kI(0, 0.0, 0);
+		leftDriveMotor.config_kD(0, 0, 0);
+
+		/* Our profile uses 10ms timing */
+		leftDriveMotor.configMotionProfileTrajectoryPeriod(10, 0); 
+		/*
+		 * status 10 provides the trajectory target for motion profile AND
+		 * motion magic
+		 */
+		leftDriveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+		autoChooser.addDefault("MP", new DriveRobotDrive());
+		SmartDashboard.putData(autoChooser);
 		SmartDashboard.putData("Bring Down Intake From vertical", new OpenIntakeVertical());
+		SmartDashboard.putData("Test", new DriveRobotDrive());
 	}
 
 	@Override
@@ -76,11 +119,11 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void autonomousInit() {
-		/*autoRoutine = autoChooser.getSelected();
+		autoRoutine = autoChooser.getSelected();
 
 		if (autoRoutine != null) {
 			autoRoutine.start();
-		} */
+		} 
 	}
 
 	@Override
