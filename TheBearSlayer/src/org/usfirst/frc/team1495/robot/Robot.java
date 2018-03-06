@@ -14,7 +14,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team1495.robot.commands.DriveRobotDrive;
 import org.usfirst.frc.team1495.robot.commands.OpenIntakeVertical;
 import org.usfirst.frc.team1495.robot.subsystems.Arm;
-import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRX;
 import org.usfirst.frc.team1495.robot.subsystems.CAN_TalonSRXE;
 import org.usfirst.frc.team1495.robot.subsystems.Climber;
 import org.usfirst.frc.team1495.robot.subsystems.Elevator;
@@ -22,11 +21,7 @@ import org.usfirst.frc.team1495.robot.subsystems.Intake;
 import org.usfirst.frc.team1495.robot.subsystems.IntegratedMP;
 import org.usfirst.frc.team1495.robot.subsystems.LimitSwitch;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-@SuppressWarnings("unused")
 public class Robot extends TimedRobot {
 	public enum DriveState{
 		FINETUNE, NOFINETUNE
@@ -34,10 +29,10 @@ public class Robot extends TimedRobot {
 	
 	//Drive
 	public static DifferentialDrive roboDrive;
-	public static WPI_TalonSRX leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
-	public static WPI_TalonSRX  leftDriveMotor2 = new CAN_TalonSRXE(RobotMap.kLeftDrive2MotorID, RobotMap.kDriveMotorSafety);
-	public static WPI_TalonSRX  rightDriveMotor2 = new CAN_TalonSRXE(RobotMap.kRightDrive2MotorID, RobotMap.kDriveMotorSafety);
-	public static WPI_TalonSRX rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE leftDriveMotor = new CAN_TalonSRXE(RobotMap.kLeftDriveMotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE  leftDriveMotor2 = new CAN_TalonSRXE(RobotMap.kLeftDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE  rightDriveMotor2 = new CAN_TalonSRXE(RobotMap.kRightDrive2MotorID, RobotMap.kDriveMotorSafety);
+	public static CAN_TalonSRXE rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID, RobotMap.kDriveMotorSafety);
 	public static DriveState controlStatus = DriveState.NOFINETUNE;
 	//Subsystems
 	public static Intake intake = new Intake();
@@ -55,7 +50,7 @@ public class Robot extends TimedRobot {
 	//Autonomous
 	static Command autoRoutine;	
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
-	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, leftDriveMotor2);
+	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, rightDriveMotor);
 
 	@Override
 	public void robotInit() {
@@ -64,6 +59,9 @@ public class Robot extends TimedRobot {
 		/*autoChooser.addDefault(...);
 		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
+		
+		leftDriveMotor.setUpMotionProfile();
+		rightDriveMotor.setUpMotionProfile();
 		
 		autoChooser.addDefault("MP", new DriveRobotDrive());
 		SmartDashboard.putData(autoChooser);
@@ -125,6 +123,6 @@ public class Robot extends TimedRobot {
 		default:
 			break;	
 		}
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY, (oi.driverController.getX(Hand.kRight) + fineTuneX) * .8);
+		//roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY, (oi.driverController.getX(Hand.kRight) + fineTuneX) * .8);
 	}
 }

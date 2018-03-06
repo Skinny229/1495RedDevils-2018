@@ -16,6 +16,7 @@ public class ChangeDriveStatus extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.controlStatus = state;
+    	System.out.println("Encoder position: " + Robot.leftDriveMotor.getRawEncoderPosition());
     }
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {

@@ -11,18 +11,18 @@ public class CAN_TalonSRXE extends CAN_TalonSRX {
 		configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
 	}
 	
-	public void setUpMotionProfile(/*double Kf, double Kp, double Ki, double Kd*/){
+	public void setUpMotionProfile(){
 		this.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		this.setSensorPhase(true); /* keep sensor and motor in phase */
 		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
 
-		this.config_kF(0, 0.076, 0);
-		this.config_kP(0, .4, 0);
-		this.config_kI(0, 0.0, 0);
-		this.config_kD(0, 0, 0);
+		this.config_kF(0, RobotMap.kf, RobotMap.timeoutEncoders);
+		this.config_kP(0, RobotMap.kp, RobotMap.timeoutEncoders);
+		this.config_kI(0, RobotMap.ki, RobotMap.timeoutEncoders);
+		this.config_kD(0, RobotMap.kd, RobotMap.timeoutEncoders);
 
 		/* Our profile uses 10ms timing */
-		this.configMotionProfileTrajectoryPeriod(10, 0); 
+		this.configMotionProfileTrajectoryPeriod(RobotMap.baseTrajTimeMS, RobotMap.timeoutEncoders); 
 		/*
 		 * status 10 provides the trajectory target for motion profile AND
 		 * motion magic

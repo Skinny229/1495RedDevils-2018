@@ -7,10 +7,6 @@ public class RobotMap {
 	public static final int kLeftDrive2MotorID = 2;
 	public static final int kRightDrive2MotorID = 3;
 	public static final boolean kDriveMotorSafety = false;
-	public static final double kLeftSideRatio = .94;
-	public static final double kRightSideRatio = 1.0;
-	public static final double kSlowDownDeadBand = 2.0;
-	public static final double kSlowDownSpeed = .3;
 	
 	// Intake
 	public static final int kLeftIntakeMotorID = 0;  // VictorSP
@@ -48,6 +44,12 @@ public class RobotMap {
 	
 	// Constants
 	public static final double kEncoderConversionFactor = 0.00851;
+	public static final double kf = .076;
+	public static final double kp = .4;
+	public static final double ki = 0.3;
+	public static final double kd = 0.0;
+	public static final int timeoutEncoders = 0;
+	public static final int baseTrajTimeMS = 10;
 	//public static final double kMaxVelocity;
 	//public static final double kMaxAcceleration;
 	//public static final double kMaxJerk;

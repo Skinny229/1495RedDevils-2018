@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 
 public class OI {
-	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
+	//public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
 	//public XboxController operatorController = new XboxController(RobotMap.kOperatorControllerPort);
 	public Joystick stick = new Joystick(RobotMap.kOperatorControllerPort);
 	/*
