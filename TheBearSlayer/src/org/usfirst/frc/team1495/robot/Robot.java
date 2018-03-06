@@ -65,42 +65,6 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto Routine", autoChooser);*/
 		PDP.clearStickyFaults();
 		
-
-		leftDriveMotor2.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		leftDriveMotor2.setSensorPhase(true); /* keep sensor and motor in phase */
-		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
-
-		leftDriveMotor2.config_kF(0, 0.076, 0);
-		leftDriveMotor2.config_kP(0, .4, 0);
-		leftDriveMotor2.config_kI(0, 0.0, 0);
-		leftDriveMotor2.config_kD(0, 20.0, 0);
-
-		/* Our profile uses 10ms timing */
-		leftDriveMotor2.configMotionProfileTrajectoryPeriod(10, 0); 
-		/*
-		 * status 10 provides the trajectory target for motion profile AND
-		 * motion magic
-		 */
-		leftDriveMotor2.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
-		
-
-		
-		leftDriveMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		leftDriveMotor.setSensorPhase(true); /* keep sensor and motor in phase */
-		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
-
-		leftDriveMotor.config_kF(0, 0.076, 0);
-		leftDriveMotor.config_kP(0, .4, 0);
-		leftDriveMotor.config_kI(0, 0.0, 0);
-		leftDriveMotor.config_kD(0, 0, 0);
-
-		/* Our profile uses 10ms timing */
-		leftDriveMotor.configMotionProfileTrajectoryPeriod(10, 0); 
-		/*
-		 * status 10 provides the trajectory target for motion profile AND
-		 * motion magic
-		 */
-		leftDriveMotor.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
 		autoChooser.addDefault("MP", new DriveRobotDrive());
 		SmartDashboard.putData(autoChooser);
 		SmartDashboard.putData("Bring Down Intake From vertical", new OpenIntakeVertical());
@@ -155,8 +119,8 @@ public class Robot extends TimedRobot {
 	double fineTuneX = 0.0;
 		switch(controlStatus){
 		case FINETUNE:
-				fineTuneY = oi.stick.getY() * .2;
-				fineTuneX = oi.stick.getX() * .2;
+				fineTuneY = oi.stick.getY();
+				fineTuneX = oi.stick.getX();
 			break;
 		default:
 			break;	

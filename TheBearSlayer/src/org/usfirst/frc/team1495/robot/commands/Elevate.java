@@ -19,9 +19,9 @@ public class Elevate extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		if (speed > 0)
-			Robot.lights.addCmd("D");
-		else
 			Robot.lights.addCmd("F");
+		else
+			Robot.lights.addCmd("D");
 	}
 
 	// Called repeatedly when this Command is scheduled to run

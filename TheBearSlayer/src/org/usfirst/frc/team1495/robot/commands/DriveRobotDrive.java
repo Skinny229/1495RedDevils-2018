@@ -1,6 +1,7 @@
 package org.usfirst.frc.team1495.robot.commands;
 
 import org.usfirst.frc.team1495.robot.Robot;
+import org.usfirst.frc.team1495.robot.RobotMap;
 
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -32,7 +33,9 @@ public class DriveRobotDrive extends Command {
     	SetValueMotionProfile setOutput = Robot.rodMP.getSetValue();
 
 		Robot.leftDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
-		Robot.leftDriveMotor2.set(ControlMode.MotionProfile, setOutput.value);
+		Robot.leftDriveMotor2.set(ControlMode.Follower, RobotMap.kLeftDriveMotorID);
+		Robot.rightDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
+		Robot.rightDriveMotor2.set(ControlMode.Follower, RobotMap.kRightDriveMotorID);
     	
     }
 

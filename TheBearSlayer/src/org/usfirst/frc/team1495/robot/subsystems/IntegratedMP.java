@@ -53,7 +53,7 @@ public class IntegratedMP {
 	 * motion profile.
 	 */
 	private TalonSRX _talon;
-	private TalonSRX _talon2;
+	private TalonSRX _talonRight;
 	/**
 	 * State machine to make sure we let enough of the motion profile stream to
 	 * talon before we fire it.
@@ -101,7 +101,7 @@ public class IntegratedMP {
 	 * every 10ms.
 	 */
 	class PeriodicRunnable implements java.lang.Runnable {
-	    public void run() {  _talon.processMotionProfileBuffer(); _talon2.processMotionProfileBuffer();   }
+	    public void run() {  _talon.processMotionProfileBuffer(); _talonRight.processMotionProfileBuffer();   }
 	}
 	Notifier _notifer = new Notifier(new PeriodicRunnable());
 	
@@ -112,15 +112,15 @@ public class IntegratedMP {
 	 * @param talon
 	 *            reference to Talon object to fetch motion profile status from.
 	 */
-	public IntegratedMP(TalonSRX talon,TalonSRX talon2) {
-		_talon = talon;
-		_talon2 = talon2;
+	public IntegratedMP(TalonSRX talonLeft,TalonSRX talonRight){
+		_talon = talonLeft;
+		_talonRight = talonRight;
 		/*
 		 * since our MP is 10ms per point, set the control frame rate and the
 		 * notifer to half that
 		 */
 		_talon.changeMotionControlFramePeriod(5);
-		_talon2.changeMotionControlFramePeriod(5);
+		_talonRight.changeMotionControlFramePeriod(5);
 		_notifer.startPeriodic(0.005);
 	}
 
@@ -135,7 +135,7 @@ public class IntegratedMP {
 		 * sitting in memory.
 		 */
 		_talon.clearMotionProfileTrajectories();
-		_talon2.clearMotionProfileTrajectories();
+		_talonRight.clearMotionProfileTrajectories();
 		/* When we do re-enter motionProfile control mode, stay disabled. */
 		_setValue = SetValueMotionProfile.Disable;
 		/* When we do start running our state machine start at the beginning. */
@@ -154,7 +154,7 @@ public class IntegratedMP {
 	public void control() {
 		/* Get the motion profile status every loop */
 		_talon.getMotionProfileStatus(_status);
-		_talon2.getMotionProfileStatus(_status);
+		_talonRight.getMotionProfileStatus(_status);
 
 		/*
 		 * track time, this is rudimentary but that's okay, we just want to make
@@ -291,18 +291,18 @@ public class IntegratedMP {
 			 * we never miss logging it.
 			 */
 			_talon.clearMotionProfileHasUnderrun(0);
-			_talon2.clearMotionProfileHasUnderrun(0);
+			_talonRight.clearMotionProfileHasUnderrun(0);
 		}
 		/*
 		 * just in case we are interrupting another MP and there is still buffer
 		 * points in memory, clear it.
 		 */
 		_talon.clearMotionProfileTrajectories();
-		_talon2.clearMotionProfileTrajectories();
+		_talonRight.clearMotionProfileTrajectories();
 
 		/* set the base trajectory period to zero, use the individual trajectory period below */
 		_talon.configMotionProfileTrajectoryPeriod(10, 100);
-		_talon2.configMotionProfileTrajectoryPeriod(10, 100);
+		_talonRight.configMotionProfileTrajectoryPeriod(10, 100);
 		
 		/* This is fast since it's just into our TOP buffer */
 		for (int i = 0; i < totalCnt; ++i) {
@@ -324,7 +324,9 @@ public class IntegratedMP {
 				point.isLastPoint = true; /* set this to true on the last point  */
 
 			_talon.pushMotionProfileTrajectory(point);
-			_talon2.pushMotionProfileTrajectory(point);
+			point.position = positionRot * -4096;
+			point.velocity = velocityRPM * -4096 / 600.0;
+			_talonRight.pushMotionProfileTrajectory(point);
 		}
 	}
 	/**
