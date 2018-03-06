@@ -23,6 +23,7 @@ public class InteractiveLEDS {
 		public void run() {
 			RobotMap.isArduinoConnected = isArduinoHere();
 			updateLimitSwitches();
+			sendToArduino("E");
 			if (cmdQueue.size() == 0) {
 
 			} else {
