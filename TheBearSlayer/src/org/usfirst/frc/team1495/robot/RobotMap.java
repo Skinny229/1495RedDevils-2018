@@ -51,6 +51,7 @@ public class RobotMap {
 	public static final double ki = 0.3;
 	public static final double kd = 0.0;
 	public static final double turnRateXDeg = 0.25;
+	public static final double fowardRateAuto = 0.4;
 	public static final int timeoutEncoders = 0;
 	public static final int baseTrajTimeMS = 10;
 	//public static final double kMaxVelocity;
