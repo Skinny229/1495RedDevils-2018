@@ -30,8 +30,6 @@ import com.ctre.phoenix.motorcontrol.can.*;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
-import org.usfirst.frc.team1495.robot.motionProfiles.GeneratedMotionProfile;
-
 import com.ctre.phoenix.motion.*;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 
@@ -73,7 +71,16 @@ public class IntegratedMP {
 	 * service it.
 	 */
 	private boolean _bStart = false;
-
+	
+	
+	/**
+	 * Point Selector
+	 * This will update every time motion profile is reset and adjust accordingly;
+	 * 
+	 * */
+	private double[][] pointsSelected = GeneratedMotionProfiles.PointsDef;
+	private int numPoints = GeneratedMotionProfiles.kNumPointsDef;
+	
 	/**
 	 * Since the CANTalon.set() routine is mode specific, deduce what we want
 	 * the set value to be and let the calling module apply it whenever we
@@ -90,6 +97,11 @@ public class IntegratedMP {
 	 * is about 20ms.
 	 */
 	private static final int kNumLoopsTimeout = 10;
+	
+	/*
+	 * boolean determining if Motion profile is running
+	 * */
+	public boolean isMPRunning = false;
 	
 	/**
 	 * Lets create a periodic task to funnel our trajectory points into our talon.
@@ -128,7 +140,7 @@ public class IntegratedMP {
 	 * Called to clear Motion profile buffer and reset state info during
 	 * disabled and when Talon is not in MP control mode.
 	 */
-	public void reset() {
+	public void reset(double newPoints[][]) {
 		/*
 		 * Let's clear the buffer just in case user decided to disable in the
 		 * middle of an MP, and now we have the second half of a profile just
@@ -141,6 +153,10 @@ public class IntegratedMP {
 		/* When we do start running our state machine start at the beginning. */
 		_state = 0;
 		_loopTimeout = -1;
+		
+		pointsSelected = newPoints;
+		numPoints = newPoints[0].length;
+		
 		/*
 		 * If application wanted to start an MP before, ignore and wait for next
 		 * button press
@@ -195,7 +211,7 @@ public class IntegratedMP {
 						_bStart = false;
 	
 						_setValue = SetValueMotionProfile.Disable;
-						startFilling();
+						startFilling(pointsSelected, numPoints);
 						/*
 						 * MP is being sent to CAN bus, wait a small amount of time
 						 */
@@ -214,6 +230,7 @@ public class IntegratedMP {
 						/* MP will start once the control frame gets scheduled */
 						_state = 2;
 						_loopTimeout = kNumLoopsTimeout;
+						isMPRunning = true;
 					}
 					break;
 				case 2: /* check the status of the MP */
@@ -235,9 +252,10 @@ public class IntegratedMP {
 						 * because we set the last point's isLast to true, we will
 						 * get here when the MP is done
 						 */
-						_setValue = SetValueMotionProfile.Hold;
+						_setValue = SetValueMotionProfile.Disable;
 						_state = 0;
 						_loopTimeout = -1;
+						isMPRunning = false;
 					}
 					break;
 			}
@@ -271,16 +289,10 @@ public class IntegratedMP {
 		/* pass to caller */
 		return retval;
 	}
-	/** Start filling the MPs to all of the involved Talons. */
-	private void startFilling() {
-		/* since this example only has one talon, just update that one */
-		startFilling(GeneratedMotionProfile.Points, GeneratedMotionProfile.kNumPoints);
-	}
-
 	private void startFilling(double[][] profile, int totalCnt) {
 
 		/* create an empty point */
-		TrajectoryPoint point = new TrajectoryPoint();
+		TrajectoryPoint point = new TrajectoryPoint();  
 
 		/* did we get an underrun condition since last time we checked ? */
 		if (_status.hasUnderrun) {
