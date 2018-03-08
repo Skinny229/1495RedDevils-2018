@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
 	SendableChooser<Character> autoSideChooser = new SendableChooser<>();
 	public static int posStart = -1;
 	public static char sideStart = ' ';
-	public static String gameData = null;
+	public static String gameData = "";
 
 	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, rightDriveMotor);
 
