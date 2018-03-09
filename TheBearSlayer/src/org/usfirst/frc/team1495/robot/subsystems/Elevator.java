@@ -16,6 +16,7 @@ public class Elevator extends Subsystem {
 	
 	public void clearSwitchFence(double delay) {
 		elevRunner.startSingle(delay);
+		elevRunner.stop();
 	}
 	
 	
@@ -23,8 +24,8 @@ public class Elevator extends Subsystem {
 
 		@Override
 		public void run() {
-			motor.set(1.0);
-			Timer.delay(2);
+			motor.set(-1.0);
+			Timer.delay(.5);
 			motor.stopMotor();
 		}
 		

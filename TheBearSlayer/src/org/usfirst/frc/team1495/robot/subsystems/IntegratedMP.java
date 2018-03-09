@@ -141,6 +141,7 @@ public class IntegratedMP {
 	 * disabled and when Talon is not in MP control mode.
 	 */
 	public void reset(double newPoints[][]) {
+		
 		/*
 		 * Let's clear the buffer just in case user decided to disable in the
 		 * middle of an MP, and now we have the second half of a profile just
@@ -156,12 +157,13 @@ public class IntegratedMP {
 		
 		pointsSelected = newPoints;
 		numPoints = newPoints[0].length;
-		
+		isMPRunning = true;
 		/*
 		 * If application wanted to start an MP before, ignore and wait for next
 		 * button press
 		 */
 		_bStart = false;
+		
 	}
 
 	/**
@@ -231,6 +233,7 @@ public class IntegratedMP {
 						_state = 2;
 						_loopTimeout = kNumLoopsTimeout;
 						isMPRunning = true;
+						System.out.println("MP ENABLED");
 					}
 					break;
 				case 2: /* check the status of the MP */
@@ -252,7 +255,7 @@ public class IntegratedMP {
 						 * because we set the last point's isLast to true, we will
 						 * get here when the MP is done
 						 */
-						_setValue = SetValueMotionProfile.Disable;
+						_setValue = SetValueMotionProfile.Hold;
 						_state = 0;
 						_loopTimeout = -1;
 						isMPRunning = false;
@@ -332,9 +335,12 @@ public class IntegratedMP {
 				point.zeroPos = true; /* set this to true on the first point */
 
 			point.isLastPoint = false;
-			if ((i + 1) == totalCnt)
+			if ((i + 1) == totalCnt){
 				point.isLastPoint = true; /* set this to true on the last point  */
-
+				System.out.println("Last point being loaded...");
+				_talon.getSensorCollection().setQuadraturePosition(0, 0);
+				_talonRight.getSensorCollection().setQuadraturePosition(0, 0);
+			}
 			_talon.pushMotionProfileTrajectory(point);
 			point.position = positionRot * -4096;
 			point.velocity = velocityRPM * -4096 / 600.0;
@@ -347,6 +353,7 @@ public class IntegratedMP {
 	 */
 	public void startMotionProfile() {
 		_bStart = true;
+		isMPRunning = true;
 	}
 
 	/**

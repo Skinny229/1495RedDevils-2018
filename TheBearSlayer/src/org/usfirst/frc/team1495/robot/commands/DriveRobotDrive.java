@@ -2,6 +2,7 @@ package org.usfirst.frc.team1495.robot.commands;
 
 import org.usfirst.frc.team1495.robot.Robot;
 import org.usfirst.frc.team1495.robot.RobotMap;
+import org.usfirst.frc.team1495.robot.subsystems.GeneratedMotionProfiles;
 
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -34,65 +35,74 @@ public class DriveRobotDrive extends Command {
 		Robot.arm.solenoid.set(Value.kReverse);
 		// If we are not in the side start raising the elevator to drop the cube
 		// independently
-		if (Robot.posStart == 1 || Robot.posStart == 2)
-			Robot.elevator.clearSwitchFence(0);
+		// if (Robot.posStart == 1 || Robot.posStart == 2)
+		// Robot.elevator.clearSwitchFence(0);
 		/*
-		 * Verifies all Data needed to run this autonomous is retreived and good to go
+		 * Verifies all Data needed to run this autonomous is retreived and good
+		 * to go
 		 */
 		if (Robot.gameData.length() == 0 || Robot.sideStart == ' ' || Robot.posStart == -1) {
 			isFin = true;
 			DriverStation.reportError("Warning! Data needed to run Autonomous is non exixstent! Skipping auto....",
 					false);
 		}
-
+		Robot.rodMP.startMotionProfile();
+		stageToPass = 1;
+		
 	}
+
+	private int stageToPass = 1;
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
 		switch (stage) {
 		case 0:
-			executeMP();
-			stage = 1;
+			System.out.println("Running MP?");
+			Robot.rodMP.control();
+			SetValueMotionProfile setOutput = Robot.rodMP.getSetValue();
+			Robot.leftDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
+			Robot.leftDriveMotor2.set(ControlMode.Follower, RobotMap.kLeftDriveMotorID);
+			Robot.rightDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
+			Robot.rightDriveMotor2.set(ControlMode.Follower, RobotMap.kRightDriveMotorID);
+
+			if (!Robot.rodMP.isMPRunning) {
+				System.out.println("Abiamo Finito");
+				stage = stageToPass;
+			}
+
 			break;
 		case 1: {
+
 			switch (Robot.posStart) {
 			case 2: { // When we are in the middle
-				Robot.rodMP.reset(null /* Just a lil bit ****/);
-				Robot.rodMP.startMotionProfile();
-				Robot.rodMP.control();
+				Robot.rodMP.reset(GeneratedMotionProfiles.PointsDef);
 				double angleTurning = 90; // Degrees
 				if (Robot.gameData.charAt(0) == 'L')
 					angleTurning *= -1;
-				turnXDegress(angleTurning);// This will execute till done no need for timer
-				executeMP();
-				angleTurning *= -1;
 				turnXDegress(angleTurning);
-				driveTillStopped();
-				dropCube();
-				isFin = true;
+				stage = 0;
+				stageToPass = 2;
+
 			}
 				break;
 
-			case 1: { // If right in front of the switch.....
-				if (Robot.gameData.charAt(0) == Robot.sideStart) { // And right in front of our side...
-					driveTillStopped();
-					dropCube();
-				}
-				// Otherwise just wait till teleop
-				isFin = true;
-				break;
-			}
-			case 0: {
+			case 1:
+			case 3:
 				boolean goingToScale;
 				double[][] distToTravel;
 				int travelinTo;
 				if (Robot.gameData.charAt(0) == Robot.sideStart) {
-					distToTravel = null; /* To the Switch */
+					distToTravel = GeneratedMotionProfiles.PointsDef; /*
+																		 * To the
+																		 * Switch
+																		 */
 					goingToScale = false;
 					travelinTo = 0;
-					Robot.elevator.clearSwitchFence(0);
 				} else if (Robot.gameData.charAt(1) == Robot.sideStart) {
-					distToTravel = null; /* To the Scale */
+					distToTravel = GeneratedMotionProfiles.PointsDef; /*
+																		 * To the
+																		 * Scale
+																		 */
 					goingToScale = true;
 					travelinTo = 1;
 				} else {
@@ -102,32 +112,18 @@ public class DriveRobotDrive extends Command {
 
 				Robot.rodMP.reset(distToTravel);
 				Robot.rodMP.startMotionProfile();
-				Robot.rodMP.control();
-				executeMP();
-				double angleTurning = 90; // Degrees
-				if (Robot.gameData.charAt(travelinTo) == 'L')
-					angleTurning *= -1;
-				turnXDegress(angleTurning);
-
-				if (goingToScale) {
-					dropCube(1.0); // Full Speed ahead!
-				} else {
-					driveTillStopped();
-					dropCube();
-				}
-
-				isFin = true;
-
-			}
+				stage = 0;
+				stageToPass = 2;
 				break;
 
 			}
-
-			isFin = true;
-			stage = -1; // If we finished this stage we have finished auton this is to prevent running
-						// anything else
 		}
-			break;
+			break; // Breaking Stage 1
+		case 2: {
+
+		}
+
+			break;// Breaking Stage 2
 		}
 	}
 
@@ -146,20 +142,38 @@ public class DriveRobotDrive extends Command {
 	protected void interrupted() {
 		stopEverything();
 	}
+/*
+	private class MPExecuter implements java.lang.Runnable {
 
-	private void executeMP() {
-		while (Robot.rodMP.isMPRunning) {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			// System.out.println("??");
 			Robot.rodMP.control();
 			setTalonMPMode();
 		}
-	}
 
+	}
+	
+
+	public static boolean isRunning;
+	Notifier runner = new Notifier(new MPExecuter());
+
+	private void executeMP() {
+		System.out.println("Starting MP...");
+		isRunning = true;
+		Robot.rodMP.startMotionProfile();
+		runner.startPeriodic(.020);
+		while (isRunning) {
+			isRunning = Robot.rodMP.isMPRunning;
+			Timer.delay(.020);
+		}
+		runner.stop();
+		System.out.println("We have finished MP");
+	}
+*/
 	private void setTalonMPMode() {
-		SetValueMotionProfile setOutput = Robot.rodMP.getSetValue();
-		Robot.leftDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
-		Robot.leftDriveMotor2.set(ControlMode.Follower, RobotMap.kLeftDriveMotorID);
-		Robot.rightDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
-		Robot.rightDriveMotor2.set(ControlMode.Follower, RobotMap.kRightDriveMotorID);
+
 	}
 
 	private void turnXDegress(double angleTarget) {
@@ -196,7 +210,7 @@ public class DriveRobotDrive extends Command {
 		dropCube(.65);
 	}
 
-	private void stopEverything() {
+	public static void stopEverything() {
 		Robot.roboDrive.stopMotor();
 		Robot.intake.stop();
 		Robot.elevator.motor.stopMotor();

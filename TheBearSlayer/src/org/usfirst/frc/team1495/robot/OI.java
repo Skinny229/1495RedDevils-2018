@@ -44,11 +44,11 @@ public class OI {
 	// Joystick
 	public Button in = new JoystickButton(stick, 2);
 	public Button out = new JoystickButton(stick, 1);
-	public Button lower = new JoystickButton(stick, 5);
-	public Button raise = new JoystickButton(stick, 3);
+	public Button lower = new JoystickButton(stick, 3);
+	public Button raise = new JoystickButton(stick, 5);
 	public Button climb = new JoystickButton(stick, 7);
-	public Button open = new JoystickButton(stick, 6);
-	public Button close = new JoystickButton(stick, 4);
+	public Button open = new JoystickButton(stick, 4);
+	public Button close = new JoystickButton(stick, 6);
 	public Button enblTune = new JoystickButton(stick, 11);
 	public Button dsblTune = new JoystickButton(stick, 12);
 
@@ -60,7 +60,7 @@ public class OI {
 		lower.whileHeld(new Elevate(1.0));
 		close.whenPressed(new OpenIntake(false));
 		open.whenPressed(new OpenIntake(true));
-		climb.whileHeld(new Climb(-0.5));
+		climb.whileHeld(new Climb(-1.0));
 		enblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.FINETUNE));
 		dsblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.NOFINETUNE));
 	}

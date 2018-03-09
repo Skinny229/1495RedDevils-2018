@@ -7,7 +7,7 @@ public class RobotMap {
 	public static final int kLeftDrive2MotorID = 2;
 	public static final int kRightDrive2MotorID = 3;
 	public static final double kDTTurnMult = 0.8;
-	public static final double kFineTuneMult = 0.3;
+	public static final double kFineTuneMult = 1.0;
 	public static final boolean kDriveMotorSafety = false;
 	
 	// Intake
@@ -47,8 +47,8 @@ public class RobotMap {
 	// Constants Auto
 	public static final double kEncoderConversionFactor = 0.00851;
 	public static final double kf = 0.076;
-	public static final double kp = 0.4;
-	public static final double ki = 0.3;
+	public static final double kp = 0.5;
+	public static final double ki = 0.0;
 	public static final double kd = 0.0;
 	public static final double turnRateXDeg = 0.25;
 	public static final double fowardRateAuto = 0.4;

@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1495.robot.commands.DriveRobotDrive;
+import org.usfirst.frc.team1495.robot.commands.TestingMP;
 import org.usfirst.frc.team1495.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -62,12 +63,10 @@ public class Robot extends TimedRobot {
 		roboDrive = new DifferentialDrive(new SpeedControllerGroup(leftDriveMotor, leftDriveMotor2),
 				new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
 		roboDrive.setSafetyEnabled(RobotMap.kDriveMotorSafety);
-		
-		//Start loading starting Motion Profile
-		//Starting distance should be at least breaking auto line
+
+		// Start loading starting Motion Profile
+		// Starting distance should be at least breaking auto line
 		rodMP.reset(GeneratedMotionProfiles.PointsDef);
-		rodMP.startMotionProfile();
-		rodMP.control();
 
 		PDP.clearStickyFaults();
 
@@ -75,16 +74,14 @@ public class Robot extends TimedRobot {
 		rightDriveMotor.setUpMotionProfile();
 
 		autoChooser.addDefault("MP", new DriveRobotDrive());
+		autoChooser.addObject("Testing MP", new TestingMP());
 		SmartDashboard.putData("Autonomous selection", autoChooser);
+		
 
-		autoPosChooser.addDefault("Center", 2);
-		autoPosChooser.addObject("Switch Front", 1);
-		autoPosChooser.addObject("Corner", 0);
+		autoPosChooser.addDefault("Left", 3);
+		autoPosChooser.addObject("Middle", 2);
+		autoPosChooser.addObject("Right", 1);
 		SmartDashboard.putData("MotionProfile starting Positin", autoPosChooser);
-
-		autoSideChooser.addDefault("Left", 'L');
-		autoSideChooser.addObject("Right", 'R');
-		SmartDashboard.putData("Side Selector", autoSideChooser);
 
 	}
 
@@ -102,7 +99,10 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
-		sideStart = autoSideChooser.getSelected();
+		if (posStart == 1)
+			sideStart = 'L';
+		else
+			sideStart = 'R';
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		if (autoRoutine != null) {
@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
 		if (autoRoutine != null) {
 			autoRoutine.cancel();
 		}
+		DriveRobotDrive.stopEverything();
 	}
 
 	@Override
@@ -146,7 +147,5 @@ public class Robot extends TimedRobot {
 		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + -fineTuneY,
 				(oi.driverController.getX(Hand.kRight) + fineTuneX) * RobotMap.kDTTurnMult);
 	}
-
-
 
 }

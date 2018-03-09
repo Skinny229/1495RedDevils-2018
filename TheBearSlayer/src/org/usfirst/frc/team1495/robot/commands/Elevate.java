@@ -29,20 +29,20 @@ public class Elevate extends Command {
 		else
 			Robot.lights.addCmd("D");
 		
-		/*if (speed > 0 && !Robot.upperElevatorLS.get())
+		System.out.println(!Robot.upperElevatorLS.get());
+		if (speed < 0 && !Robot.upperElevatorLS.get())
 			Robot.elevator.motor.set(speed);
-		else if (speed < 0 && !Robot.lowerElevatorLS.get())
+		else if (speed > 0 && !Robot.lowerElevatorLS.get())
 			Robot.elevator.motor.set(speed);
 		else{
 			Robot.elevator.motor.stopMotor();
-			speed = 0;
-		}*/
-		Robot.elevator.motor.set(speed);
+		}
+		//Robot.elevator.motor.set(speed);
 	}
 
 	// Make this return true when this Command no longer needs to run execute()
 	protected boolean isFinished() {
-		return speed == 0;
+		return false;
 	}
 
 	// Called once after isFinished returns true
