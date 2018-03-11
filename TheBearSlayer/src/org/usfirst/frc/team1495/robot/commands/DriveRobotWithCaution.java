@@ -38,6 +38,7 @@ public class DriveRobotWithCaution extends Command {
 		System.out.println("Selected Starting Position: " + Robot.posStart);
 
 		startEncStart = Robot.leftDriveMotor.getRawEncoderPosition();
+		justAutoLine = false;
 		
 			//Determing where we going
 			System.out.println("Analyzing where to go....");
@@ -56,7 +57,8 @@ public class DriveRobotWithCaution extends Command {
 			}else {
 				System.out.println("Warning! Not moving Nothing is in our side");
 				toSwitch = false;
-				isFin = true;
+				justAutoLine = true;
+				distToTravel = 120.0;
 			}
 			System.out.print("Targeting....");
 			if(toSwitch)
@@ -77,20 +79,27 @@ public class DriveRobotWithCaution extends Command {
 			}
 	}
 
-	private boolean isFin, toSwitch, hasHitTop;
+	private boolean isFin, toSwitch, hasHitTop, justAutoLine;
 	private double angleTarget, distToTravel, angleToTurn;
 	private int startEncStart, stage, goingTo;
 	
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		if (this.isCanceled())
+		if (this.isCanceled()){
 			isFin = true;
+			return;
+		}
 		switch (stage) {
 		case 0:
-			if (startEncStart < ((distToTravel / (RobotMap.wheelDiameterIn * Math.PI) * RobotMap.unitsPerRot) + startEncStart))
+			if (Robot.leftDriveMotor.getRawEncoderPosition() < ((distToTravel / (RobotMap.wheelDiameterIn * Math.PI) * RobotMap.unitsPerRot)) + startEncStart)
 				Robot.roboDrive.arcadeDrive(.65, 0);
 			else {
 				Robot.roboDrive.stopMotor();
+				if(justAutoLine && !toSwitch){
+					System.out.println("Stage 0 Finished. Ending auto since there is no targets");
+					isFin = true;
+					return;
+				}
 				System.out.println("Stage 0 Finished. Moving to Stage 1");
 				stage = 1;
 			}
@@ -106,7 +115,9 @@ public class DriveRobotWithCaution extends Command {
 					}
 
 					angleToTurn = angleTarget;
-
+					Robot.elevator.motor.set(-1.0);
+					Timer.delay(2.5);
+					Robot.elevator.motor.stopMotor();
 					if (Robot.gyro.getRawAngleDegrees() < angleToTurn) {
 						stage = 5;
 						System.out.println("We need to turn! Moving to Stage 5");
@@ -147,7 +158,7 @@ public class DriveRobotWithCaution extends Command {
 			}
 			break;
 		case 4:
-			if (startEncStart < ((distToTravel / (RobotMap.wheelDiameterIn * Math.PI) * RobotMap.unitsPerRot) + startEncStart)) {
+			if (Robot.leftDriveMotor.getRawEncoderPosition() < ((distToTravel / (RobotMap.wheelDiameterIn * Math.PI) * RobotMap.unitsPerRot))+ startEncStart) {
 				Robot.roboDrive.arcadeDrive(.65, 0);
 			}
 			else {
@@ -167,8 +178,11 @@ public class DriveRobotWithCaution extends Command {
 					System.out.println("Turn Finished. Entering Stage 3");
 					return;
 				}
-				Robot.elevator.motor.set(-1.0);
-				Timer.delay(1.0);
+				else if(!Robot.goScale && !toSwitch){
+					DriverStation.reportError("Going to Scale Disabled. ending auto", false);
+					isFin = true;
+					return;
+				}
 				Robot.roboDrive.arcadeDrive(.5, 0);
 				Timer.delay(.3);
 				System.out.println("Turn Finished. Entering Stage 2");
@@ -180,13 +194,17 @@ public class DriveRobotWithCaution extends Command {
 				Robot.roboDrive.arcadeDrive(0, -RobotMap.turnRateXDeg);
 			} else {
 				Robot.roboDrive.stopMotor();
+			
 				if(!toSwitch) {
 					stage = 3;
 					System.out.println("Turn Finished. Entering Stage 3");
 					return;
 				}
-				Robot.elevator.motor.set(-1.0);
-				Timer.delay(1.0);
+				else if(!Robot.goScale && !toSwitch){
+					DriverStation.reportError("Going to Scale Disabled. ending auto", false);
+					isFin = true;
+					return;
+				}
 				Robot.roboDrive.arcadeDrive(.5, 0);
 				Timer.delay(.3);
 				System.out.println("Turn Finished. Entering Stage 2");

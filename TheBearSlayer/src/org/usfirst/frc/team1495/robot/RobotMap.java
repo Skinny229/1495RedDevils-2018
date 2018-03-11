@@ -7,7 +7,7 @@ public class RobotMap {
 	public static final int kLeftDrive2MotorID = 2;
 	public static final int kRightDrive2MotorID = 3;
 	public static final double kDTTurnMult = 0.8;
-	public static final double kFineTuneMult = 1.0;
+	public static final double kFineTuneMult = 0.4;
 	public static final boolean kDriveMotorSafety = false;
 	
 	// Intake

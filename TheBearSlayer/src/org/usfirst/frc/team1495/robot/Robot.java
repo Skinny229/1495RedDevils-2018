@@ -52,8 +52,10 @@ public class Robot extends TimedRobot {
 	static Command autoRoutine;
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
+	SendableChooser<Boolean> goScaleChooser = new SendableChooser<>();
 	public static char posStart = ' ';
 	public static String gameData = "";
+	public static boolean goScale;
 
 	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, rightDriveMotor);
 
@@ -73,10 +75,10 @@ public class Robot extends TimedRobot {
 		leftDriveMotor.setUpMotionProfile();
 		rightDriveMotor.setUpMotionProfile();
 
-		autoChooser.addDefault("Nothin", new NoDrive());
-		autoChooser.addObject("That one", new DriveRobotWithCaution());
-		autoChooser.addObject("MP", new DriveRobotDrive());
-		autoChooser.addObject("Testing MP", new TestingMP());
+		autoChooser.addDefault("Encoder Control", new DriveRobotWithCaution());
+		autoChooser.addObject("Drive Straight", new NoDrive());
+		autoChooser.addObject("Motion Profile", new DriveRobotDrive());
+		autoChooser.addObject("Experimental Motion Profile", new TestingMP());
 		SmartDashboard.putData("Autonomous selection", autoChooser);
 		
 
@@ -84,6 +86,10 @@ public class Robot extends TimedRobot {
 		autoPosChooser.addObject("Middle", 'M');
 		autoPosChooser.addObject("Right", 'R');
 		SmartDashboard.putData("MotionProfile starting Positin", autoPosChooser);
+		
+		goScaleChooser.addDefault("Go to Scale if possible", true);
+		goScaleChooser.addObject("Don't go to scale", false);
+		SmartDashboard.putData(goScaleChooser);
 		
 		gyro.calibrate();
 		gyro.reset();
@@ -103,6 +109,7 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
+		goScale = goScaleChooser.getSelected();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		if (autoRoutine != null) {
