@@ -63,7 +63,7 @@ public class DriveRobotDrive extends Command {
 			Robot.leftDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
 			Robot.leftDriveMotor2.set(ControlMode.Follower, RobotMap.kLeftDriveMotorID);
 			Robot.rightDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
-			Robot.rightDriveMotor2.set(ControlMode.Follower, RobotMap.kRightDriveMotorID);
+			Robot.rightDriveMotor2.set(ControlMode.Follower, RobotMap.kRightDriveMotorID); 
 
 			if (!Robot.rodMP.isMPRunning) {
 				System.out.println("Abiamo Finito");

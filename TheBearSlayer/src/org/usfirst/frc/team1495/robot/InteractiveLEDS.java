@@ -21,8 +21,9 @@ public class InteractiveLEDS {
 
 		@Override
 		public void run() {
-			RobotMap.isArduinoConnected = isArduinoHere();
-			updateLimitSwitches();
+			//RobotMap.isArduinoConnected = isArduinoHere();
+			sendToArduino("A");
+			//updateLimitSwitches();
 			if (cmdQueue.size() == 0) {
 
 			} else {
@@ -66,7 +67,7 @@ public class InteractiveLEDS {
 
 	public InteractiveLEDS() {
 		i2 = new I2C(Port.kOnboard, RobotMap.kI2CAdress);
-		notify.startPeriodic(0.05);
+		notify.startPeriodic(0.5);
 	}
 
 	public boolean sendToArduino(String input) {

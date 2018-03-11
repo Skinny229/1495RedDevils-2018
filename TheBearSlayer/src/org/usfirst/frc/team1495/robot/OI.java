@@ -54,13 +54,13 @@ public class OI {
 
 	public OI() {
 
-		in.whileHeld(new SpinIntake(-1.0));
-		out.whileHeld(new SpinIntake(1.0));
+		in.whileHeld(new SpinIntake(-.75));
+		out.whileHeld(new SpinIntake(.65));
 		raise.whileHeld(new Elevate(-1.0));
 		lower.whileHeld(new Elevate(1.0));
 		close.whenPressed(new OpenIntake(false));
 		open.whenPressed(new OpenIntake(true));
-		climb.whileHeld(new Climb(-1.0));
+		climb.whileHeld(new Climb(1.0));
 		enblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.FINETUNE));
 		dsblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.NOFINETUNE));
 	}

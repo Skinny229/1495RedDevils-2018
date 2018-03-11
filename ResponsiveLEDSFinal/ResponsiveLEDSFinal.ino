@@ -15,6 +15,7 @@
 
 //Creating Constants
 #define kNumLedElevator 70
+#define kNumLedTop 45
 #define kElevatorPin 4
 #define kDelayPerTick 5
 #define i2cAdress 4
@@ -23,6 +24,8 @@
 //Creating Global Variables
 
 
+//**Creating Top Var
+CRGB topLeds[kNumLedTop];
 
 //**Creating Elevator Variables**
 //Colors the elevator can be in
@@ -61,6 +64,7 @@ void loop() {
 
 
      elevUpdate();
+     updateTop(); 
 
 
     FastLED.show();
@@ -73,11 +77,13 @@ void loop() {
 
 void initLEDS(){
     FastLED.addLeds<WS2812B, kElevatorPin, GRB>(elevLeds, kNumLedElevator);
+    FastLED.addLeds<WS2812B, 3, GRB>(topLeds, kNumLedTop);
  
  }
  void startUpSequence(CRGB elevSetUpColor){
-          for(int i = 0; i < kNumLedElevator; i++){
+          for(int i = 0; i < kNumLedTop; i++){
               elevLeds[i] = elevSetUpColor;
+              topLeds[i] = elevSetUpColor;
                 FastLED.show();
                delay(10);
           }
@@ -93,6 +99,7 @@ void initI2CLink(){
       //While we do not have the link keep waiting
             for(int i = 0; i < kNumLedElevator; i++){
         elevLeds[i] = CRGB::Red;
+        topLeds[i] = CRGB::Red;
       }
       FastLED.show();
       }
@@ -102,17 +109,24 @@ void confirmLinkBlink(){
   for(int i = 0; i < 6; i ++){
     for(int i = 0; i < kNumLedElevator; i++){
         elevLeds[i] = CRGB::Green;
+        topLeds[i] = CRGB::Green;
       }
       FastLED.show();
       delay(250);
         for(int i = 0; i < kNumLedElevator; i++){
         elevLeds[i] = CRGB::Black;
+        topLeds[i] = CRGB::Black;
       }
       FastLED.show();
       delay(150);
     }
   }
 
+void updateTop(){
+    for(int i = 0; i < kNumLedTop; i ++)
+      topLeds[i] = elevColor;
+  
+}
 
 void requestReceived(){
            int cmdReceived = Wire.read();

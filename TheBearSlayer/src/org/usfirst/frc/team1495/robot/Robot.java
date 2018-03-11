@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1495.robot.commands.DriveRobotDrive;
+import org.usfirst.frc.team1495.robot.commands.DriveRobotWithCaution;
+import org.usfirst.frc.team1495.robot.commands.NoDrive;
 import org.usfirst.frc.team1495.robot.commands.TestingMP;
 import org.usfirst.frc.team1495.robot.subsystems.*;
 
@@ -49,9 +51,9 @@ public class Robot extends TimedRobot {
 	// Autonomous
 	static Command autoRoutine;
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
-	SendableChooser<Integer> autoPosChooser = new SendableChooser<>();
+	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
 	SendableChooser<Character> autoSideChooser = new SendableChooser<>();
-	public static int posStart = -1;
+	public static char posStart = ' ';
 	public static char sideStart = ' ';
 	public static String gameData = "";
 
@@ -73,16 +75,20 @@ public class Robot extends TimedRobot {
 		leftDriveMotor.setUpMotionProfile();
 		rightDriveMotor.setUpMotionProfile();
 
-		autoChooser.addDefault("MP", new DriveRobotDrive());
+		autoChooser.addDefault("Nothin", new NoDrive());
+		autoChooser.addObject("That one", new DriveRobotWithCaution());
+		autoChooser.addObject("MP", new DriveRobotDrive());
 		autoChooser.addObject("Testing MP", new TestingMP());
 		SmartDashboard.putData("Autonomous selection", autoChooser);
 		
 
-		autoPosChooser.addDefault("Left", 3);
-		autoPosChooser.addObject("Middle", 2);
-		autoPosChooser.addObject("Right", 1);
+		autoPosChooser.addDefault("Left", 'L');
+		autoPosChooser.addObject("Middle", 'M');
+		autoPosChooser.addObject("Right", 'R');
 		SmartDashboard.putData("MotionProfile starting Positin", autoPosChooser);
-
+		
+		gyro.calibrate();
+		gyro.reset();
 	}
 
 	@Override
