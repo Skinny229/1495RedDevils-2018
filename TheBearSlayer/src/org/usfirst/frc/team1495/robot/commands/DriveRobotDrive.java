@@ -41,7 +41,7 @@ public class DriveRobotDrive extends Command {
 		 * Verifies all Data needed to run this autonomous is retreived and good
 		 * to go
 		 */
-		if (Robot.gameData.length() == 0 || Robot.sideStart == ' ' || Robot.posStart == -1) {
+		if (Robot.gameData.length() == 0 || Robot.posStart == -1) {
 			isFin = true;
 			DriverStation.reportError("Warning! Data needed to run Autonomous is non exixstent! Skipping auto....",
 					false);
@@ -91,14 +91,14 @@ public class DriveRobotDrive extends Command {
 				boolean goingToScale;
 				double[][] distToTravel;
 				int travelinTo;
-				if (Robot.gameData.charAt(0) == Robot.sideStart) {
+				if (Robot.gameData.charAt(0) == Robot.posStart) {
 					distToTravel = GeneratedMotionProfiles.PointsDef; /*
 																		 * To the
 																		 * Switch
 																		 */
 					goingToScale = false;
 					travelinTo = 0;
-				} else if (Robot.gameData.charAt(1) == Robot.sideStart) {
+				} else if (Robot.gameData.charAt(1) == Robot.posStart) {
 					distToTravel = GeneratedMotionProfiles.PointsDef; /*
 																		 * To the
 																		 * Scale

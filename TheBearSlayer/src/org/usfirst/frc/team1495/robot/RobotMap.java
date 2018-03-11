@@ -50,6 +50,11 @@ public class RobotMap {
 	public static final double kp = 0.5;
 	public static final double ki = 0.0;
 	public static final double kd = 0.0;
+	public static final double distSwitch = 125.0;
+	public static final double distScale = 285.0;
+	public static final double closeUpToScale = 1.0;
+	public static final double wheelDiameterIn = 8.0;
+	public static final double unitsPerRot = 4096.0;
 	public static final double turnRateXDeg = 0.6;
 	public static final double fowardRateAuto = 0.55;
 	public static final int timeoutEncoders = 0;

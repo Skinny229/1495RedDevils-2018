@@ -52,9 +52,7 @@ public class Robot extends TimedRobot {
 	static Command autoRoutine;
 	SendableChooser<Command> autoChooser = new SendableChooser<>();
 	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
-	SendableChooser<Character> autoSideChooser = new SendableChooser<>();
 	public static char posStart = ' ';
-	public static char sideStart = ' ';
 	public static String gameData = "";
 
 	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, rightDriveMotor);
@@ -105,10 +103,6 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
-		if (posStart == 1)
-			sideStart = 'L';
-		else
-			sideStart = 'R';
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 
 		if (autoRoutine != null) {

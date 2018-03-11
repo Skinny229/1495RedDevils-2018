@@ -22,8 +22,8 @@ public class InteractiveLEDS {
 		@Override
 		public void run() {
 			//RobotMap.isArduinoConnected = isArduinoHere();
-			sendToArduino("A");
-			//updateLimitSwitches();
+			//sendToArduino("A");
+			updateLimitSwitches();
 			if (cmdQueue.size() == 0) {
 
 			} else {
