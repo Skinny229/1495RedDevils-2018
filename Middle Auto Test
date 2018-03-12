@@ -1,0 +1,86 @@
+		if(Robot.posStart == 'M') {
+			/*
+			 * 
+			 * Self Note: I've got to figure out how to move the elevator while moving or it's going to be too late
+			 * 
+			 * */
+			switch(stage){
+			case 0:
+				if (Robot.leftDriveMotor.getRawEncoderPosition() < ((60.0  / (8.0 * Math.PI) * RobotMap.unitsPerRot) + startEncStart))
+					Robot.roboDrive.arcadeDrive(.65, 0);
+				else {
+					Robot.roboDrive.stopMotor();
+					System.out.println("Stage 0 Finished. Moving to Stage 1");
+					stage = 1;
+				}
+				break;
+			case 1:
+				if(Robot.gameData.charAt(0) == 'L') {
+					angleTarget *= -1;
+					stage = 5;
+				}else if(Robot.gameData.charAt(0) == 'R'){
+					stage = 6;
+				}
+				break;
+			case 2:
+				if(Robot.leftDriveMotor.getRawEncoderPosition() < ((/*dist moving to the side*/100.0 / (8.0 * Math.PI) * RobotMap.unitsPerRot) + startEncStart)){
+					Robot.roboDrive.arcadeDrive(0.65, 0);
+				}else {
+					Robot.roboDrive.stopMotor();
+					stage = 3;
+				}
+				break;
+			case 3:
+				angleTarget *= -1;
+				if(Robot.gameData.charAt(0) == 'L') {
+					stage = 5;
+				}else if(Robot.gameData.charAt(0) == 'R'){
+					stage = 6;
+				}
+				break;
+			case 4:
+				if (Robot.leftDriveMotor.getRawEncoderVelocity() > 0 && !this.isCanceled()) {
+				} else {
+					System.out.println("It seems we have crashed agaisnt something. Droppin Cube....");
+					dropCube();
+					isFin = true;
+				}
+				break;
+			case 5:
+				if (Robot.gyro.getRawAngleDegrees() <= angleTarget && !this.isCanceled()) {
+					Robot.roboDrive.arcadeDrive(0, RobotMap.turnRateXDeg);
+				} else {
+					Robot.roboDrive.stopMotor();
+					
+					if(!isFirstTurnMade) {
+						isFirstTurnMade = true;
+						System.out.println("Turn Finished. Entering Stage 2");
+						startEncStart = Robot.leftDriveMotor.getRawEncoderPosition();
+						stage = 2;
+						}else {
+							Robot.roboDrive.arcadeDrive(0.65, 0);
+							Timer.delay(.3);
+							stage = 4;
+						}
+				}
+				break;
+			case 6:
+				if (Robot.gyro.getRawAngleDegrees() >= angleTarget && !this.isCanceled()) {
+					Robot.roboDrive.arcadeDrive(0, -RobotMap.turnRateXDeg);
+				} else {
+					Robot.roboDrive.stopMotor();
+					if(!isFirstTurnMade) {
+					isFirstTurnMade = true;
+					System.out.println("Turn Finished. Entering Stage 2");
+					startEncStart = Robot.leftDriveMotor.getRawEncoderPosition();
+					stage = 2;
+					}else {
+						Robot.roboDrive.arcadeDrive(0.65, 0);
+						Timer.delay(.3);
+						stage = 4;
+					}
+				}
+				break;
+			}
+		}
+	
