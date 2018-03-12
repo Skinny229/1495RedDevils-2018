@@ -54,8 +54,8 @@ public class OI {
 
 	public OI() {
 
-		in.whileHeld(new SpinIntake(-.75));
-		out.whileHeld(new SpinIntake(.65));
+		in.whileHeld(new SpinIntake(-1.0));
+		out.whileHeld(new SpinIntake(1.0));
 		raise.whileHeld(new Elevate(-1.0));
 		lower.whileHeld(new Elevate(1.0));
 		close.whenPressed(new OpenIntake(false));
