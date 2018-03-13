@@ -6,12 +6,14 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import org.usfirst.frc.team1495.robot.commands.AutoRunner;
 import org.usfirst.frc.team1495.robot.commands.DriveRobotWithCaution;
 import org.usfirst.frc.team1495.robot.commands.NoDrive;
 import org.usfirst.frc.team1495.robot.subsystems.*;
@@ -54,8 +56,7 @@ public class Robot extends TimedRobot {
 	public static char posStart = ' ';
 	public static String gameData = "";
 	public static boolean goScale;
-
-
+	AutoRunner autoRunner;
 
 	@Override
 	public void robotInit() {
@@ -67,7 +68,6 @@ public class Robot extends TimedRobot {
 		// Start loading starting Motion Profile
 		// Starting distance should be at least breaking auto line
 
-
 		PDP.clearStickyFaults();
 
 		leftDriveMotor.setUpMotionProfile();
@@ -76,17 +76,16 @@ public class Robot extends TimedRobot {
 		autoChooser.addDefault("Encoder Control", new DriveRobotWithCaution());
 		autoChooser.addObject("Drive Straight", new NoDrive());
 		SmartDashboard.putData("Autonomous selection", autoChooser);
-		
 
 		autoPosChooser.addDefault("Left", 'L');
 		autoPosChooser.addObject("Middle", 'M');
 		autoPosChooser.addObject("Right", 'R');
 		SmartDashboard.putData("MotionProfile starting Positin", autoPosChooser);
-		
+
 		goScaleChooser.addDefault("Go to Scale if possible", true);
 		goScaleChooser.addObject("Don't go to scale", false);
 		SmartDashboard.putData(goScaleChooser);
-		
+
 		gyro.calibrate();
 		gyro.reset();
 	}
@@ -107,7 +106,19 @@ public class Robot extends TimedRobot {
 		posStart = autoPosChooser.getSelected();
 		goScale = goScaleChooser.getSelected();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-
+		autoRunner = new AutoRunner();
+		arm.solenoid.set(Value.kReverse);
+		switch (posStart) {
+		case 'L':
+		case 'R':
+			autoRunner.addSideRunner();
+			if (posStart == gameData.charAt(0))
+				autoRunner.addTurnNRam();
+			break;
+		case 'M':
+			autoRunner.addMiddleRunner();
+			break;
+		}
 		if (autoRoutine != null) {
 			autoRoutine.start();
 		}
@@ -140,8 +151,8 @@ public class Robot extends TimedRobot {
 		double fineTuneX = 0.0;
 		switch (controlStatus) {
 		case FINETUNE:
-			fineTuneY = oi.stick.getY() * RobotMap.kFineTuneMult;
-			fineTuneX = oi.stick.getX() * RobotMap.kFineTuneMult;
+			fineTuneY = oi.operator.getY(Hand.kLeft) * RobotMap.kFineTuneMult;
+			fineTuneX = oi.operator.getX(Hand.kRight) * RobotMap.kFineTuneMult;
 			break;
 		default:
 			break;

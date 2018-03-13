@@ -126,7 +126,7 @@ public class DriveRobotWithCaution extends Command {
 			break;
 		case 5:
 			if (Robot.gyro.getRawAngleDegrees() <= angleToTurn && !this.isCanceled()) {
-				Robot.roboDrive.arcadeDrive(0, RobotMap.turnRateXDeg);
+				Robot.roboDrive.arcadeDrive(0, RobotMap.kAutoTurnRate);
 			} else {
 				Robot.roboDrive.stopMotor();
 				Robot.roboDrive.arcadeDrive(.5, 0);
@@ -137,7 +137,7 @@ public class DriveRobotWithCaution extends Command {
 			break;
 		case 6:
 			if (Robot.gyro.getRawAngleDegrees() >= angleToTurn && !this.isCanceled()) {
-				Robot.roboDrive.arcadeDrive(0, -RobotMap.turnRateXDeg);
+				Robot.roboDrive.arcadeDrive(0, -RobotMap.kAutoTurnRate);
 			} else {
 				Robot.roboDrive.stopMotor();
 				Robot.roboDrive.arcadeDrive(.5, 0);

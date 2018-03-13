@@ -6,7 +6,6 @@ import org.usfirst.frc.team1495.robot.commands.Elevate;
 import org.usfirst.frc.team1495.robot.commands.OpenIntake;
 //import org.usfirst.frc.team1495.robot.commands.OpenIntake;
 import org.usfirst.frc.team1495.robot.commands.SpinIntake;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -28,7 +27,7 @@ public class OI {
 	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
 	// public XboxController operatorController = new
 	// XboxController(RobotMap.kOperatorControllerPort);
-	public Joystick stick = new Joystick(RobotMap.kOperatorControllerPort);
+	public XboxController operator = new XboxController(RobotMap.kOperatorControllerPort);
 
 	/*
 	 * // Xbox public Button in = new JoystickButton(driverController, 5); public
@@ -42,15 +41,15 @@ public class OI {
 	 */
 
 	// Joystick
-	public Button in = new JoystickButton(stick, 2);
-	public Button out = new JoystickButton(stick, 1);
-	public Button lower = new JoystickButton(stick, 3);
-	public Button raise = new JoystickButton(stick, 5);
-	public Button climb = new JoystickButton(stick, 7);
-	public Button open = new JoystickButton(stick, 4);
-	public Button close = new JoystickButton(stick, 6);
-	public Button enblTune = new JoystickButton(stick, 11);
-	public Button dsblTune = new JoystickButton(stick, 12);
+	public Button in = new JoystickButton(operator, 2);
+	public Button out = new JoystickButton(operator, 1);
+	public Button lower = new JoystickButton(operator, 3);
+	public Button raise = new JoystickButton(operator, 5);
+	public Button climb = new JoystickButton(operator, 7);
+	public Button open = new JoystickButton(operator, 4);
+	public Button close = new JoystickButton(operator, 6);
+	public Button enblTune = new JoystickButton(operator, 11);
+	public Button dsblTune = new JoystickButton(operator, 12);
 
 	public OI() {
 
