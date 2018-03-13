@@ -12,10 +12,8 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team1495.robot.commands.DriveRobotDrive;
 import org.usfirst.frc.team1495.robot.commands.DriveRobotWithCaution;
 import org.usfirst.frc.team1495.robot.commands.NoDrive;
-import org.usfirst.frc.team1495.robot.commands.TestingMP;
 import org.usfirst.frc.team1495.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
@@ -57,7 +55,7 @@ public class Robot extends TimedRobot {
 	public static String gameData = "";
 	public static boolean goScale;
 
-	public static IntegratedMP rodMP = new IntegratedMP(leftDriveMotor, rightDriveMotor);
+
 
 	@Override
 	public void robotInit() {
@@ -68,7 +66,7 @@ public class Robot extends TimedRobot {
 
 		// Start loading starting Motion Profile
 		// Starting distance should be at least breaking auto line
-		rodMP.reset(GeneratedMotionProfiles.PointsDef);
+
 
 		PDP.clearStickyFaults();
 
@@ -77,8 +75,6 @@ public class Robot extends TimedRobot {
 
 		autoChooser.addDefault("Encoder Control", new DriveRobotWithCaution());
 		autoChooser.addObject("Drive Straight", new NoDrive());
-		autoChooser.addObject("Motion Profile", new DriveRobotDrive());
-		autoChooser.addObject("Experimental Motion Profile", new TestingMP());
 		SmartDashboard.putData("Autonomous selection", autoChooser);
 		
 
@@ -127,7 +123,6 @@ public class Robot extends TimedRobot {
 		if (autoRoutine != null) {
 			autoRoutine.cancel();
 		}
-		DriveRobotDrive.stopEverything();
 	}
 
 	@Override
