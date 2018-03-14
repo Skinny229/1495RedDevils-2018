@@ -35,6 +35,7 @@ public class AutoRunner extends CommandGroup {
     	requires(Robot.elevator);
     	//Raise Elev
     	this.addParallel(new RaiseElev());
+    	this.addParallel(new OpenIntake(false));
     }
     
 
@@ -66,7 +67,8 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addScaleRunner() {
-    	
+    	this.addParallel(new DriveDistEncoder(RobotMap.distScaleFromSwitch));
+    	this.addParallel(new RaiseElev());
     }
     
     

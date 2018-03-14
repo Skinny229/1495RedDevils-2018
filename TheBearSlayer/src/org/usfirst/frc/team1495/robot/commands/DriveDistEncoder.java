@@ -6,7 +6,9 @@ import org.usfirst.frc.team1495.robot.RobotMap;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
+ *Drives foward certain number of inches
  *
+ *Warning !!! this does not compensate for error over time, This if run for too much distance will veer off target
  */
 public class DriveDistEncoder extends Command {
 

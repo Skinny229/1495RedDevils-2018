@@ -51,7 +51,7 @@ public class RobotMap {
 	public static final double ki = 0.0;
 	public static final double kd = 0.0;
 	public static final double distSwitch = 125.0;
-	public static final double distScale = 285.0;
+	public static final double distScaleFromSwitch = 160.0;
 	public static final double closeUpToScale = 1.0;
 	public static final double kWheelDiameterIn = 8.0;
 	public static final double kUnitsPerRot = 4096.0;
