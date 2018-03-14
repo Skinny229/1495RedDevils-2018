@@ -12,7 +12,12 @@ public class AutoRunner extends CommandGroup {
 
 	
 	public double angleTurnin = 90.0;
-	private char switchSide = Robot.gameData.charAt(0);
+	private char switchSide;
+	public enum ElevPos{
+		kSwitch,kScale,kStop
+	}
+	
+	
     public AutoRunner() {
         // Add Commands here:
         // e.g. addSequential(new Command1());
@@ -33,8 +38,9 @@ public class AutoRunner extends CommandGroup {
     	requires(Robot.intake);
     	requires(Robot.arm);
     	requires(Robot.elevator);
+    	switchSide = Robot.gameData.charAt(0);
     	//Raise Elev
-    	this.addParallel(new RaiseElev());
+    	this.addParallel(new RaiseElev(ElevPos.kSwitch));
     	this.addParallel(new OpenIntake(false));
     }
     
@@ -67,8 +73,13 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addScaleRunner() {
+    	/*
+    	 * Not to be use right now
+    	 * 
+    	 * 
     	this.addParallel(new DriveDistEncoder(RobotMap.distScaleFromSwitch));
     	this.addParallel(new RaiseElev());
+    	*/
     }
     
     

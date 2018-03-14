@@ -14,6 +14,7 @@ public class RobotMap {
 	public static final int kLeftIntakeMotorID = 0;  // VictorSP
 	public static final int kRightIntakeMotorID = 1; // VictorSP
 	public static final boolean kIntakeMotorSafety = false;
+	public static final double kIntakeSpeed = .75;
 
 	// Arm	
 	public static final int kArmSolenoidForward = 0;
@@ -24,10 +25,12 @@ public class RobotMap {
 	public static final boolean kElevatorMotorSafety = false;
 	public static final int kUpperElevatorLSPort = 2; // Digital
 	public static final int kLowerElevatorLSPort = 3; // Digital
-
+	public static final double kElevSpeed = 1.0;
+	
 	// Climber
 	public static final int kClimberMotorID = 5; // CAN ID /
 	public static final boolean kClimberMotorSafety = false;
+	public static final double kClimberSpeed = 1.0;
 
 	// Control
 	public static final int kDriverControllerPort = 0; // USB PORT
@@ -50,13 +53,12 @@ public class RobotMap {
 	public static final double kp = 0.5;
 	public static final double ki = 0.0;
 	public static final double kd = 0.0;
+	public static final double timeToSwitch = 1.0;
 	public static final double distSwitch = 125.0;
 	public static final double distScaleFromSwitch = 160.0;
-	public static final double closeUpToScale = 1.0;
 	public static final double kWheelDiameterIn = 8.0;
 	public static final double kUnitsPerRot = 4096.0;
 	public static final double kAutoTurnRate = 0.6;
-	public static final double kIntakeExitSpeed = -.65;
 	public static final double fowardRateAuto = 0.65;
 	public static final int timeoutEncoders = 0;
 	public static final int baseTrajTimeMS = 10;
