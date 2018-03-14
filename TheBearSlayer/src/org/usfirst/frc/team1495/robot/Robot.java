@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 	public static char posStart = ' ';
 	public static String gameData = "";
 	public static boolean goScale;
-	AutoRunner autoRunner;
+	static AutoRunner autoRunner;
 
 	@Override
 	public void robotInit() {
@@ -119,7 +119,10 @@ public class Robot extends TimedRobot {
 			autoRunner.addMiddleRunner();
 			break;
 		}
-		if (autoRoutine != null) {
+		if(autoRoutine instanceof AutoRunner) {
+			autoRunner.start();
+		}
+		else if (autoRoutine != null ) {
 			autoRoutine.start();
 		}
 	}
@@ -133,6 +136,7 @@ public class Robot extends TimedRobot {
 	public void teleopInit() {
 		if (autoRoutine != null) {
 			autoRoutine.cancel();
+			autoRunner.cancel();
 		}
 	}
 
