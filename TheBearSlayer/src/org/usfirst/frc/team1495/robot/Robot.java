@@ -18,9 +18,6 @@ import org.usfirst.frc.team1495.robot.commands.NoDrive;
 import org.usfirst.frc.team1495.robot.subsystems.*;
 
 public class Robot extends TimedRobot {
-	public enum DriveState {
-		FINETUNE, NOFINETUNE
-	}
 
 	// Drive Train
 	public static DifferentialDrive roboDrive;
@@ -32,7 +29,6 @@ public class Robot extends TimedRobot {
 			RobotMap.kDriveMotorSafety);
 	public static CAN_TalonSRXE rightDriveMotor = new CAN_TalonSRXE(RobotMap.kRightDriveMotorID,
 			RobotMap.kDriveMotorSafety);
-	public static DriveState controlStatus = DriveState.NOFINETUNE;
 	// Subsystems
 	public static Intake intake = new Intake();
 	public static Elevator elevator = new Elevator();
@@ -140,11 +136,17 @@ public class Robot extends TimedRobot {
 			autoRoutine.cancel();
 			autoRunner.cancel();
 		}
+		intake.stop();
+		elevator.stop();
+		roboDrive.stopMotor();
 	}
 
 	@Override
 	public void teleopPeriodic() {
-		runDriveTrain();
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * RobotMap.kDTTurnMult);
+		
+		elevator.motor.set(oi.operator.getY(Hand.kLeft));
+		intake.set(oi.operator.getTriggerAxis(Hand.kLeft)-oi.operator.getTriggerAxis(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 
@@ -152,19 +154,6 @@ public class Robot extends TimedRobot {
 	public void testPeriodic() {
 	}
 
-	public void runDriveTrain() {
-		double fineTuneY = 0.0;
-		double fineTuneX = 0.0;
-		switch (controlStatus) {
-		case FINETUNE:
-			fineTuneY = -oi.operator.getY(Hand.kLeft) * RobotMap.kFineTuneMult;
-			fineTuneX = oi.operator.getX(Hand.kRight) * RobotMap.kFineTuneMult;
-			break;
-		default:
-			break;
-		}
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft) + fineTuneY,
-				(oi.driverController.getX(Hand.kRight) + fineTuneX) * RobotMap.kDTTurnMult);
-	}
+
 
 }

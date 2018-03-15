@@ -1,11 +1,7 @@
 package org.usfirst.frc.team1495.robot;
 
-import org.usfirst.frc.team1495.robot.commands.ChangeDriveStatus;
-import org.usfirst.frc.team1495.robot.commands.Climb;
-import org.usfirst.frc.team1495.robot.commands.Elevate;
-import org.usfirst.frc.team1495.robot.commands.OpenIntake;
-//import org.usfirst.frc.team1495.robot.commands.OpenIntake;
-import org.usfirst.frc.team1495.robot.commands.SpinIntake;
+import org.usfirst.frc.team1495.robot.commands.*;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -25,34 +21,27 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class OI {
 	public XboxController driverController = new XboxController(RobotMap.kDriverControllerPort);
-	// public XboxController operatorController = new
-	// XboxController(RobotMap.kOperatorControllerPort);
 	public XboxController operator = new XboxController(RobotMap.kOperatorControllerPort);
 
-	/*
-	 * // Xbox public Button in = new JoystickButton(driverController, 5); public
-	 * Button out = new JoystickButton(driverController, 6); public Button lower =
-	 * new JoystickButton(driverController, 3); public Button raise = new
-	 * JoystickButton(driverController, 4); public Button climb = new
-	 * JoystickButton(driverController, 8); public Button drop = new
-	 * JoystickButton(driverController, 7); public Button open = new
-	 * JoystickButton(driverController, 9); public Button close = new
-	 * JoystickButton(driverController, 10);
-	 */
+	// Xbox
+	public Button climb = new JoystickButton(operator, 4);
+	public Button openArm = new JoystickButton(operator, 6);
+	public Button closeArm = new JoystickButton(operator, 5);
 
 	// Joystick
-	public Button in = new JoystickButton(operator, 2);
-	public Button out = new JoystickButton(operator, 1);
-	public Button lower = new JoystickButton(operator, 3);
-	public Button raise = new JoystickButton(operator, 5);
-	public Button climb = new JoystickButton(operator, 7);
-	public Button open = new JoystickButton(operator, 4);
-	public Button close = new JoystickButton(operator, 6);
-	public Button enblTune = new JoystickButton(operator, 11);
-	public Button dsblTune = new JoystickButton(operator, 12);
-
+	/*
+	 * public Button in = new JoystickButton(operator, 2); public Button out = new
+	 * JoystickButton(operator, 1); public Button lower = new
+	 * JoystickButton(operator, 3); public Button raise = new
+	 * JoystickButton(operator, 5); public Button climb = new
+	 * JoystickButton(operator, 7); public Button open = new
+	 * JoystickButton(operator, 4); public Button close = new
+	 * JoystickButton(operator, 6); public Button enblTune = new
+	 * JoystickButton(operator, 11); public Button dsblTune = new
+	 * JoystickButton(operator, 12);
+	 */
 	public OI() {
-
+		/* joystick
 		in.whileHeld(new SpinIntake(RobotMap.kIntakeSpeed));
 		out.whileHeld(new SpinIntake(-RobotMap.kIntakeSpeed));
 		raise.whileHeld(new Elevate(-RobotMap.kElevSpeed));
@@ -60,7 +49,11 @@ public class OI {
 		close.whenPressed(new OpenIntake(false));
 		open.whenPressed(new OpenIntake(true));
 		climb.whileHeld(new Climb(RobotMap.kClimberSpeed));
-		enblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.FINETUNE));
-		dsblTune.whenPressed(new ChangeDriveStatus(Robot.DriveState.NOFINETUNE));
+		 */
+		climb.whileHeld(new Climb(RobotMap.kClimberSpeed));
+		openArm.whenPressed(new OpenIntake(true));
+		closeArm.whenPressed(new OpenIntake(false));
+		
+		
 	}
 }

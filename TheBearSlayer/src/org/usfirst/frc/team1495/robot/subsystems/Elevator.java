@@ -14,24 +14,10 @@ public class Elevator extends Subsystem {
 	}
 
 	
-	public void clearSwitchFence(double delay) {
-		elevRunner.startSingle(delay);
-		elevRunner.stop();
+	public void stop() {
+		motor.stopMotor();
 	}
 	
-	
-	private class elevatorRunner implements java.lang.Runnable{
-
-		@Override
-		public void run() {
-			motor.set(-1.0);
-			Timer.delay(.5);
-			motor.stopMotor();
-		}
-		
-	}
-	
-	Notifier elevRunner = new Notifier(new elevatorRunner());
 	
 	
 	public void initDefaultCommand() {
