@@ -48,8 +48,8 @@ public class Robot extends TimedRobot {
 	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
 	SendableChooser<Boolean> goScaleChooser = new SendableChooser<>();
 	public static char posStart = ' ';
-	public static String gameData = "";
-	public static boolean goScale;
+	public static String gameData = "  ";
+	public static boolean goScale = false;
 	static AutoRunner autoRunner;
 
 	@Override
@@ -103,19 +103,6 @@ public class Robot extends TimedRobot {
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		if(autoRoutine instanceof AutoRunner) {
 			autoRunner = new AutoRunner();
-			switch (posStart) {
-			case 'L':
-			case 'R':
-				autoRunner.addSideRunner();
-				if (posStart == gameData.charAt(0))
-					autoRunner.addTurnNRam();
-				else if(posStart == gameData.charAt(1) && goScale)
-					autoRunner.addScaleRunner();
-				break;
-			case 'M':
-				autoRunner.addMiddleRunner();
-				break;
-			}
 			System.out.println("New Auto Detected! Running....");
 			autoRunner.start();
 		}

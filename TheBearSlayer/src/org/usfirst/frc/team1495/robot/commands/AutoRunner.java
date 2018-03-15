@@ -42,6 +42,19 @@ public class AutoRunner extends CommandGroup {
     	//Raise Elev
     	this.addParallel(new RaiseElev(ElevPos.kSwitch));
     	this.addParallel(new OpenIntake(false));
+		switch (switchSide) {
+		case 'L':
+		case 'R':
+			addSideRunner();
+			if (Robot.posStart == switchSide)
+				addTurnNRam();
+			else if(Robot.posStart == Robot.gameData.charAt(1) && Robot.goScale)
+				addScaleRunner();
+			break;
+		case 'M':
+				addMiddleRunner();
+			break;
+		}
     }
     
 
