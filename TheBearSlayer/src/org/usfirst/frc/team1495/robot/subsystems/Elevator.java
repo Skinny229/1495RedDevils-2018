@@ -1,8 +1,6 @@
 package org.usfirst.frc.team1495.robot.subsystems;
 
 import org.usfirst.frc.team1495.robot.RobotMap;
-import edu.wpi.first.wpilibj.Notifier;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Elevator extends Subsystem {
