@@ -42,7 +42,6 @@ public class Robot extends TimedRobot {
 	// Other
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
 	public static Compressor compressor = new Compressor();
-	public static InteractiveLEDS lights = new InteractiveLEDS();
 	// Autonomous
 	static Command autoRoutine;
 	SendableChooser<Command> autoChooser = new SendableChooser<>();

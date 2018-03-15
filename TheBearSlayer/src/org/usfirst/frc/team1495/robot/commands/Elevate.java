@@ -23,19 +23,13 @@ public class Elevate extends Command {
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
-		
-		if (speed > 0)
-			Robot.lights.addCmd("F");
-		else
-			Robot.lights.addCmd("D");
-		
 		//System.out.println(!Robot.upperElevatorLS.get());
 		if (speed < 0 && !Robot.upperElevatorLS.get())
 			Robot.elevator.motor.set(speed);
 		else if (speed > 0)
 			Robot.elevator.motor.set(speed);
 		else{
-			Robot.elevator.motor.stopMotor();
+			Robot.elevator.stop();
 		}
 		
 	}
@@ -47,14 +41,12 @@ public class Elevate extends Command {
 
 	// Called once after isFinished returns true
 	protected void end() {
-		Robot.elevator.motor.stopMotor();
-		Robot.lights.addCmd("E");
+		Robot.elevator.stop();
 	}
 
 	// Called when another command which requires one or more of the same
 	// subsystems is scheduled to run
 	protected void interrupted() {
-		Robot.elevator.motor.stopMotor();
-		Robot.lights.addCmd("E");
+		Robot.elevator.stop();
 	}
 }
