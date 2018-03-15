@@ -26,14 +26,14 @@ public class RaiseElev extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	switch(setTo) {
-    	case kScale:
+    	case kSwitch:
     		if(timeSinceInitialized() < RobotMap.timeToSwitch) {
     			Robot.elevator.motor.set(-1.0);
     		}else {
     			isFin = true;
     		}
     		break;
-    	case kSwitch:
+    	case kScale:
     		if(!Robot.upperElevatorLS.get()) {
     			Robot.elevator.motor.set(-1.0);
     		}else {

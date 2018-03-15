@@ -46,10 +46,14 @@ public class AutoRunner extends CommandGroup {
 		case 'L':
 		case 'R':
 			addSideRunner();
-			if (Robot.posStart == switchSide)
+			if (Robot.posStart == switchSide){
 				addTurnNRam();
-			else if(Robot.posStart == Robot.gameData.charAt(1) && Robot.goScale)
+				System.out.println("Targeting Switch....");
+			}
+			else if(Robot.posStart == Robot.gameData.charAt(1) && Robot.goScale){
 				addScaleRunner();
+				System.out.println("Targetin Scale...");
+			}
 			break;
 		case 'M':
 				addMiddleRunner();
