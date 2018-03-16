@@ -35,7 +35,6 @@ public class Robot extends TimedRobot {
 	public static Climber climber = new Climber();
 	public static Arm arm = new Arm();
 	public static LimitSwitch upperElevatorLS = new LimitSwitch(RobotMap.kUpperElevatorLSPort);
-	public static LimitSwitch lowerElevatorLS = new LimitSwitch(RobotMap.kLowerElevatorLSPort);
 	// Control
 	public static Gyro gyro = new Gyro();
 	public static OI oi = new OI();
@@ -43,15 +42,14 @@ public class Robot extends TimedRobot {
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
 	public static Compressor compressor = new Compressor();
 	// Autonomous
-	static Command autoRoutine;
-	SendableChooser<Command> autoChooser = new SendableChooser<>();
+	static Integer autoRoutine;
+	SendableChooser<Integer> autoChooser = new SendableChooser<>();
 	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
 	SendableChooser<Boolean> goScaleChooser = new SendableChooser<>();
 	public static char posStart = ' ';
 	public static String gameData = "  ";
 	public static boolean goScale = false;
-	static AutoRunner autoRunner;
-
+	
 	@Override
 	public void robotInit() {
 
@@ -67,9 +65,9 @@ public class Robot extends TimedRobot {
 		leftDriveMotor.setUpMotionProfile();
 		rightDriveMotor.setUpMotionProfile();
 
-		autoChooser.addDefault("Encoder Control", new DriveRobotWithCaution());
-		autoChooser.addObject("Command Group Auto Runner", new AutoRunner());
-		autoChooser.addObject("Drive Straight", new NoDrive());
+		autoChooser.addDefault("Command Group Auto Runner", 1);
+		autoChooser.addObject("Encoder Control", 2);
+		autoChooser.addObject("Drive Straight", 3);
 		SmartDashboard.putData("Autonomous selection", autoChooser);
 
 		autoPosChooser.addDefault("Left", 'L');
@@ -95,20 +93,30 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 	}
 
+	 static Command autoCmd;
 	@Override
 	public void autonomousInit() {
+		
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
 		goScale = goScaleChooser.getSelected();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
-		if(autoRoutine instanceof AutoRunner) {
-			autoRunner = new AutoRunner();
+		switch(autoRoutine){
+		case 1:
+			autoCmd = new AutoRunner();
 			System.out.println("New Auto Detected! Running....");
-			autoRunner.start();
+			break;
+		case 2:
+			autoCmd = new DriveRobotWithCaution();
+			break;
+		case 3:
+			autoCmd = new NoDrive();
+			break;
+		default:
+			autoCmd = new NoDrive();
+			break;
 		}
-		else if (autoRoutine != null ) {
-			autoRoutine.start();
-		}
+		autoCmd.start();
 	}
 
 	@Override
@@ -118,9 +126,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void teleopInit() {
-		if (autoRoutine != null) {
-			autoRoutine.cancel();
-			autoRunner.cancel();
+		if (autoCmd != null) {
+			autoCmd.cancel();
 		}
 		intake.stop();
 		elevator.stop();

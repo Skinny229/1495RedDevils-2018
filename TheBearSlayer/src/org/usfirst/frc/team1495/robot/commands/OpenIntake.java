@@ -15,6 +15,7 @@ public class OpenIntake extends Command {
  
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		System.out.println("Running: OpenIntake");
 		if(down)
 			Robot.arm.solenoid.set(Value.kForward);
 		else 

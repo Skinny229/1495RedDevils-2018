@@ -29,6 +29,7 @@ public class DriveDistEncoder extends Command {
 
 	// Called just before this Command runs the first time
 	protected void initialize() {
+		System.out.println("Running: DriveDistEncoder");
 		isFin = false;
 		startingEncReading = Robot.leftDriveMotor.getRawEncoderPosition();
 	}

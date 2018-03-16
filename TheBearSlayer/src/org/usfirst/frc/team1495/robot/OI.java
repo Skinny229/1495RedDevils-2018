@@ -51,8 +51,8 @@ public class OI {
 		climb.whileHeld(new Climb(RobotMap.kClimberSpeed));
 		 */
 		climb.whileHeld(new Climb(RobotMap.kClimberSpeed));
-		openArm.whenPressed(new OpenIntake(true));
-		closeArm.whenPressed(new OpenIntake(false));
+		openArm.whenPressed(new OpenIntake(false));
+		closeArm.whenPressed(new OpenIntake(true));
 		
 		
 	}

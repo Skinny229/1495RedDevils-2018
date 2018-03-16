@@ -21,8 +21,9 @@ public class TurnXDegrees extends Command {
 
     // Called once when the command executes
     protected void initialize() {
-    	isFin = true;
-    	setTimeout(7);
+    	System.out.println("Running: TurnXDegrees");
+    	isFin = false;
+    	setTimeout(5);
     	if(angleTarget < 0) {
     		turnSpeed *= -1;
     		isTurningLeft = true;

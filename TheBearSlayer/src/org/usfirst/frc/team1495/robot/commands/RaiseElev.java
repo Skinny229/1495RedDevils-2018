@@ -20,6 +20,7 @@ public class RaiseElev extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+    	System.out.println("Running: RaiseElev");
     	isFin = false;
     }
 

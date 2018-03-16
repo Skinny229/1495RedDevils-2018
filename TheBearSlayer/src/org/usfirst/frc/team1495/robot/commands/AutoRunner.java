@@ -11,43 +11,34 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class AutoRunner extends CommandGroup {
 
 	
-	public double angleTurnin = 90.0;
-	private char switchSide;
+	private double angleTurnin = 90.0;
 	public enum ElevPos{
 		kSwitch,kScale,kStop
 	}
 	
 	
     public AutoRunner() {
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+    	
     	requires(Robot.intake);
     	requires(Robot.arm);
     	requires(Robot.elevator);
-    	switchSide = Robot.gameData.charAt(0);
-    	//Raise Elev
+    	
+    	
+		System.out.println("Game Data: ");
+		System.out.println("Friendly Switch: " + Robot.gameData.charAt(0));
+		System.out.println("Scale: " + Robot.gameData.charAt(1));
+		System.out.println("Enemy Switch: " + Robot.gameData.charAt(2));
+		System.out.println("Selected Starting Position: " + Robot.posStart);
+    	
+    	//No matter what raise the elevator to the switch position and and drop the intake
     	this.addParallel(new RaiseElev(ElevPos.kSwitch));
-    	this.addParallel(new OpenIntake(false));
-		switch (switchSide) {
+    	this.addParallel(new OpenIntake(true));
+		switch (Robot.posStart) {
 		case 'L':
 		case 'R':
 			addSideRunner();
-			if (Robot.posStart == switchSide){
-				addTurnNRam();
+			if (Robot.posStart == Robot.gameData.charAt(0)){
+		      	addTurnNRam();
 				System.out.println("Targeting Switch....");
 			}
 			else if(Robot.posStart == Robot.gameData.charAt(1) && Robot.goScale){
@@ -64,12 +55,12 @@ public class AutoRunner extends CommandGroup {
 
     
     public void addMiddleRunner() {
-    	this.addParallel(new DriveDistEncoder(60));
-    	if(switchSide == 'L') {
+    	this.addParallel(new DriveDistEncoder(RobotMap.distSwitchFromMiddle));
+    	if(Robot.gameData.charAt(0) == 'L') {
     			angleTurnin *= -1;
     		}
     	this.addSequential(new TurnXDegrees(angleTurnin));
-    	this.addSequential(new DriveDistEncoder(60));
+    	this.addSequential(new DriveDistEncoder(RobotMap.distSwitchFromMiddle));
     	angleTurnin *= -1;
     	this.addSequential(new TurnXDegrees(angleTurnin));
     	this.addSequential(new DriveToWall());
@@ -77,7 +68,7 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addSideRunner() {
-    	this.addParallel(new DriveDistEncoder(RobotMap.distSwitch));
+    	this.addSequential(new DriveDistEncoder(RobotMap.distSwitch));
     }
     
     public void addTurnNRam() {
@@ -90,6 +81,7 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addScaleRunner() {
+    	System.out.print("Nothing for now...");
     	/*
     	 * Not to be use right now
     	 * 

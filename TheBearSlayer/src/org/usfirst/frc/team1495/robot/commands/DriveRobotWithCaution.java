@@ -24,7 +24,7 @@ public class DriveRobotWithCaution extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("Autonomous Starting!");
-		Robot.arm.solenoid.set(Value.kReverse);
+		Robot.arm.solenoid.set(Value.kForward);
 
 		stage = 0;
 		isFin = false;

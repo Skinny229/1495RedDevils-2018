@@ -21,7 +21,8 @@ public class DriveToWall extends Command {
     
     // Called just before this Command runs the first time
     protected void initialize() {
-    	setTimeout(6);//Seconds
+    	System.out.println("Running: DriveToWall");
+    	//setTimeout(6);//Seconds
     	isFin = false;
     	Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto - .5, 0);
     	Timer.delay(.3);
