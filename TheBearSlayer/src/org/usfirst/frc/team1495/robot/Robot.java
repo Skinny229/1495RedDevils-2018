@@ -46,9 +46,13 @@ public class Robot extends TimedRobot {
 	SendableChooser<Integer> autoChooser = new SendableChooser<>();
 	SendableChooser<Character> autoPosChooser = new SendableChooser<>();
 	SendableChooser<Boolean> goScaleChooser = new SendableChooser<>();
+	SendableChooser<Integer> priorityChooser = new SendableChooser<>();
+	
 	public static char posStart = ' ';
 	public static String gameData = "  ";
 	public static boolean goScale = false;
+	public static int priorityLocation = -1;
+	public static int otherLocation = -1;
 	
 	@Override
 	public void robotInit() {
@@ -68,12 +72,16 @@ public class Robot extends TimedRobot {
 		autoChooser.addDefault("Command Group Auto Runner", 1);
 		autoChooser.addObject("Encoder Control", 2);
 		autoChooser.addObject("Drive Straight", 3);
-		SmartDashboard.putData("Autonomous selection", autoChooser);
+		SmartDashboard.putData(autoChooser);
 
 		autoPosChooser.addDefault("Left", 'L');
 		autoPosChooser.addObject("Middle", 'M');
 		autoPosChooser.addObject("Right", 'R');
-		SmartDashboard.putData("MotionProfile starting Positin", autoPosChooser);
+		SmartDashboard.putData(autoPosChooser);
+		
+		priorityChooser.addDefault("Prioritize: Switch", 0);
+		priorityChooser.addObject("Prioritize Scale", 1);
+		SmartDashboard.putData(priorityChooser);
 
 		goScaleChooser.addDefault("Go to Scale if possible. **NOTE: Will only work with CMDGroup auto runner**", true);
 		goScaleChooser.addObject("Don't go to scale if possible", false);
@@ -81,6 +89,9 @@ public class Robot extends TimedRobot {
 
 		gyro.calibrate();
 		gyro.reset();
+		
+		
+		SmartDashboard.putData(gyro);
 	}
 
 	@Override
@@ -100,6 +111,13 @@ public class Robot extends TimedRobot {
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
 		goScale = goScaleChooser.getSelected();
+		priorityLocation = priorityChooser.getSelected();
+		
+		if(priorityLocation == 0)
+			otherLocation = 1;
+		else
+			otherLocation = 0;
+		
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		System.out.println("Game Data: ");
 		System.out.println("Friendly Switch: " + Robot.gameData.charAt(0));
@@ -146,6 +164,9 @@ public class Robot extends TimedRobot {
 	double elevInput = 0.0;
 	@Override
 	public void teleopPeriodic() {
+		
+		SmartDashboard.putData(gyro);
+		
 		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * RobotMap.kDTTurnMult);
 		elevInput = oi.operator.getY();
 		if(Math.abs(elevInput) < RobotMap.kElevDeadband){
