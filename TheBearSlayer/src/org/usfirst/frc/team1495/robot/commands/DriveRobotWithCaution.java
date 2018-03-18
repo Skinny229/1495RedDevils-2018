@@ -31,11 +31,6 @@ public class DriveRobotWithCaution extends Command {
 		angleTarget = 90;
 		Robot.leftDriveMotor.resetEncoder();
 
-		System.out.println("Game Data: ");
-		System.out.println("Friendly Switch: " + Robot.gameData.charAt(0));
-		System.out.println("Scale: " + Robot.gameData.charAt(1));
-		System.out.println("Enemy Switch: " + Robot.gameData.charAt(2));
-		System.out.println("Selected Starting Position: " + Robot.posStart);
 
 		startEncStart = Robot.leftDriveMotor.getRawEncoderPosition();
 

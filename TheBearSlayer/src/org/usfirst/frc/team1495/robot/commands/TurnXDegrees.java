@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class TurnXDegrees extends Command {
 
 	
-	private double angleTarget, turnSpeed = RobotMap.kAutoTurnRate;
+	private double angleTarget, turnSpeed = RobotMap.kAutoTurnRate, startingAngle;
 	private boolean isTurningLeft, isFin;
     public TurnXDegrees(double angleRequested) {
         // Use requires() here to declare subsystem dependencies
@@ -22,12 +22,14 @@ public class TurnXDegrees extends Command {
     // Called once when the command executes
     protected void initialize() {
     	System.out.println("Running: TurnXDegrees");
+    	startingAngle = Robot.gyro.getRawAngleDegrees();
     	isFin = false;
     	setTimeout(5);
     	if(angleTarget < 0) {
-    		turnSpeed *= -1;
+    		System.out.println("Turning Left...");
     		isTurningLeft = true;
     	}else {
+    		System.out.println("Turning Right...");
     		isTurningLeft = false;
     	}
     	
@@ -36,13 +38,13 @@ public class TurnXDegrees extends Command {
     
     protected void execute() {
     	if(isTurningLeft) {
-    		if (Robot.gyro.getRawAngleDegrees() >= angleTarget && !this.isCanceled()) {
+    		if (Robot.gyro.getRawAngleDegrees() >= (angleTarget + startingAngle) && !this.isCanceled()) {
 				Robot.roboDrive.arcadeDrive(0, -turnSpeed);
 			} else {
 				isFin = true;
 			}
     	}else {
-    		if (Robot.gyro.getRawAngleDegrees() <= angleTarget && !this.isCanceled()) {
+    		if (Robot.gyro.getRawAngleDegrees() <= (angleTarget + startingAngle) && !this.isCanceled()) {
 				Robot.roboDrive.arcadeDrive(0, turnSpeed);
 			} else {
 				isFin = true;

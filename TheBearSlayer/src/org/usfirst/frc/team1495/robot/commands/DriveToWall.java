@@ -3,7 +3,6 @@ package org.usfirst.frc.team1495.robot.commands;
 import org.usfirst.frc.team1495.robot.Robot;
 import org.usfirst.frc.team1495.robot.RobotMap;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
@@ -24,14 +23,14 @@ public class DriveToWall extends Command {
     	System.out.println("Running: DriveToWall");
     	//setTimeout(6);//Seconds
     	isFin = false;
-    	Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto - .5, 0);
-    	Timer.delay(.3);
+    	Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto-.1, 0);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		if (Robot.leftDriveMotor.getRawEncoderVelocity() > 0 && !this.isCanceled()) {
-			Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto - .5, 0);
+    	
+		if (Robot.leftDriveMotor.getRawEncoderVelocity() != 0 || timeSinceInitialized() < .75) {
+			Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto-.1, 0);
 		} else {
 			isFin = true;
 		}

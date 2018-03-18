@@ -19,6 +19,7 @@ public class RobotMap {
 	// Arm	
 	public static final int kArmSolenoidForward = 0;
 	public static final int kArmSoleoidReverse = 1;
+	public static final boolean kDefDownDir = false;
 	
 	// Elevator
 	public static final int kElevatorMotorID = 4; // CAN ID
@@ -26,6 +27,7 @@ public class RobotMap {
 	public static final int kUpperElevatorLSPort = 2; // Digital
 	public static final int kLowerElevatorLSPort = 3; // Digital
 	public static final double kElevSpeed = 1.0;
+	public static final double kElevDeadband = .05;
 	
 	// Climber
 	public static final int kClimberMotorID = 5; // CAN ID /
@@ -53,10 +55,11 @@ public class RobotMap {
 	public static final double kp = 0.5;
 	public static final double ki = 0.0;
 	public static final double kd = 0.0;
-	public static final double timeToSwitch = 1.0;
-	public static final double distSwitch = 125.0;
+	public static final double timeToSwitch = 2.0;
+	public static final double distSwitch = 130.0;
 	public static final double distScaleFromSwitch = 160.0;
-	public static final double distSwitchFromMiddle = 50.0;
+	public static final double distStartingMiddle = 20.0;
+	public static final double distSwitchFromMiddle = 15.0;
 	public static final double kWheelDiameterIn = 8.0;
 	public static final double kUnitsPerRot = 4096.0;
 	public static final double kAutoTurnRate = 0.6;

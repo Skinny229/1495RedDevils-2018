@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 	public static OI oi = new OI();
 	// Other
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
-	public static Compressor compressor = new Compressor();
+	public static Compressor compressor = new Compressor(0);
 	// Autonomous
 	static Integer autoRoutine;
 	SendableChooser<Integer> autoChooser = new SendableChooser<>();
@@ -52,7 +52,7 @@ public class Robot extends TimedRobot {
 	
 	@Override
 	public void robotInit() {
-
+		compressor.clearAllPCMStickyFaults();
 		roboDrive = new DifferentialDrive(new SpeedControllerGroup(leftDriveMotor, leftDriveMotor2),
 				new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
 		roboDrive.setSafetyEnabled(RobotMap.kDriveMotorSafety);
@@ -96,17 +96,25 @@ public class Robot extends TimedRobot {
 	 static Command autoCmd;
 	@Override
 	public void autonomousInit() {
-		
+		System.out.println("-----------Auto Started---------");
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
 		goScale = goScaleChooser.getSelected();
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
+		System.out.println("Game Data: ");
+		System.out.println("Friendly Switch: " + Robot.gameData.charAt(0));
+		System.out.println("Scale: " + Robot.gameData.charAt(1));
+		System.out.println("Enemy Switch: " + Robot.gameData.charAt(2));
+		System.out.println("Selected Starting Position: " + Robot.posStart);
+
+		System.out.print("Running...");
 		switch(autoRoutine){
 		case 1:
+			System.out.println("Auto GroupCMD");
 			autoCmd = new AutoRunner();
-			System.out.println("New Auto Detected! Running....");
 			break;
 		case 2:
+			System.out.println("Encoder Auto");
 			autoCmd = new DriveRobotWithCaution();
 			break;
 		case 3:
@@ -132,14 +140,19 @@ public class Robot extends TimedRobot {
 		intake.stop();
 		elevator.stop();
 		roboDrive.stopMotor();
+		System.out.println("--------------Auto Has Ended!---------------");
 	}
 
+	double elevInput = 0.0;
 	@Override
 	public void teleopPeriodic() {
 		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * RobotMap.kDTTurnMult);
+		elevInput = oi.operator.getY();
+		if(Math.abs(elevInput) < RobotMap.kElevDeadband){
+			elevInput = 0.0;
+		}
+		elevator.set(elevInput);
 		
-		elevator.motor.set(oi.operator.getY(Hand.kLeft));
-		intake.set(oi.operator.getTriggerAxis(Hand.kLeft)-oi.operator.getTriggerAxis(Hand.kRight));
 		Scheduler.getInstance().run();
 	}
 

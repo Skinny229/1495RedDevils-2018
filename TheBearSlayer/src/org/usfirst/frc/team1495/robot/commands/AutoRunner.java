@@ -3,6 +3,7 @@ package org.usfirst.frc.team1495.robot.commands;
 import org.usfirst.frc.team1495.robot.Robot;
 import org.usfirst.frc.team1495.robot.RobotMap;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -16,6 +17,7 @@ public class AutoRunner extends CommandGroup {
 		kSwitch,kScale,kStop
 	}
 	
+	public static String target = " ";
 	
     public AutoRunner() {
     	
@@ -24,30 +26,31 @@ public class AutoRunner extends CommandGroup {
     	requires(Robot.elevator);
     	
     	
-		System.out.println("Game Data: ");
-		System.out.println("Friendly Switch: " + Robot.gameData.charAt(0));
-		System.out.println("Scale: " + Robot.gameData.charAt(1));
-		System.out.println("Enemy Switch: " + Robot.gameData.charAt(2));
-		System.out.println("Selected Starting Position: " + Robot.posStart);
     	
     	//No matter what raise the elevator to the switch position and and drop the intake
     	this.addParallel(new RaiseElev(ElevPos.kSwitch));
-    	this.addParallel(new OpenIntake(true));
+    	this.addParallel(new OpenIntake(RobotMap.kDefDownDir));
+    	System.out.print("Analyzing where to go...");
 		switch (Robot.posStart) {
 		case 'L':
 		case 'R':
 			addSideRunner();
 			if (Robot.posStart == Robot.gameData.charAt(0)){
 		      	addTurnNRam();
-				System.out.println("Targeting Switch....");
+		      	target = "switch";
+				System.out.println("Targeting switch...");
 			}
 			else if(Robot.posStart == Robot.gameData.charAt(1) && Robot.goScale){
 				addScaleRunner();
-				System.out.println("Targetin Scale...");
+				System.out.println("Targetin Scale..");
+				target = "scale";
+			}else if(!Robot.goScale){
+				DriverStation.reportError("Warning! Scale auto wanted but is disabled!", false);
 			}
 			break;
 		case 'M':
 				addMiddleRunner();
+				target = "switch";
 			break;
 		}
     }
@@ -55,12 +58,18 @@ public class AutoRunner extends CommandGroup {
 
     
     public void addMiddleRunner() {
-    	this.addParallel(new DriveDistEncoder(RobotMap.distSwitchFromMiddle));
+    	this.addParallel(new DriveDistEncoder(RobotMap.distStartingMiddle));
     	if(Robot.gameData.charAt(0) == 'L') {
     			angleTurnin *= -1;
+    			//Turn Left is the switch side is on our left
     		}
     	this.addSequential(new TurnXDegrees(angleTurnin));
-    	this.addSequential(new DriveDistEncoder(RobotMap.distSwitchFromMiddle));
+    	if(Robot.gameData.charAt(0) == 'R'){
+    	this.addSequential(new DriveDistEncoder(20.0));
+    	}else
+    	{
+    		this.addSequential(new DriveDistEncoder(40.0));
+    	}
     	angleTurnin *= -1;
     	this.addSequential(new TurnXDegrees(angleTurnin));
     	this.addSequential(new DriveToWall());
@@ -72,7 +81,7 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addTurnNRam() {
-    	if(Robot.posStart == 'L') {
+    	if(Robot.posStart == 'R') {
     		angleTurnin *= -1;
     	}
     	this.addSequential(new TurnXDegrees(angleTurnin));
@@ -81,14 +90,13 @@ public class AutoRunner extends CommandGroup {
     }
     
     public void addScaleRunner() {
-    	System.out.print("Nothing for now...");
-    	/*
-    	 * Not to be use right now
-    	 * 
-    	 * 
-    	this.addParallel(new DriveDistEncoder(RobotMap.distScaleFromSwitch));
-    	this.addParallel(new RaiseElev());
-    	*/
+    	this.addSequential(new DriveDistEncoder(RobotMap.distScaleFromSwitch));
+    	if(Robot.posStart == 'R') {
+    		angleTurnin *= -1;
+    	}
+    	this.addSequential(new TurnXDegrees(angleTurnin));
+    	this.addSequential(new RaiseElev(ElevPos.kScale));
+    	this.addSequential(new dropCubeAuto(-1.0));
     }
     
     

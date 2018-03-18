@@ -35,7 +35,7 @@ public class RaiseElev extends Command {
     		}
     		break;
     	case kScale:
-    		if(!Robot.upperElevatorLS.get()) {
+    		if(!Robot.upperElevatorLS.get() || timeSinceInitialized() < .4) {
     			Robot.elevator.motor.set(-1.0);
     		}else {
     			isFin = true;
@@ -55,6 +55,7 @@ public class RaiseElev extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	System.out.println("Raising Stage Done.");
     	Robot.elevator.motor.stopMotor();
     }
 

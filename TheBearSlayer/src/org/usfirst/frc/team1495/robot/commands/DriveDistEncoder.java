@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.command.Command;
 public class DriveDistEncoder extends Command {
 
 	private double distance, startingEncReading, speed;
-	private boolean isFin;
+	private boolean isFin, goingScale;
 
 	public DriveDistEncoder(double distInches) {
 		// Use requires() here to declare subsystem dependencies
@@ -30,17 +30,32 @@ public class DriveDistEncoder extends Command {
 	// Called just before this Command runs the first time
 	protected void initialize() {
 		System.out.println("Running: DriveDistEncoder");
+		System.out.println("Driving " +  distance + " inches");
+		if(distance > 140 && AutoRunner.target == "scale")
+			goingScale = true;
+		else 
+			goingScale = false;
+		
 		isFin = false;
 		startingEncReading = Robot.leftDriveMotor.getRawEncoderPosition();
 	}
 
 	// Called repeatedly when this Command is scheduled to run
 	protected void execute() {
+	if(goingScale){
+		if (Robot.leftDriveMotor.getRawEncoderPosition() < ((distance / (RobotMap.kWheelDiameterIn * Math.PI) * RobotMap.kUnitsPerRot)+ startingEncReading) && !this.isCanceled())
+			Robot.roboDrive.tankDrive(speed+.01, speed);
+		else {
+			isFin = true;
+		}
+	}
+	else{
 		if (Robot.leftDriveMotor.getRawEncoderPosition() < ((distance / (RobotMap.kWheelDiameterIn * Math.PI) * RobotMap.kUnitsPerRot)+ startingEncReading) && !this.isCanceled())
 			Robot.roboDrive.arcadeDrive(speed, 0);
 		else {
 			isFin = true;
 		}
+	}
 
 	}
 
@@ -59,4 +74,5 @@ public class DriveDistEncoder extends Command {
 	protected void interrupted() {
 		Robot.roboDrive.stopMotor();
 	}
+	
 }
