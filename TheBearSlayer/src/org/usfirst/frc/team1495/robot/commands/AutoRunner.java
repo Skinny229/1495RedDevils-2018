@@ -2,6 +2,8 @@ package org.usfirst.frc.team1495.robot.commands;
 
 import org.usfirst.frc.team1495.robot.Robot;
 import org.usfirst.frc.team1495.robot.RobotMap;
+import org.usfirst.frc.team1495.robot.subsystems.MotionProfileRunner;
+import org.usfirst.frc.team1495.robot.subsystems.MotionProfileTrajectories;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -17,7 +19,9 @@ public class AutoRunner extends CommandGroup {
 	}
 
 	public static String target = " ";
-
+	
+	public static MotionProfileRunner mpExecuter = new MotionProfileRunner(Robot.leftDriveMotor, Robot.rightDriveMotor);
+	
 	public AutoRunner() {
 
 		requires(Robot.intake);
@@ -29,6 +33,11 @@ public class AutoRunner extends CommandGroup {
 		this.addParallel(new RaiseElev(ElevPos.kSwitch));
 		this.addParallel(new OpenIntake(RobotMap.kDefDownDir));
 		
+		if(Robot.gameData.charAt(0) == 'T'){
+			this.addParallel(new DriveDistMotionProfile(MotionProfileTrajectories.Points));
+			return;
+		}
+		
 		switch (Robot.posStart) {
 		case 'L':
 		case 'R':
@@ -38,6 +47,8 @@ public class AutoRunner extends CommandGroup {
 			target = "switch";
 			addMiddleRunner();
 			break;
+		default:
+			this.addParallel(new NoDrive()); // Will just drive straight foward
 		}
 	}
 
