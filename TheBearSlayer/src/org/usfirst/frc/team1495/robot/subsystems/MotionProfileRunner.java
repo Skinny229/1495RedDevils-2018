@@ -156,7 +156,6 @@ public class MotionProfileRunner {
 	public void control() {
 		/* Get the motion profile status every loop */
 		_talonL.getMotionProfileStatus(_status);
-		_talonR.getMotionProfileStatus(_status);
 
 		/*
 		 * track time, this is rudimentary but that's okay, we just want to make
@@ -246,7 +245,6 @@ public class MotionProfileRunner {
 
 			/* Get the motion profile status every loop */
 			_talonL.getMotionProfileStatus(_status);
-			_talonR.getMotionProfileStatus(_status);
 			_heading = _talonL.getActiveTrajectoryHeading();
 			_pos = _talonL.getActiveTrajectoryPosition();
 			_vel = _talonL.getActiveTrajectoryVelocity();
