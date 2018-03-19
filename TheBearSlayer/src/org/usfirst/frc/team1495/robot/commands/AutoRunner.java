@@ -92,6 +92,7 @@ public class AutoRunner extends CommandGroup {
 			angleTurnin *= -1;
 			this.addParallel(new TurnXDegrees(angleTurnin));
 			this.addParallel(new RaiseElev(ElevPos.kScale));
+			this.addSequential(new dropCubeAuto());
 			
 		}
 		
