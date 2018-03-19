@@ -9,6 +9,7 @@ public class CAN_TalonSRXE extends CAN_TalonSRX {
 	public CAN_TalonSRXE(int deviceNumber, boolean safety) {
 		super(deviceNumber, safety);
 		configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 0);
+	
 	}
 	
 	public void setUpMotionProfile(){

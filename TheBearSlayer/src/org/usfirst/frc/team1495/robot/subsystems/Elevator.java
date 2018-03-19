@@ -14,6 +14,10 @@ public class Elevator extends Subsystem {
 		motor = new CAN_TalonSRXE(RobotMap.kElevatorMotorID, RobotMap.kElevatorMotorSafety);
 	}
 
+	/**
+	 * This set method will automatically take into account
+	 * the upper limit switch when running 
+	 * */
 	public void set(double speed){
 		//switch()
 		if(!Robot.upperElevatorLS.get() && speed < 0.0){

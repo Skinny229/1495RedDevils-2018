@@ -28,20 +28,22 @@ public class AutoRunner extends CommandGroup {
 		// intake
 		this.addParallel(new RaiseElev(ElevPos.kSwitch));
 		this.addParallel(new OpenIntake(RobotMap.kDefDownDir));
-		System.out.print("Analyzing where to go...");
+		
 		switch (Robot.posStart) {
 		case 'L':
 		case 'R':
 			addSideRunner();
 			break;
 		case 'M':
-			addMiddleRunner();
-			
 			target = "switch";
+			addMiddleRunner();
 			break;
 		}
 	}
 
+	/**
+	 * Auto Sequence for when we start in the middle
+	 * */
 	public void addMiddleRunner() {
 		this.addParallel(new DriveDistEncoder(RobotMap.distStartingMiddle));
 		if (Robot.gameData.charAt(0) == 'L') {
@@ -60,15 +62,49 @@ public class AutoRunner extends CommandGroup {
 		this.addSequential(new dropCubeAuto());
 	}
 
+	/**
+	 * Current Autonomous for when the robot is on the sides
+	 * */
 	public void addSideRunner() {
 		this.addSequential(new DriveDistEncoder(RobotMap.distSwitch));
 		if (Robot.posStart == Robot.gameData.charAt(Robot.priorityLocation)) {
 			goToLocation(Robot.priorityLocation);
 		} else if (Robot.posStart == Robot.gameData.charAt(Robot.otherLocation)) {
 			goToLocation(Robot.otherLocation);
+		}else if(Robot.canCross){
+			cross(Robot.priorityLocation);
 		}
 	}
 
+	public void cross(int location){
+		//Align with path way
+		this.addSequential(new DriveDistEncoder(30.0));
+		if(Robot.posStart == 'R'){
+			angleTurnin *= -1;
+		}
+		this.addSequential(new TurnXDegrees(angleTurnin));
+		this.addSequential(new DriveDistEncoder(160.0));
+		if(Robot.priorityLocation == 0){
+			this.addSequential(new TurnXDegrees(angleTurnin));
+			this.addSequential(new DriveToWall());
+			this.addSequential(new dropCubeAuto());
+		}else if(Robot.priorityLocation == 1){
+			angleTurnin *= -1;
+			this.addParallel(new TurnXDegrees(angleTurnin));
+			this.addParallel(new RaiseElev(ElevPos.kScale));
+			
+		}
+		
+	}
+	
+	
+	
+	/**
+	 * Heads to a location on the Robot's starting side
+	 * 
+	 * @param
+	 * location 0 or 1. 0 being the switch and 1 being scale
+	 * */
 	public void goToLocation(int location) {
 		if (location == 0) {
 			addTurnNRam();
@@ -77,6 +113,12 @@ public class AutoRunner extends CommandGroup {
 		}
 	}
 
+	/**
+	 * 
+	 * Turns inwards the field and will drive straight until it is stopped
+	 * by a field element
+	 * 
+	 * */
 	public void addTurnNRam() {
 		if (Robot.posStart == 'R') {
 			angleTurnin *= -1;
@@ -86,6 +128,10 @@ public class AutoRunner extends CommandGroup {
 		this.addSequential(new dropCubeAuto());
 	}
 
+	/**
+	 *  Auto sequence to going to the scale from the switch side
+	 *  
+	 * */
 	public void addScaleRunner() {
 		this.addSequential(new DriveDistEncoder(RobotMap.distScaleFromSwitch));
 		if (Robot.posStart == 'R') {

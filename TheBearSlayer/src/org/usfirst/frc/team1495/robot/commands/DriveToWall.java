@@ -13,20 +13,19 @@ public class DriveToWall extends Command {
 	private boolean isFin;
 
     public DriveToWall() {
-        // Use requires() here to declare subsystem dependencies
-        // eg. requires(chassis);
     }
 
     
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.println("Running: DriveToWall");
-    	//setTimeout(6);//Seconds
     	isFin = false;
     	Robot.roboDrive.arcadeDrive(RobotMap.fowardRateAuto-.1, 0);
     }
 
-    // Called repeatedly when this Command is scheduled to run
+    /**
+     * Drive for at least .75 seconds and then stop when you hit something
+     */
     protected void execute() {
     	
 		if (Robot.leftDriveMotor.getRawEncoderVelocity() != 0 || timeSinceInitialized() < .75) {
