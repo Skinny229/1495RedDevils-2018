@@ -22,6 +22,7 @@ public class AutoRunner extends CommandGroup {
 	
 	public static MotionProfileRunner mpExecuter = new MotionProfileRunner(Robot.leftDriveMotor, Robot.rightDriveMotor);
 	
+	
 	public AutoRunner() {
 
 		requires(Robot.intake);

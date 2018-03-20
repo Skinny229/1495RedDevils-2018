@@ -35,8 +35,8 @@ public class OI {
 	public Button in = new JoystickButton(operator, 2);
 	public Button out = new JoystickButton(operator, 1);
 	public Button climb = new JoystickButton(operator, 8);
-	public Button open = new JoystickButton(operator, 4);
-	public Button close = new JoystickButton(operator, 6);
+	public Button open = new JoystickButton(operator, 3);
+	public Button  close = new JoystickButton(operator, 5);
 
 	public OI() {
 		// joystick

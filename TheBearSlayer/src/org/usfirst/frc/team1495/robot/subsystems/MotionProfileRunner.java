@@ -316,7 +316,7 @@ public class MotionProfileRunner {
 			point.headingDeg = 0; /* future feature - not used in this example*/
 			point.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
 			point.profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
-			point.timeDur = GetTrajectoryDuration((int)profile[i][2]);
+			point.timeDur = TrajectoryDuration.Trajectory_Duration_10ms;
 			point.zeroPos = false;
 			if (i == 0)
 				point.zeroPos = true; /* set this to true on the first point */

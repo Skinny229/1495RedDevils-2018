@@ -38,9 +38,11 @@ public class Robot extends TimedRobot {
 	// Control
 	public static Gyro gyro = new Gyro();
 	public static OI oi = new OI();
+	public static boolean is
 	// Other
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
 	public static Compressor compressor = new Compressor(RobotMap.kPCM);
+	
 	// Autonomous
 	static int autoRoutine;
 	SendableChooser<Integer> autoChooser = new SendableChooser<>();
@@ -76,28 +78,33 @@ public class Robot extends TimedRobot {
 		autoChooser.addDefault("Command Group Auto Runner", 1);
 		autoChooser.addObject("Encoder Control", 2);
 		autoChooser.addObject("Drive Straight", 3);
-		SmartDashboard.putData(autoChooser);
 
 		autoPosChooser.addDefault("Left", 'L');
 		autoPosChooser.addObject("Middle", 'M');
 		autoPosChooser.addObject("Right", 'R');
-		SmartDashboard.putData(autoPosChooser);
+	
 		
 		priorityChooser.addDefault("Prioritize: Switch", 0);
 		priorityChooser.addObject("Prioritize Scale", 1);
-		SmartDashboard.putData(priorityChooser);
+		
 
 		goScaleChooser.addDefault("Go to Scale if possible. **NOTE: Will only work with CMDGroup auto runner**", true);
 		goScaleChooser.addObject("Don't go to scale if possible", false);
-		SmartDashboard.putData(goScaleChooser);
+	
 		
 		canCrossChooser.addDefault("Can't Cross", false);
 		canCrossChooser.addObject("Cross", true);
-		SmartDashboard.putData(canCrossChooser);
+		
+
 
 		gyro.calibrate();
-		gyro.reset();
-		SmartDashboard.putData("Gyro",gyro);
+
+		SmartDashboard.putData("Auto Chooser",autoChooser);
+		SmartDashboard.putData("Starting Position",autoPosChooser);
+		SmartDashboard.putData("Location Priotiy",priorityChooser);
+		SmartDashboard.putData("Can we go to scale", goScaleChooser);
+		SmartDashboard.putData("Can we cross",canCrossChooser);
+		SmartDashboard.putData("Gyro", gyro);
 	}
 
 	@Override

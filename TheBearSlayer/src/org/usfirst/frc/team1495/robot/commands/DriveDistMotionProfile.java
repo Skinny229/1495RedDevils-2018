@@ -3,6 +3,7 @@ package org.usfirst.frc.team1495.robot.commands;
 import org.usfirst.frc.team1495.robot.Robot;
 import org.usfirst.frc.team1495.robot.RobotMap;
 import org.usfirst.frc.team1495.robot.subsystems.MotionProfileRunner;
+
 import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
@@ -71,3 +72,4 @@ public class DriveDistMotionProfile extends Command {
     	Robot.rightDriveMotor2.set(0);
     }
 }
+
