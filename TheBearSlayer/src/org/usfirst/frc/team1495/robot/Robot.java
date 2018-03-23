@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team1495.robot.commands.AutoRunner;
+import org.usfirst.frc.team1495.robot.commands.AutoRunnerMP;
 import org.usfirst.frc.team1495.robot.commands.DriveRobotWithCaution;
 import org.usfirst.frc.team1495.robot.commands.NoDrive;
 import org.usfirst.frc.team1495.robot.subsystems.*;
@@ -38,11 +39,11 @@ public class Robot extends TimedRobot {
 	// Control
 	public static Gyro gyro = new Gyro();
 	public static OI oi = new OI();
-	public static boolean is
+
 	// Other
 	public static PowerDistributionPanel PDP = new PowerDistributionPanel(RobotMap.kPDP);
 	public static Compressor compressor = new Compressor(RobotMap.kPCM);
-	
+
 	// Autonomous
 	static int autoRoutine;
 	SendableChooser<Integer> autoChooser = new SendableChooser<>();
@@ -50,21 +51,22 @@ public class Robot extends TimedRobot {
 	SendableChooser<Boolean> goScaleChooser = new SendableChooser<>();
 	SendableChooser<Integer> priorityChooser = new SendableChooser<>();
 	SendableChooser<Boolean> canCrossChooser = new SendableChooser<>();
-	
+
 	public static char posStart = ' ';
 	public static String gameData = "  ";
 	public static boolean goScale = false;
 	public static int priorityLocation = -1;
 	public static int otherLocation = -1;
 	public static boolean canCross = false;
-	
+
 	@Override
 	public void robotInit() {
-		
-		
+
+
+
 		roboDrive = new DifferentialDrive(new SpeedControllerGroup(leftDriveMotor, leftDriveMotor2),
 				new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
-		
+
 		roboDrive.setSafetyEnabled(RobotMap.kDriveMotorSafety);
 		leftDriveMotor.setUpMotionProfile();
 		rightDriveMotor.setUpMotionProfile();
@@ -82,29 +84,25 @@ public class Robot extends TimedRobot {
 		autoPosChooser.addDefault("Left", 'L');
 		autoPosChooser.addObject("Middle", 'M');
 		autoPosChooser.addObject("Right", 'R');
-	
-		
+
 		priorityChooser.addDefault("Prioritize: Switch", 0);
 		priorityChooser.addObject("Prioritize Scale", 1);
-		
 
 		goScaleChooser.addDefault("Go to Scale if possible. **NOTE: Will only work with CMDGroup auto runner**", true);
 		goScaleChooser.addObject("Don't go to scale if possible", false);
-	
-		
+
 		canCrossChooser.addDefault("Can't Cross", false);
 		canCrossChooser.addObject("Cross", true);
-		
-
 
 		gyro.calibrate();
 
-		SmartDashboard.putData("Auto Chooser",autoChooser);
-		SmartDashboard.putData("Starting Position",autoPosChooser);
-		SmartDashboard.putData("Location Priotiy",priorityChooser);
+		SmartDashboard.putData("Auto Chooser", autoChooser);
+		SmartDashboard.putData("Starting Position", autoPosChooser);
+		SmartDashboard.putData("Location Priotiy", priorityChooser);
 		SmartDashboard.putData("Can we go to scale", goScaleChooser);
-		SmartDashboard.putData("Can we cross",canCrossChooser);
+		SmartDashboard.putData("Can we cross", canCrossChooser);
 		SmartDashboard.putData("Gyro", gyro);
+
 	}
 
 	@Override
@@ -118,25 +116,26 @@ public class Robot extends TimedRobot {
 		Scheduler.getInstance().run();
 	}
 
-    private static Command autoCmd;
+	private static Command autoCmd;
+
 	@Override
 	public void autonomousInit() {
 		System.out.println("-----------Auto Started---------");
-	
+
 		autoRoutine = autoChooser.getSelected();
 		posStart = autoPosChooser.getSelected();
 		goScale = goScaleChooser.getSelected();
 		priorityLocation = priorityChooser.getSelected();
 		canCross = canCrossChooser.getSelected();
-		
-		//Just in case we fail to obtain a priorityLocation which is unlikely
-		if(priorityLocation == 0)
+
+		// Just in case we fail to obtain a priorityLocation which is unlikely
+		if (priorityLocation == 0)
 			otherLocation = 1;
-		else if(priorityLocation == 1)
+		else if (priorityLocation == 1)
 			otherLocation = 0;
 		else
 			otherLocation = -1;
-		
+
 		gameData = DriverStation.getInstance().getGameSpecificMessage();
 		System.out.println("Relevant game data: ");
 		System.out.println("Friendly switch: " + gameData.charAt(0));
@@ -144,7 +143,7 @@ public class Robot extends TimedRobot {
 		System.out.println("Selected starting position: " + posStart);
 
 		System.out.print("Running...");
-		switch(autoRoutine){
+		switch (autoRoutine) {
 		case 1:
 			System.out.println("Auto GroupCMD");
 			autoCmd = new AutoRunner();
@@ -180,23 +179,26 @@ public class Robot extends TimedRobot {
 	}
 
 	private double elevInput = 0.0;
+
 	@Override
 	public void teleopPeriodic() {
-		
-		SmartDashboard.putData("Gyro",gyro);
-		
-		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft), oi.driverController.getX(Hand.kRight) * RobotMap.kDTTurnMult);
-		
+
+		SmartDashboard.putData("Gyro", gyro);
+
+		roboDrive.arcadeDrive(-oi.driverController.getY(Hand.kLeft),
+				oi.driverController.getX(Hand.kRight) * RobotMap.kDTTurnMult);
+
 		elevInput = oi.operator.getY();
-		if(Math.abs(elevInput) < RobotMap.kElevDeadband){
-			elevInput = 0.0;
-		}
-		elevator.set(elevInput);
-		
+		/*
+		 * if(Math.abs(elevInput) < RobotMap.kElevDeadband){ elevInput = 0.0; }
+		 */
+		elevator.motor.set(elevInput);
+
 		Scheduler.getInstance().run();
 	}
 
 	@Override
 	public void testPeriodic() {
 	}
+
 }

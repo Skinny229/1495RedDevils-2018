@@ -16,7 +16,7 @@ public class DriveDistMotionProfile extends Command {
 
 	double[][] trajectory;
 	int trajectoryPointsNum;
-	MotionProfileRunner mp = AutoRunner.mpExecuter;
+	MotionProfileRunner mp = AutoRunnerMP.mpExecuter;
 	SetValueMotionProfile setOutput;
 	private boolean isDone = false;
 	
@@ -24,13 +24,11 @@ public class DriveDistMotionProfile extends Command {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
     	trajectory = pointsWanted;
-    	trajectoryPointsNum = pointsWanted[0].length;
+    	trajectoryPointsNum = 185;
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	mp.reset();
-    	mp.startFilling(trajectory, trajectoryPointsNum);
     	mp.startMotionProfile();
     	isDone = false;
     
@@ -40,7 +38,7 @@ public class DriveDistMotionProfile extends Command {
     protected void execute() {
     	mp.control();
     	setOutput = mp.getSetValue();
-    	if(setOutput.value == SetValueMotionProfile.Enable.value || timeSinceInitialized() < .75){
+    	if(setOutput.value == SetValueMotionProfile.Enable.value || timeSinceInitialized() < 3){
     		Robot.leftDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
     		Robot.leftDriveMotor2.set(ControlMode.Follower, RobotMap.kLeftDriveMotorID);
     		Robot.rightDriveMotor.set(ControlMode.MotionProfile, setOutput.value);
