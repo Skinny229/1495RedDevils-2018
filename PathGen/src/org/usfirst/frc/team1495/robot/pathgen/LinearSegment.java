@@ -8,4 +8,9 @@ public class LinearSegment extends CurveSegment {
 	public Point interpolate(double t) {
 		return new Point((1 - t) * start().x + t * end().x, (1 - t) * start().y + t * end().y);
 	}
+	
+	public double getY(double x){
+		
+		return 1.0;
+	}
 }

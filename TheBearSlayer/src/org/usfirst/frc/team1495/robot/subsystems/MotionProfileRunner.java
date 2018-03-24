@@ -183,7 +183,7 @@ public class MotionProfileRunner {
 					_bStart = false;
 
 					_setValue = SetValueMotionProfile.Disable;
-					startFilling();
+					//startFilling();
 					/*
 					 * MP is being sent to CAN bus, wait a small amount of time
 					 */
@@ -262,13 +262,13 @@ public class MotionProfileRunner {
 		return retval;
 	}
 
-	/** Start filling the MPs to all of the involved Talons. */
+	/** Start filling the MPs to all of the involved Talons. 
 	private void startFilling() {
-		/* since this example only has one talon, just update that one */
+		 since this example only has one talon, just update that one 
 		startFilling(MotionProfileTrajectories.Points, MotionProfileTrajectories.kNumPoints);
-	}
-
-	private void startFilling(double[][] profile, int totalCnt) {
+	}*/
+	
+	public void startFilling(double[][] profileL, int totalCntL, double[][] profileR, int totalCntR){
 
 		/* create an empty point */
 		TrajectoryPoint point = new TrajectoryPoint();
@@ -283,22 +283,29 @@ public class MotionProfileRunner {
 			 */
 			_talonL.clearMotionProfileHasUnderrun(0);
 		}
+		if(_statusR.hasUnderrun){
+			_talonR.clearMotionProfileHasUnderrun(0);
+		}
 		/*
 		 * just in case we are interrupting another MP and there is still buffer points
 		 * in memory, clear it.
 		 */
 		_talonL.clearMotionProfileTrajectories();
+		_talonR.clearMotionProfileTrajectories();
 
 		/*
 		 * set the base trajectory period to zero, use the individual trajectory period
 		 * below
 		 */
 		_talonL.configMotionProfileTrajectoryPeriod(RobotMap.baseTrajTimeMS, RobotMap.timeoutEncoders);
+		_talonR.configMotionProfileTrajectoryPeriod(RobotMap.baseTrajTimeMS, RobotMap.timeoutEncoders);
 
-		/* This is fast since it's just into our TOP buffer */
-		for (int i = 0; i < totalCnt; ++i) {
-			double positionRot = profile[i][0];
-			double velocityRPM = profile[i][1];
+		/* This is fast since it's just into our TOP buffer 
+		 * This is assuming that both sides of the drive train have the same points
+		 * */
+		for (int i = 0; i < totalCntL; ++i) {
+			double positionRot = profileL[i][0];
+			double velocityRPM = profileL[i][1];
 			/* for each point, fill our structure and pass it to API */
 			point.position = positionRot * RobotMap.kUnitsPerRot; // Convert Revolutions to Units
 			point.velocity = velocityRPM * RobotMap.kUnitsPerRot / 600.0; // Convert RPM to Units/100ms
@@ -308,24 +315,117 @@ public class MotionProfileRunner {
 											 * future feature - not used in this example - cascaded PID [0,1], leave
 											 * zero
 											 */
-			point.timeDur = GetTrajectoryDuration((int) profile[i][2]);
+			point.timeDur = GetTrajectoryDuration((int) profileL[i][2]);
 			point.zeroPos = false;
 			if (i == 0)
 				point.zeroPos = true; /* set this to true on the first point */
 
 			point.isLastPoint = false;
-			if ((i + 1) == totalCnt)
+			if ((i + 1) == totalCntL)
 				point.isLastPoint = true; /* set this to true on the last point */
 
 			_talonL.pushMotionProfileTrajectory(point);
 		}
+		TrajectoryPoint point2 = new TrajectoryPoint();
+		
+		for(int i = 0; i < totalCntR; i++){
+			double positionRot = profileR[i][0];
+			double velocityRPM = profileR[i][1];
+			/* for each point, fill our structure and pass it to API */
+			point2.position = positionRot * RobotMap.kUnitsPerRot; // Convert Revolutions to Units
+			point2.velocity = velocityRPM * RobotMap.kUnitsPerRot / 600.0; // Convert RPM to Units/100ms
+			point2.headingDeg = 0; /* future feature - not used in this example */
+			point2.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+			point2.profileSlotSelect1 = 0; /*
+											 * future feature - not used in this example - cascaded PID [0,1], leave
+											 * zero
+											 */
+			point2.timeDur = GetTrajectoryDuration((int) profileL[i][2]);
+			point2.zeroPos = false;
+			if (i == 0)
+				point2.zeroPos = true; /* set this to true on the first point */
+
+			point2.isLastPoint = false;
+			if ((i + 1) == totalCntL)
+				point2.isLastPoint = true; /* set this to true on the last point */
+
+			_talonR.pushMotionProfileTrajectory(point2);
+		}
+		
+		
+	}
+	
+	public void startFilling(double[][] profileL, int totalCntL) {
+
+		/* create an empty point */
+		TrajectoryPoint point = new TrajectoryPoint();
+
+		/* did we get an underrun condition since last time we checked ? */
+		if (_statusL.hasUnderrun) {
+			/* better log it so we know about it */
+			Instrumentation.OnUnderrun();
+			/*
+			 * clear the error. This flag does not auto clear, this way we never miss
+			 * logging it.
+			 */
+			_talonL.clearMotionProfileHasUnderrun(0);
+		}
+		if(_statusR.hasUnderrun){
+			_talonR.clearMotionProfileHasUnderrun(0);
+		}
+		/*
+		 * just in case we are interrupting another MP and there is still buffer points
+		 * in memory, clear it.
+		 */
+		_talonL.clearMotionProfileTrajectories();
+		_talonR.clearMotionProfileTrajectories();
+
+		/*
+		 * set the base trajectory period to zero, use the individual trajectory period
+		 * below
+		 */
+		_talonL.configMotionProfileTrajectoryPeriod(RobotMap.baseTrajTimeMS, RobotMap.timeoutEncoders);
+		_talonR.configMotionProfileTrajectoryPeriod(RobotMap.baseTrajTimeMS, RobotMap.timeoutEncoders);
+
+		/* This is fast since it's just into our TOP buffer 
+		 * This is assuming that both sides of the drive train have the same points
+		 * */
+		for (int i = 0; i < totalCntL; ++i) {
+			double positionRot = profileL[i][0];
+			double velocityRPM = profileL[i][1];
+			/* for each point, fill our structure and pass it to API */
+			point.position = positionRot * RobotMap.kUnitsPerRot; // Convert Revolutions to Units
+			point.velocity = velocityRPM * RobotMap.kUnitsPerRot / 600.0; // Convert RPM to Units/100ms
+			point.headingDeg = 0; /* future feature - not used in this example */
+			point.profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+			point.profileSlotSelect1 = 0; /*
+											 * future feature - not used in this example - cascaded PID [0,1], leave
+											 * zero
+											 */
+			point.timeDur = GetTrajectoryDuration((int) profileL[i][2]);
+			point.zeroPos = false;
+			if (i == 0)
+				point.zeroPos = true; /* set this to true on the first point */
+
+			point.isLastPoint = false;
+			if ((i + 1) == totalCntL)
+				point.isLastPoint = true; /* set this to true on the last point */
+
+			_talonL.pushMotionProfileTrajectory(point);
+			
+			point.position *= -1;
+			point.velocity *= -1;
+			
+			_talonR.pushMotionProfileTrajectory(point);
+		}
+		
 	}
 
 	/**
 	 * Called by application to signal Talon to start the buffered MP (when it's
 	 * able to).
 	 */
-	void startMotionProfile() {
+	public void startMotionProfile() {
 		_bStart = true;
 	}
 
@@ -335,7 +435,7 @@ public class MotionProfileRunner {
 	 *         motion-profile output, 1 for enable motion-profile, 2 for hold
 	 *         current motion profile trajectory point.
 	 */
-	SetValueMotionProfile getSetValue() {
+	public SetValueMotionProfile getSetValue() {
 		return _setValue;
 	}
 }

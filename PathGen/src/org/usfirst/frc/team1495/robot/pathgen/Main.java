@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class Main extends JPanel {
+
 	private static final long serialVersionUID = 1L;
 	public static final double kInchPerPixels = 0.91;
 	public static final double kPixelsPerInch = 1.10;
@@ -22,20 +23,20 @@ public class Main extends JPanel {
 	public static final int kOffsetY = 10;
 	public static final int kDimensionX = 379;
 	public static final int kDimensionY = 416;
-	
+
 	public static void main(String[] args) {
 		Main main = new Main();
 		JFrame frame = new JFrame("1495 Path Generator");
-		frame.setSize(new Dimension(500,700));
-		main.setPreferredSize(new Dimension(500,700));
-		//BufferedImage image = null;
-		//try {
-		//	image = ImageIO.read(new File("PowerUpHalfField.png"));
-		//} catch (IOException e) {
-		//	System.out.println("WHERE IS IT?");
-		//}
-		//frame.setContentPane(new ImagePanel(image));
-		
+		frame.setSize(new Dimension(500, 700));
+		main.setPreferredSize(new Dimension(500, 700));
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File("PowerUpHalfField.png"));
+		} catch (IOException e) {
+			System.out.println("WHERE IS IT?");
+		}
+		frame.setContentPane(new ImagePanel(image));
+
 		frame.getContentPane().add(main, BorderLayout.CENTER);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -46,6 +47,38 @@ public class Main extends JPanel {
 			g.setColor(Color.BLACK);
 			g.drawLine(379, 0, 379, 416);
 			g.drawLine(0, 416, 379, 416);
+
+			g.setColor(Color.ORANGE);
+			Path customMiddleR = new Path(new QuadraticSegment(new Point(2.0,0), new Point(2.0, 0.65), new Point(2.25,.75))
+										,new QuadraticSegment( new Point(2.25,.75), new Point(2.375,.9), new Point(2.4,1.33)));
+			
+			for (int i = 0; i < 50; i++) {
+				g.drawLine((int) (customMiddleR.segments[0].interpolate((double) (i) / 50).x * 100),
+						kDimensionY - (int) (customMiddleR.segments[0].interpolate((double) (i) / 50).y * 100),
+						(int) (customMiddleR.segments[0].interpolate((double) (i + 1) / 50).x * 100),
+						kDimensionY - (int) (customMiddleR.segments[0].interpolate((double) (i + 1) / 50).y * 100));
+				g.drawLine((int) (customMiddleR.segments[1].interpolate((double) (i) / 50).x * 100),
+						kDimensionY - (int) (customMiddleR.segments[1].interpolate((double) (i) / 50).y * 100),
+						(int) (customMiddleR.segments[1].interpolate((double) (i + 1) / 50).x * 100),
+						kDimensionY - (int) (customMiddleR.segments[1].interpolate((double) (i + 1) / 50).y * 100));
+			}
+			
+			
+			g.setColor(Color.CYAN);
+			Path customMiddleL = new Path(new QuadraticSegment(new Point(2.0,0), new Point(2.0, 0.65), new Point(1.5,.65)),
+					new CubicSegment( new Point(1.5,.65), new Point(1.45,.75), new Point(1.4,1.0), new Point(1.2,1.4)));
+			for (int i = 0; i < 50; i++) {
+				g.drawLine((int) (customMiddleL.segments[0].interpolate((double) (i) / 50).x * 100),
+						kDimensionY - (int) (customMiddleL.segments[0].interpolate((double) (i) / 50).y * 100),
+						(int) (customMiddleL.segments[0].interpolate((double) (i + 1) / 50).x * 100),
+						kDimensionY - (int) (customMiddleL.segments[0].interpolate((double) (i + 1) / 50).y * 100));
+				g.drawLine((int) (customMiddleL.segments[1].interpolate((double) (i) / 50).x * 100),
+						kDimensionY - (int) (customMiddleL.segments[1].interpolate((double) (i) / 50).y * 100),
+						(int) (customMiddleL.segments[1].interpolate((double) (i + 1) / 50).x * 100),
+						kDimensionY - (int) (customMiddleL.segments[1].interpolate((double) (i + 1) / 50).y * 100));
+			}
+			
+			
 			g.setColor(Color.BLUE);
 			Path path1 = new Path(
 					new CubicSegment(new Point(0, 0), new Point(1, 1), new Point(1.5, 1.5), new Point(2, 1)),
@@ -63,6 +96,7 @@ public class Main extends JPanel {
 			g.setColor(Color.RED);
 			Path path2 = new Path(new QuadraticSegment(new Point(0, 0), new Point(2.5, 4), new Point(3, 1)),
 					new LinearSegment(new Point(3, 1), new Point(2.5, 4.3)));
+
 			for (int i = 0; i < 50; i++) {
 				g.drawLine((int) (path2.segments[0].interpolate((double) (i) / 50).x * 100),
 						kDimensionY - (int) (path2.segments[0].interpolate((double) (i) / 50).y * 100),
@@ -93,12 +127,13 @@ public class Main extends JPanel {
 class ImagePanel extends JComponent {
 	private static final long serialVersionUID = 1L;
 	private Image image;
-    public ImagePanel(Image image) {
-        this.image = image;
-    }
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g.drawImage(image, 0, 0, this);
-    }
-}
 
+	public ImagePanel(Image image) {
+		this.image = image;
+	}
+
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, 0, 0, this);
+	}
+}

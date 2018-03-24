@@ -14,7 +14,8 @@ public class AutoRunnerMP extends CommandGroup {
 
 	public static MotionProfileRunner mpExecuter = new MotionProfileRunner(Robot.leftDriveMotor, Robot.rightDriveMotor);
 	
-	
+	private char startingPos, switchPos;
+	private int targetLoc, otherLoc;
 	
 	/**
 	 * Runs Autonomous using motion profiles for motion
@@ -28,7 +29,7 @@ public class AutoRunnerMP extends CommandGroup {
 	 * @param
 	 * 	Priotizing either Switch or Scale
 	 * */
-    public AutoRunnerMP(char startPos, char localSwitchPos,int priorityLoc) {
+    public AutoRunnerMP(char startPos, char closeSwitchPos,int priorityLoc) {
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
@@ -45,8 +46,7 @@ public class AutoRunnerMP extends CommandGroup {
         // e.g. if Command1 requires chassis, and Command2 requires arm,
         // a CommandGroup containing them would require both the chassis and the
         // arm.
-    	int target;
-    	boolean isCrossing;
+    	
     	requires(Robot.arm);
     	requires(Robot.intake);
     	requires(Robot.elevator);
@@ -54,6 +54,16 @@ public class AutoRunnerMP extends CommandGroup {
     	//No matter what run these
     	this.addParallel(new OpenIntake(RobotMap.kDefDownDir));
     	this.addParallel(new RaiseElev(ElevPos.kSwitch));
+    	
+    	startingPos = startPos;
+    	switchPos = closeSwitchPos;
+    	targetLoc = priorityLoc;
+    	if(targetLoc == 0)
+    		otherLoc = 1;
+    	else if(targetLoc == 1)
+    		otherLoc = 0;
+    	else
+    		otherLoc = -1;
     	
     	switch(startPos){
     	case 'L':
@@ -74,27 +84,47 @@ public class AutoRunnerMP extends CommandGroup {
     
     
 	public void addMiddleRunner() {
-		double turnAngle = 90;
-		this.addParallel(new DriveDistEncoder(RobotMap.distStartingMiddle));
-		if (Robot.gameData.charAt(0) == 'L') {
-			turnAngle *= -1;
-			// Turn Left is the switch side is on our left
+		if(switchPos == 'L'){
+			//Add Middle MP Runner 
+		}else if(switchPos == 'R'){
+			//Add Middle -> R MP Runner
 		}
-		this.addSequential(new TurnXDegrees(turnAngle));
-		if (Robot.gameData.charAt(0) == 'R') {
-			this.addSequential(new DriveDistEncoder(20.0));
-		} else {
-			this.addSequential(new DriveDistEncoder(40.0));
-		}
-		//Revert back to where we were
-		turnAngle *= -1;
-		this.addSequential(new TurnXDegrees(turnAngle));
-		this.addSequential(new DriveToWall());
 		this.addSequential(new dropCubeAuto());
 	}
 	
 	public void addSideRunner(){
-		
+		if(startingPos == Robot.gameData.charAt(targetLoc)){
+			goToLocalTarget(targetLoc);
+		}else if(startingPos == Robot.gameData.charAt(otherLoc)){
+			goToLocalTarget(otherLoc);
+		}else if(Robot.canCross && Robot.goScale){
+			
+		}
+			
 	}
 	
+	public void addCrossRunner(){
+		if(startingPos == 'L'){
+			//Add Left->Right MP cross
+		}else if(startingPos == 'R'){
+			//Add Right->Left MP Cross
+		}
+		this.addSequential(new RaiseElev(ElevPos.kScale));
+		this.addSequential(new dropCubeAuto());
+	}
+	public void goToLocalTarget(int target){
+		if(target == 0){
+			double angle = 90.0;
+			if (Robot.posStart == 'R') {
+				angle *= -1;
+			}
+			this.addSequential(new TurnXDegrees(angle));
+			this.addSequential(new DriveToWall());
+			this.addSequential(new dropCubeAuto());
+		}else if(target == 1 && Robot.goScale){
+			this.addParallel(new RaiseElev(ElevPos.kScale));
+			//this.addParallel(new DriveDistMotionProfile(something something trajectory));
+			this.addSequential(new dropCubeAuto());
+		}
+	}
 }
