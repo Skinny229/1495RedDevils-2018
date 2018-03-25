@@ -68,14 +68,11 @@ public class Robot extends TimedRobot {
 				new SpeedControllerGroup(rightDriveMotor, rightDriveMotor2));
 
 		roboDrive.setSafetyEnabled(RobotMap.kDriveMotorSafety);
-		leftDriveMotor.setUpMotionProfile();
-		rightDriveMotor.setUpMotionProfile();
+		leftDriveMotor.setUpMotionProfile(false);
+		rightDriveMotor.setUpMotionProfile(true);
 
 		PDP.clearStickyFaults();
 		compressor.clearAllPCMStickyFaults();
-
-		leftDriveMotor.setUpMotionProfile();
-		rightDriveMotor.setUpMotionProfile();
 
 		autoChooser.addDefault("Command Group Auto Runner", 1);
 		autoChooser.addObject("Encoder Control", 2);

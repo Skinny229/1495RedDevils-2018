@@ -53,6 +53,7 @@ public class Main extends JPanel {
 										,new QuadraticSegment( new Point(2.25,.75), new Point(2.375,.9), new Point(2.4,1.33)));
 			
 			for (int i = 0; i < 50; i++) {
+				
 				g.drawLine((int) (customMiddleR.segments[0].interpolate((double) (i) / 50).x * 100),
 						kDimensionY - (int) (customMiddleR.segments[0].interpolate((double) (i) / 50).y * 100),
 						(int) (customMiddleR.segments[0].interpolate((double) (i + 1) / 50).x * 100),
@@ -62,8 +63,8 @@ public class Main extends JPanel {
 						(int) (customMiddleR.segments[1].interpolate((double) (i + 1) / 50).x * 100),
 						kDimensionY - (int) (customMiddleR.segments[1].interpolate((double) (i + 1) / 50).y * 100));
 			}
-			
-			
+			return;
+			/*
 			g.setColor(Color.CYAN);
 			Path customMiddleL = new Path(new QuadraticSegment(new Point(2.0,0), new Point(2.0, 0.65), new Point(1.5,.65)),
 					new CubicSegment( new Point(1.5,.65), new Point(1.45,.75), new Point(1.4,1.0), new Point(1.2,1.4)));
@@ -120,6 +121,7 @@ public class Main extends JPanel {
 						(int) (path3.segments[1].interpolate((double) (i + 1) / 50).x * 100),
 						kDimensionY - (int) (path3.segments[1].interpolate((double) (i + 1) / 50).y * 100));
 			}
+			*/
 		}
 	}
 }

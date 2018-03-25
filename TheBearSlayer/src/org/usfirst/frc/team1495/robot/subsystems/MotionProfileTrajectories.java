@@ -189,4 +189,9 @@ public class MotionProfileTrajectories {
 		{4.99997619047619,	0.285714286	,10},
 		{5,	0	,10}};
 
+	
+	public static double [][]Points_Middle_R_L = new double[][]{
+		
+	};
+		
 }

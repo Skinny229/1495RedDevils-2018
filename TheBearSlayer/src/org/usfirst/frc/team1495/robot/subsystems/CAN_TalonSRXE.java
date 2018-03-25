@@ -12,7 +12,14 @@ public class CAN_TalonSRXE extends CAN_TalonSRX {
 	
 	}
 	
-	public void setUpMotionProfile(){
+	
+	/**
+	 *  Configures PIDF, Encoder, Status Frame Period
+	 *  
+	 *   @param reverseSensor
+	 *   Reverses Encoder direction
+	 */
+	public void setUpMotionProfile(boolean reverseSensor){
 		this.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		this.setSensorPhase(true); /* keep sensor and motor in phase */
 		//rightDriveMotor.configNeutralDeadband(Constants.kNeutralDeadband, 0);
@@ -29,6 +36,7 @@ public class CAN_TalonSRXE extends CAN_TalonSRX {
 		 * motion magic
 		 */
 		this.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, 0);
+		
 	}
 
 	public int getRawEncoderPosition() {
